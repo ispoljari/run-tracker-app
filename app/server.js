@@ -3,6 +3,7 @@
 // Import 3rd party frameworks
 const express = require('express');
 const morgan = require('morgan');
+const path = require('path');
 
 // Initialize an express app
 const app = express();
