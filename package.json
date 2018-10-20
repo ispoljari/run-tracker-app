@@ -1,0 +1,27 @@
+{
+  "name": "run-tracker-app",
+  "version": "1.0.0",
+  "description": "This app enables users to log their runs, analyse their progress on a weekly basis, and share their posts with other users on the platform",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ispoljari/run-tracker-app.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongoDB",
+    "javascript",
+    "running",
+    "run"
+  ],
+  "author": "Ivan Spoljaric",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ispoljari/run-tracker-app/issues"
+  },
+  "homepage": "https://github.com/ispoljari/run-tracker-app#readme"
+}
