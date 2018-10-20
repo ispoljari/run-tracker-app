@@ -10,3 +10,6 @@ const app = express();
 
 // Setup logging of the HTTP layer
 app.use(morgan('combined'));
+
+// Serve static assets to client
+app.use(express.static(path.join(__dirname, 'public')));
