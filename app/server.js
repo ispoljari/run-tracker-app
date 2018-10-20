@@ -13,3 +13,8 @@ app.use(morgan('combined'));
 
 // Serve static assets to client
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Run the server
+app.listen(process.env.PORT || 8080, ()=> {
+  console.info(`The server started listening at port ${process.env.PORT || 8080}`);
+});
