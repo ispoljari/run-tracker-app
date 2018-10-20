@@ -4,6 +4,7 @@
   "description": "This app enables users to log their runs, analyse their progress on a weekly basis, and share their posts with other users on the platform",
   "main": "server.js",
   "scripts": {
+    "start": "node app/server.js",
     "test": "mocha --exit"
   },
   "repository": {
