@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/ispoljari/run-tracker-app#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
   }
 }
