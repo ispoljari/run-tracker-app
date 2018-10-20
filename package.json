@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/ispoljari/run-tracker-app/issues"
   },
-  "homepage": "https://github.com/ispoljari/run-tracker-app#readme"
+  "homepage": "https://github.com/ispoljari/run-tracker-app#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
