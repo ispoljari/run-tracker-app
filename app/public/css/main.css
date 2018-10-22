@@ -15,7 +15,7 @@
 
 .logo-img {
   /* Styles */
-  width: 80px;
+  width: 70px;
 }
 
 .header__nav {
@@ -99,7 +99,7 @@
 
 .menu__avatar {
   /* Styles */
-  width: 35px;
+  width: 40px;
 }
 
 .heading {
@@ -132,6 +132,7 @@
 }
 
 .heading__subtitle {
+  /* Layout */
   display: inline-block;
   margin-top: 7px;
 }
@@ -140,10 +141,35 @@
 /* ------------------------FOOTER------------------- */
 
 .credit {
+  /* Layout */
   margin-top: 30px;
 }
 
 .credit__text {
+  /* Layout */
   text-align: center;
 }
 
+
+/* ------------------------------------------------- */
+/* --------------------MEDIA QUERIES---------------- */
+
+@media screen and (max-device-width: 540px) {
+  .menu__item--mobile {
+    /* Layout */
+    display: none;
+  }
+
+  .menu__avatar--mobile {
+     /* Styles */
+      width: 55px;
+  }
+
+  .fa_angle--mobile {
+    /* Layout */
+    bottom: 10px;
+
+    /* Styles */
+    font-size: 32px;
+  }
+}
