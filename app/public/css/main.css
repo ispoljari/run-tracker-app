@@ -1,7 +1,7 @@
 .header {
   margin-top: 30px;
   padding: 5px;
-  background-color: lightgray;
+  background-color: aquamarine;
   position: relative;
 }
 
@@ -36,4 +36,15 @@
 .menu__link {
   text-decoration: none;
   color: black;
+}
+
+.title {
+  margin-top: 10px;
+  background-color: aqua;
+}
+
+.title__heading {
+  margin: 0;
+  padding: 5px;
+  font-size: 26px;
 }
