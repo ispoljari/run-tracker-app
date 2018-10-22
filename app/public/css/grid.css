@@ -39,17 +39,13 @@
   padding-right: 1.041666%;
 }
 
-.col-bottom-offset {
-	margin-bottom: 30px;
-}
-
-.row-bottom-offset {
-  margin-bottom: 0px;
+.col-8-left-offset {
+	margin-left: 0;
 }
 
 /* NON-MOBILE GRID */
 
-@media only screen and (min-width: 640px) {
+@media only screen and (min-width: 540px) {
 	.row-bottom-offset {
 		margin-bottom: 30px;
 	}
@@ -80,11 +76,15 @@
 
 	.col-6 {
 		width: 50%;
-	}
+  }
 
 	.col-8 {
 		width: 66.666666%;
 	}
+
+  .col-8-left-offset {
+    margin-left: 16.67%;
+  }
 
 	.col-10 {
 		width: 83.333333%;
