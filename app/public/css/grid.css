@@ -1,0 +1,98 @@
+/* 1200 PX WIDE, 12 COLUMN FLUID GRID WITH 12 GUTTERS. */
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.row {
+  max-width: 1200px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
+/* CLEARFIX */
+.row:before,
+.row:after {
+  display: table;
+  content: "";
+}
+
+.row:after {
+  clear: both;
+}
+
+.col-1, 
+.col-2, 
+.col-3, 
+.col-4,
+.col-5, 
+.col-6, 
+.col-8, 
+.col-10, 
+.col-12 {
+  float: left;
+  width: 100%;
+  padding-left: 1.041666%;
+  padding-right: 1.041666%;
+}
+
+.col-bottom-offset {
+	margin-bottom: 30px;
+}
+
+.row-bottom-offset {
+  margin-bottom: 0px;
+}
+
+/* NON-MOBILE GRID */
+
+@media only screen and (min-width: 640px) {
+	.row-bottom-offset {
+		margin-bottom: 30px;
+	}
+
+	.col-bottom-offset {
+		margin-bottom: 0px;
+  }
+  
+  .col-1 {
+		width: 8.333333%;
+	}
+
+	.col-2 {
+		width: 16.666666%;		
+	}
+
+	.col-3 {
+		width: 25%;
+	}
+
+	.col-4 {
+		width: 33.333333%;		
+	}
+
+	.col-5 {
+		width: 41.666666%;
+	}
+
+	.col-6 {
+		width: 50%;
+	}
+
+	.col-8 {
+		width: 66.666666%;
+	}
+
+	.col-10 {
+		width: 83.333333%;
+	}
+
+	.col-12 {
+		width: 100%;
+	}
+
+}
+
