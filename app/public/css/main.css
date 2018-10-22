@@ -57,13 +57,11 @@
 }
 
 .menu__item:nth-child(4) {
-  /* Styles */
-  background-color: gold;
-}
-
-.menu__item:last-of-type {
   /* Layout */
-  margin-left: 30px;
+  position: relative;
+  bottom: -10px;
+  padding-bottom: 0px;
+  margin-left: 40px;
 }
 
 .menu__item--shadow {
@@ -90,6 +88,11 @@
   color: black;
 }
 
+.menu__avatar {
+  /* Layout */
+  width: 35px;
+}
+
 .heading {
   /* Layout */
   margin-top: 10px;
@@ -98,6 +101,15 @@
   /* Styles */
   background-color: bisque;
   border-radius: 5px;
+}
+
+.fa-angle-down {
+  /* Layout */
+  position: relative;
+  bottom: 5px;
+
+  /* Styles */
+  font-size: 24px;
 }
 
 
@@ -116,6 +128,9 @@
 }
 
 /* ------------------------------------------------- */
-/* ------------------------------------------------- */
+/* ------------------------FOOTER------------------- */
 
+.credit__text {
+  text-align: center;
+}
 
