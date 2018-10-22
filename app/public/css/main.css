@@ -11,9 +11,10 @@
 .header__logo {
   /* Layout */
   display: inline-block;
+}
 
+.logo-img {
   /* Styles */
-  height: 80px;
   width: 80px;
 }
 
@@ -62,6 +63,9 @@
   bottom: -10px;
   padding-bottom: 0px;
   margin-left: 40px;
+
+  /* Styles */
+  border-radius: 5px;
 }
 
 .menu__item--shadow {
@@ -70,10 +74,15 @@
 }
 
 .menu__item--hover:hover {
+  /* Styles */
   background-color: #f5f5f5;
   box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.75);
 }
 
+.menu__item--avatar-hover:hover {
+  /* Styles */
+  background-color: #f5f5f5;
+}
 
 .header__logo--border,
 .menu__item--border {
@@ -89,7 +98,7 @@
 }
 
 .menu__avatar {
-  /* Layout */
+  /* Styles */
   width: 35px;
 }
 
@@ -129,6 +138,10 @@
 
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
+
+.credit {
+  margin-top: 30px;
+}
 
 .credit__text {
   text-align: center;
