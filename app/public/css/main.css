@@ -183,14 +183,14 @@
 .post-data__time,
 .post-data__average-speed {
   margin-left: 15px;
+  margin-top: 0px;
 }
 
 .post-header__user,
 .post-header__datetime,
 .post-data__distance,
 .post-data__time,
-.post-data__average-speed,
-.post-data__difficulty {
+.post-data__average-speed {
   /* Layout */
   display: inline-block;
 }
@@ -227,5 +227,18 @@
 
   .heading__title {
     font-size: 24px;
+  }
+
+  .post-data__distance,
+  .post-data__time,
+  .post-data__average-speed {
+    display: block;
+  }
+
+  .post-header__datetime,
+  .post-data__time,
+  .post-data__average-speed {
+    margin-left: 0px;
+    margin-top: 3px;
   }
 }
