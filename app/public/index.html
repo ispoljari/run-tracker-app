@@ -37,7 +37,7 @@
               <li class="menu__item menu__item--border menu__item--shadow menu__item--hover">
                 <a href="#4" class="menu__link">Add New Run</a>
               </li>
-              <li class="menu__item menu__item--avatar-hover">
+              <li class="menu__item menu__item--avatar-hover js-avatar">
                   <a href="#4" class="menu__link">
                     <img src="svg/monster.svg" alt="An image of a random monster " class="menu__avatar menu__avatar--mobile">
                     <i class="fa fa-angle-down fa_angle--mobile"></i>
@@ -45,6 +45,34 @@
                 </li>
             </ul>
           </nav>
+          <div class="profile-options js-profile-options">
+            <ul class="profile-menu">
+              <li class="profile-menu__item profile--menu__item--emphasize">
+                <p>Wolfgang A. Mozart</p>
+              </li>
+              <hr>
+              <li class="profile-menu__item profile-menu__item--voffset profile-menu__item--hover">
+                <a href="#">
+                  <p>My Profile</p>
+                </a>
+              </li>
+              <li class="profile-menu__item profile-menu__item--voffset profile-menu__item--hover profile-menu__item--hide-runs">
+                <a href="#">
+                  <p>My Runs</p>
+                </a>
+              </li>
+              <li class="profile-menu__item profile-menu__item--voffset profile-menu__item--hover profile-menu__item--hide-analytics">
+                <a href="#">
+                  <p>Analytics</p>
+                </a>
+              </li>
+              <li class="profile-menu__item profile-menu__item--voffset  profile-menu__item--hover">
+                <a href="#">
+                  <p>Log Out</p>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="heading">
@@ -76,21 +104,25 @@
                 <div class="post-info">
                   <div class="post-header">
                     <div class="post-header__user">
-                      <h2>John Smith</h2>
+                      <a href="#">
+                        <h2>John Smith</h2>
+                      </a>
                     </div>
                     <div class="post-header__datetime">
                       <p>20th October 2018. at 19:45</p>
                     </div>
                   </div>
                   <div class="post-data">
-                    <div class="post-data__distance">
-                      <p><span class="post-data--emphasize">Distance:</span> 4.1km</p>
+                    <div class="post-data__distance post-data__distance--style-results">
+                      <p>Distance</p>
+                      <p>4.1 km</p>
                     </div>
-                    <div class="post-data__time">
-                      <p><span class="post-data--emphasize">Time:</span> 28min</p>
+                    <div class="post-data__time post-data__distance--style-results">
+                      <p>Run Time</p>
+                      <p>28m</p>
                     </div>
-                    <div class="post-data__average-speed">
-                      <p><span class="post-data--emphasize">Average speed:</span> 6:49/km</p>
+                    <div class="post-data__average-speed post-data__distance--style-results">
+                      <p>Average speed</p> <p>6:49/km</p>
                     </div>
                   </div>
                 </div>
@@ -116,6 +148,10 @@
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous">
+  </script>
   <script src="js/app.js"></script>
 </body>
 </html>
