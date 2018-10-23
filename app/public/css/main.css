@@ -46,7 +46,7 @@
 
 .menu__item:nth-child(1) {
   /* Styles */
-  background-color: yellow;
+  background-color: gold;
 }
 
 .menu__item:nth-child(2) {
@@ -83,7 +83,7 @@
 
 .menu__item--avatar-hover:hover {
   /* Styles */
-  background-color: #f5f0f0;
+  background-color: #dcd6d6;
 }
 
 .menu__item--mobile-S {
@@ -101,6 +101,10 @@
   /* Styles */
   border: 2px solid black;
   border-radius: 5px;
+}
+
+.header__logo--hover:hover {
+  background-color: #dcd6d6;
 }
 
 a {
@@ -197,6 +201,10 @@ a {
   /* Layout */
   display: inline-block;
   margin-top: 7px;
+}
+
+.heading__subtitle span {
+  color: crimson;
 }
 
 /* ------------------------------------------------- */
