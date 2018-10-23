@@ -96,7 +96,6 @@
   display: none;
 }
 
-
 .header__logo--border,
 .menu__item--border {
   /* Styles */
@@ -133,6 +132,46 @@
   /* Styles */
   font-size: 24px;
 }
+
+/* Dop down menu */
+
+.profile-options {
+  /* Layout */
+  position: absolute;
+  bottom: -95px;
+  right: 0;
+
+  /* Style */
+  min-width: 200px;
+  border: 2px solid black;
+  border-radius: 3px;
+  background-color: #f5f5f5;
+}
+
+.profile-menu {
+  /* Layout */
+  padding: 10px;
+}
+
+.profile-menu__item:nth-child(3),
+.profile-menu__item:nth-child(4) {
+  /* Layout */
+  padding: 3px;
+
+  /* Styles */
+  list-style: none;
+  border: 1px solid black;
+  border-radius: 3px;
+  max-width: 110px;
+}
+
+.profile-menu__item--voffset {
+  /* Layout */
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+/* Header Title text */
 
 
 .heading__title {
