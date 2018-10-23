@@ -83,7 +83,7 @@
 
 .menu__item--avatar-hover:hover {
   /* Styles */
-  background-color: #f5f5f5;
+  background-color: #f5f0f0;
 }
 
 .menu__item--mobile-S {
@@ -146,7 +146,7 @@ a {
   min-width: 200px;
   border: 2px solid black;
   border-radius: 3px;
-  background-color: snow;
+  background-color: #f5f0f0;
 }
 
 .profile-options--toggle-visibility {
@@ -304,6 +304,10 @@ a {
   .profile-menu__item--hide-runs {
     /* Layout */
     display: none;
+  }
+
+  .profile--menu__item--emphasize {
+    font-weight: bold;
   }
 
   .post-header__user,
