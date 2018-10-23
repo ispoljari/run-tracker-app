@@ -13,6 +13,7 @@
   position: relative;
   top: 5px;
   display: inline-block;
+  border-radius: 5px;
 }
 
 .logo-img {
@@ -169,7 +170,7 @@ a {
 
   /* Styles */
   list-style: none;
-  border: 1px solid black;
+  border: 1px solid rebeccapurple;
   border-radius: 3px;
   max-width: 110px;
 }
