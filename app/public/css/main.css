@@ -137,6 +137,7 @@
 
 .profile-options {
   /* Layout */
+  display: none;
   position: absolute;
   bottom: -95px;
   right: 0;
@@ -146,6 +147,10 @@
   border: 2px solid black;
   border-radius: 3px;
   background-color: #f5f5f5;
+}
+
+.profile-options--toggle-visibility {
+  display: block;
 }
 
 .profile-menu {
