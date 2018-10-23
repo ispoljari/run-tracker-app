@@ -146,7 +146,7 @@ a {
   min-width: 200px;
   border: 2px solid black;
   border-radius: 3px;
-  background-color: #f5f5f5;
+  background-color: snow;
 }
 
 .profile-options--toggle-visibility {
@@ -172,7 +172,7 @@ a {
 
 .profile-menu__item--hover:nth-child(n+3):hover {
   /* Styles */
-  background-color: #e3e3e3;
+  background-color: rgb(255, 203, 255);
 }
 
 .profile-menu__item--voffset {
@@ -219,7 +219,7 @@ a {
   border: 2px solid black;
   border-radius: 5px;
   background-color: azure;
-  max-width: 550px;
+  max-width: 400px;
 }
 
 .post-avatar {
@@ -237,26 +237,41 @@ a {
   margin-top: 10px;
 }
 
-.post-data--emphasize {
+.post-data__distance--style-results p:first-of-type {
   /* Style */
-  font-weight: bold;
+  color: #505050;
+}
+
+.post-data__distance--style-results p:last-of-type {
+  /* Style */
+  margin-top: 2px;
+  font-size: 22px;
 }
 
 .post-header__datetime,
-.post-data__time,
 .post-data__average-speed {
   /* Layout */
   margin-left: 0px;
   margin-top: 3px;
 }
 
+.post-data__time {
+  /* Layout */
+  margin-left: 15px;
+}
+
+
 .post-header__user,
 .post-header__datetime,
-.post-data__distance,
-.post-data__time,
 .post-data__average-speed {
   /* Layout */
   display: block;
+}
+
+.post-data__distance,
+.post-data__time {
+  /* Layout */
+  display: inline-block;
 }
 
 /* ------------------------------------------------- */
@@ -287,40 +302,37 @@ a {
   }
 
   .profile-menu__item--hide-runs {
+    /* Layout */
     display: none;
+  }
+
+  .post-header__user,
+  .post-header__datetime,
+  .post-data__average-speed {
+    /* Layout */
+    display: inline-block;
+  }
+
+  .post-data__average-speed {
+    /* Layout */
+    margin-left: 15px;
   }
 }
 
 
-@media screen and (min-device-width: 540px) {
+@media screen and (min-device-width: 590px) {
   .menu__item--mobile-M {
     /* Layout */
     display: inline-block;
   }
 
   .profile-menu__item--hide-analytics {
+    /* Layout */
     display: none;
   }
 
   .heading__title {
     /* Style */
     font-size: 26px;
-  }
-
-  .post-header__user,
-  .post-header__datetime,
-  .post-data__distance,
-  .post-data__time,
-  .post-data__average-speed {
-    /* Layout */
-    display: inline-block;
-  }
-
-  .post-header__datetime,
-  .post-data__time,
-  .post-data__average-speed {
-    /* Layout */
-    margin-left: 15px;
-    margin-top: 0px;
   }
 }
