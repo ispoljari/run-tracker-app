@@ -7,3 +7,7 @@ deploy:
   app: pure-peak-20096
   on:
     repo: ispoljari/run-tracker-app
+  
+branches:
+  only:
+    - master
