@@ -1,5 +1,5 @@
 # Run Tracker App
 
-## CURRENTLY BUILDING THIS APP
+## Currently building this app...
 
-### HERE'S A LINK TO THE PRODUCTION ENVIRONMENT: https://pure-peak-20096.herokuapp.com/
+### Here's a link to the production environment: https://pure-peak-20096.herokuapp.com/
