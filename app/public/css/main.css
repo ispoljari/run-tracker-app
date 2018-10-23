@@ -86,6 +86,17 @@
   background-color: #f5f5f5;
 }
 
+.menu__item--mobile-S {
+  /* Layout */
+  display: none;
+}
+
+.menu__item--mobile-M {
+  /* Layout */
+  display: none;
+}
+
+
 .header__logo--border,
 .menu__item--border {
   /* Styles */
@@ -130,7 +141,7 @@
   padding: 5px;
 
   /* Styles */
-  font-size: 26px;
+  font-size: 20px;
 }
 
 .heading__subtitle {
@@ -182,8 +193,8 @@
 .post-header__datetime,
 .post-data__time,
 .post-data__average-speed {
-  margin-left: 15px;
-  margin-top: 0px;
+  margin-left: 0px;
+  margin-top: 3px;
 }
 
 .post-header__user,
@@ -192,7 +203,7 @@
 .post-data__time,
 .post-data__average-speed {
   /* Layout */
-  display: inline-block;
+  display: block;
 }
 
 /* ------------------------------------------------- */
@@ -211,34 +222,40 @@
 
 /* ------------------------------------------------- */
 /* --------------------MEDIA QUERIES---------------- */
-@media screen and (max-device-width: 420px) {
+@media screen and (min-device-width: 420px) {
   .menu__item--mobile-S {
     /* Layout */
-    display: none;
-  }
-}
-
-
-@media screen and (max-device-width: 540px) {
-  .menu__item--mobile-M {
-    /* Layout */
-    display: none;
+    display: inline-block;
   }
 
   .heading__title {
     font-size: 24px;
   }
+}
 
+
+@media screen and (min-device-width: 540px) {
+  .menu__item--mobile-M {
+    /* Layout */
+    display: inline-block;
+  }
+
+  .heading__title {
+    font-size: 26px;
+  }
+
+  .post-header__user,
+  .post-header__datetime,
   .post-data__distance,
   .post-data__time,
   .post-data__average-speed {
-    display: block;
+    display: inline-block;
   }
 
   .post-header__datetime,
   .post-data__time,
   .post-data__average-speed {
-    margin-left: 0px;
-    margin-top: 3px;
+    margin-left: 15px;
+    margin-top: 0px;
   }
 }
