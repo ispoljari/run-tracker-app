@@ -15,7 +15,7 @@ function profileMenuListener() {
   });
 
   $('body').on('click', () => {
-    if (profileMenuOpen()) {
+    if (isProfileMenuOpen()) {
       closeProfileMenu();
     }
   });
@@ -25,7 +25,7 @@ function toggleProfileMenu() {
   $('.js-profile-options').toggleClass('profile-options--toggle-visibility');
 }
 
-function profileMenuOpen() {
+function isProfileMenuOpen() {
   return $('.js-profile-options').hasClass('profile-options--toggle-visibility');
 }
 

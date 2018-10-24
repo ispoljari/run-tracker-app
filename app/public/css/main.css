@@ -220,13 +220,14 @@ a {
 .content__post {
   /* Layout */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin: 0 auto;
   padding: 10px;
 
   /* Style */
   border: 2px solid black;
   border-radius: 5px;
+  box-shadow: 4px 4px 0px 0px rgba(162, 162, 162, 0.75);
   background-color: azure;
   max-width: 400px;
 }
@@ -243,7 +244,7 @@ a {
 
 .post-data {
   /* Layout */
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .post-data__distance--style-results p:first-of-type {
@@ -261,7 +262,16 @@ a {
 .post-data__average-speed {
   /* Layout */
   margin-left: 0px;
-  margin-top: 3px;
+}
+
+.post-header__datetime {
+  /* Layout */
+  margin-top: 5px;
+}
+
+.post-data__average-speed {
+   /* Layout */
+   margin-top: 10px;
 }
 
 .post-data__time {
