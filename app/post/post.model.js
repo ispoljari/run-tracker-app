@@ -3,9 +3,12 @@
 // Import 3rd party frameworks and libraries 
 
 const mongoose = require('mongoose');
-const {User} = require('../user');
+const Joi = require('joi');
 
 mongoose.Promise = global.Promise;
+
+// Import the User model to enable referencing from post.user
+const {User} = require('../user');
 
 const Schema = mongoose.Schema;
 
@@ -19,7 +22,7 @@ const postSchema = Schema({
 
 // Setup populate in middleware
 postSchema.pre('find', function(next) {
-  this.populate('user');
+  this.populate('User');
   next();
 });
 
@@ -30,15 +33,19 @@ postSchema.methods.serialize = function() {
     runTime: this.runTime,
     dateTime: this.dateTime,
     upvotes: this.upvotes,
-    userName: this.user.name,
-    userDisplayName: this.user.displayName,
-    userAvatar: this.user.avatar
+    user: this.user.serialize()
   };
 };
 
-// Add validation with Joi
-// -----------
+// Create a Joi schema for post data validation
+const postJoiSchema = Joi.object().keys({
+  distance: Joi.number().required(),
+  runTime: Joi.number().required(),
+  dateTime: Joi.date().optional(),
+  upvotes: Joi.number().optional(),
+  user: Joi.string().required()
+});
 
-const Post = mongoose.model('Post');
+const Post = mongoose.model('Post', postSchema);
 
-module.exports = {Post};
+module.exports = {Post, postJoiSchema};

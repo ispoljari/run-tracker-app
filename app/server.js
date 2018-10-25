@@ -37,10 +37,15 @@ app.use(express.json());
 
 // Import router modules
 const {router: usersRouter} = require('./user');
+const {router: postsRouter} = require('./post');
 
-// Route handlers for the /api/users/ endpoint
-// Used to POST a new user to the DB, not protected
+/* Route handler for the /api/users/ endpoint
+   Used to POST a new user to the DB, not protected */
 app.use('/api/users', usersRouter);
+
+/* Route handler for the /api/posts/ endpoint 
+   GET (all notes) operation is not protected. POST, PUT, DELETE operations are protected */
+app.use('/api/posts', postsRouter);
 
 // Run/stop server
 

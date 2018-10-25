@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
 
   let {email, password, name, displayName, avatar = randomAvatarIndex} = req.body;
 
-  // ADD USER DATA VALIDATION
+  // ADD user data validation
   const validate = Joi.validate({
     name,
     displayName,
