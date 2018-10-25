@@ -10,8 +10,8 @@ mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 
 const postSchema = Schema({
-  distance: {type: Number, required: true},
-  runTime: {type: Number, required: true},
+  distance: {type: Number},
+  runTime: {type: Number},
   dateTime: {type: Date, default: Date.now},
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   upvotes: {type: Number, default: 0}

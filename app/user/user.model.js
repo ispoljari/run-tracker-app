@@ -9,15 +9,17 @@ mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
 
-// Create the user schema
+/*  ------ Create the user schema
+-> The 'require' validator is not used in the user schema, because validation is not done at the dabatase layer, but at the nodejs/server layer with a 3rd party validation framework called Joi) */
+
 const userSchema = Schema({
-  name: {type: String, required: true},
-  displayName: {type: String, required: true},
+  name: {type: String},
+  displayName: {type: String},
   email: {
-    type: String, 
-    required: true,
-    unique: true},
-  password: {type: String, required: true},
+    type: String,
+    unique: true /* Ensure that this field is unique (no duplicates) in the DB */
+  },
+  password: {type: String},
   avatar: {type: Number}
 });
 
