@@ -1,5 +1,7 @@
 'use strict';
 
+// Import 3rd party frameworks and libraries 
+
 const mongoose = require('mongoose');
 const {User} = require('../user');
 
