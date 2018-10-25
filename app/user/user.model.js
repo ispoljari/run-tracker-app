@@ -2,7 +2,7 @@
 
 // Import 3rd party libraries and frameworks
 const mongoose = require('mongoose');
-// const Joi = require('joi');
+const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 
 mongoose.Promise = global.Promise;
@@ -18,7 +18,7 @@ const userSchema = Schema({
     required: true,
     unique: true},
   password: {type: String, required: true},
-  avatar: {type: Number, required: true}
+  avatar: {type: Number}
 });
 
 userSchema.methods.serialize = function() {
@@ -39,13 +39,15 @@ userSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
 
-// // Create a Joi schema for user data validation
-// const userJoiSchema = Joi.object().keys({
-//   name: Joi.string().min(1).trim().required(),
-//   email: Joi.string().email().trim().required(),
-
-// });
+// Create a Joi schema for user data validation
+const userJoiSchema = Joi.object().keys({
+  name: Joi.string().min(1).trim().required(),
+  displayName: Joi.string().min(1).trim().required(),
+  email: Joi.string().email().trim().required(),
+  password: Joi.string().min(10).max(72).trim().required(),
+  avatar: Joi.number().integer()
+});
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = {User};
+module.exports = {User, userJoiSchema};

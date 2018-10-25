@@ -2,8 +2,9 @@
 
 // Import 3rd party frameworks, libraries and/or config parameters
 const express = require('express');
+const Joi = require('joi');
 
-const {User} = require('./user.model');
+const {User, userJoiSchema} = require('./user.model');
 const {HTTP_STATUS_CODES} = require('../config');
 
 // Mount the router middleware
@@ -12,12 +13,30 @@ const router = express.Router();
 // Create a New User
 router.post('/', (req, res) => {
 
-  // ADD USER DATA VALIDATION HERE!!
+  // If the user doesn't select an avatar, assign a random index
+  let randomAvatarIndex = Math.floor(Math.random()*30);
 
-  let {email, password, name, displayName, avatar} = req.body;
+  let {email, password, name, displayName, avatar = randomAvatarIndex} = req.body;
+
+  // ADD USER DATA VALIDATION
+  const validate = Joi.validate({
+    name,
+    displayName,
+    email,
+    password,
+    avatar
+  }, userJoiSchema, {convert: false});
+
+  if (validate.error) {
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      reason: validate.error.name,
+      message: validate.error.details[0].message
+    });
+  }
 
   User.find({email})
-  .count()
+  .countDocuments()
   .then(count => {
     if (count > 0) {
       return Promise.reject({
@@ -30,7 +49,7 @@ router.post('/', (req, res) => {
     return User.hashPassword(password);
   })
   .then(passwordHash => {
-    User.create({
+    return User.create({
       name,
       displayName,
       email,
