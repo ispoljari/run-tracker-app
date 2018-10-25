@@ -19,6 +19,15 @@ app.use(morgan('combined'));
 // Serve static assets to client
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Body parsing
+app.use(express.json());
+
+// Import router modules
+const {router: usersRouter} = require('./user');
+
+// Route handlers for the /api/users/ endpoint
+app.use('/api/users', usersRouter);
+
 // Run the server
 if (require.main === module) {
   app.listen(process.env.PORT || 8080, ()=> {
