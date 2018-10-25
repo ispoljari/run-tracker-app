@@ -9,12 +9,13 @@ const {HTTP_STATUS_CODES} = require('../config');
 // Mount the router middleware
 const router = express.Router();
 
-// ADD USER DATA VALIDATION HERE!!
-
-let {email, password, name, displayName, avatar} = req.body;
-
 // Create a New User
 router.post('/', (req, res) => {
+
+  // ADD USER DATA VALIDATION HERE!!
+
+  let {email, password, name, displayName, avatar} = req.body;
+
   User.find({email})
   .count()
   .then(count => {
@@ -26,7 +27,6 @@ router.post('/', (req, res) => {
         location: 'email' 
       });
     }
-    
     return User.hashPassword(password);
   })
   .then(passwordHash => {

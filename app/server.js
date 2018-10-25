@@ -42,11 +42,56 @@ const {router: usersRouter} = require('./user');
 // Used to POST a new user to the DB, not protected
 app.use('/api/users', usersRouter);
 
-// Run the server
-if (require.main === module) {
-  app.listen(PORT || 8080, ()=> {
-    console.info(`The server started listening at port ${process.env.PORT || 8080}`);
+// Run/stop server
+
+let server;
+
+function runServer(databaseUrl, port = PORT) {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(databaseUrl, {useNewUrlParser: true}, err => {
+      if (err) {
+        return reject(err);
+      }
+  
+      console.info(`Connected to database at ${databaseUrl}`);
+      server = app.listen(port, () => {
+        console.info(`The server started listening at ${port}`);
+        resolve();
+      })
+      .on('error', err => {
+        mongoose.disconnect();
+        reject(err);
+      });
+    });
+  })
+  .catch(err => {
+    return console.error(err);
   });
 }
 
-module.exports = {app};
+function stopServer() {
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.info('The server has disconnected from the DB.');
+
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+
+        console.info('The server has shut down.')
+        resolve();
+      });
+    })
+    .catch(err => {
+      return console.error(err);
+    });
+  });
+}
+
+// Run the server
+if (require.main === module) {
+  runServer(DATABASE_URL);
+}
+
+module.exports = {app, runServer, stopServer};
