@@ -1,9 +1,14 @@
 'use strict';
 
-// Import 3rd party frameworks
+// Import 3rd party frameworks, custom libraries and/or env. variables
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
+
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
+const {DATABASE_URL, TEST_DATABASE_URL, PORT, HTTP_STATUS_CODES} = require('./config');
 
 // Initialize an express app
 const app = express();
