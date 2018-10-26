@@ -54,7 +54,7 @@ postSchema.methods.serialize = function() {
 const postJoiSchema = Joi.object().keys({
   distance: Joi.number().required(),
   runTime: Joi.number().required(),
-  dateTime: Joi.date().optional(),
+  dateTime: Joi.string().optional(),
   user: Joi.string().required(),
   upvotes: Joi.array().items(
     Joi.object().keys({
