@@ -44,8 +44,20 @@ router.post('/', (req, res) => {
     return res.status(HTTP_STATUS_CODES.CREATED).json(post.serialize());
   })
   .catch(err => {
-    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(err);
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({error: 'Something went wrong with your request.'});
   });
 });
+
+// Retrieve all existing notes (publicly accessible)
+
+router.get('/', (req, res) => {
+  Post.find()
+    .then(posts => {
+      return res.json(posts.map(post => post.serialize()))
+    })
+    .catch(err => {
+      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({error: 'Something went wrong with your request.'});
+    })
+})
 
 module.exports = {router};
