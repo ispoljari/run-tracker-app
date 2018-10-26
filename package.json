@@ -26,12 +26,16 @@
   },
   "homepage": "https://github.com/ispoljari/run-tracker-app#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.16.4",
+    "joi": "^14.0.1",
+    "mongoose": "^5.3.6",
     "morgan": "^1.9.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
+    "faker": "^4.1.0",
     "mocha": "^5.2.0"
   }
 }
