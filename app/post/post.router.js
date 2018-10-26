@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
     runTime,
     dateTime,
     user,
-    upovotes
+    upvotes
   }, postJoiSchema, {convert: false});
 
   if (validate.error) {
@@ -41,11 +41,11 @@ router.post('/', (req, res) => {
     upvotes
   })
   .then(post => {
-    return res.status(HTTP_STATUS_CODES.CREATED).json(note.serialize());
+    return res.status(HTTP_STATUS_CODES.CREATED).json(post.serialize());
   })
   .catch(err => {
     return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(err);
-  })
+  });
 });
 
 module.exports = {router};

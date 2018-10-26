@@ -69,4 +69,6 @@ router.post('/', (req, res) => {
   });
 });
 
+// PUT endpoint (protected)
+
 module.exports = {router};

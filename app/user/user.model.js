@@ -13,14 +13,14 @@ const Schema = mongoose.Schema;
 -> The 'require' validator is not used in the user schema, because validation is not done at the dabatase layer, but at the nodejs/server layer with a 3rd party validation framework called Joi) */
 
 const userSchema = Schema({
-  name: {type: String},
-  displayName: {type: String},
+  name: String,
+  displayName: String,
   email: {
     type: String,
     unique: true /* Ensure that this field is unique (no duplicates) in the DB */
   },
-  password: {type: String},
-  avatar: {type: Number}
+  password: String,
+  avatar: Number
 });
 
 userSchema.methods.serialize = function() {
