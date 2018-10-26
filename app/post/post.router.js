@@ -44,7 +44,10 @@ router.post('/', (req, res) => {
     return res.status(HTTP_STATUS_CODES.CREATED).json(post.serialize());
   })
   .catch(err => {
-    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({error: 'Something went wrong with your request.'});
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
   });
 });
 
@@ -56,7 +59,10 @@ router.get('/', (req, res) => {
       return res.json(posts.map(post => post.serialize()))
     })
     .catch(err => {
-      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({error: 'Something went wrong with your request.'});
+      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error'
+      });
     })
 })
 
