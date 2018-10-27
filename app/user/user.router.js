@@ -28,6 +28,8 @@ router.post('/', (req, res) => {
   }, userJoiSchema, {convert: false});
 
   if (validate.error) {
+    console.error(validate.error);
+
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
       reason: validate.error.name,
@@ -41,9 +43,7 @@ router.post('/', (req, res) => {
     if (count > 0) {
       return Promise.reject({
         code: HTTP_STATUS_CODES.BAD_REQUEST,
-        reason: 'ValidationError',
-        message: 'Email already taken',
-        location: 'email' 
+        message: 'Email already taken'
       });
     }
     return User.hashPassword(password);
@@ -61,11 +61,19 @@ router.post('/', (req, res) => {
       return res.status(HTTP_STATUS_CODES.CREATED).json(user.serialize());
   })
   .catch(err => {
+    console.error(err);
+
     if (err.reason === 'ValidationError') {
-      return res.status(err.code).json(err);
+      return res.status(err.code).json({
+        code: err.code,
+        message: err.message
+      });
     }
-    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-    message: 'Internal Server Error'});
+
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
   });
 });
 
