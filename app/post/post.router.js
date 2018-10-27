@@ -55,8 +55,9 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
   Post.find()
+    .populate()
     .then(posts => {
-      return res.json(posts.map(post => post.serialize()))
+      return res.status(HTTP_STATUS_CODES.OK).json(posts.map(post => post.serialize()))
     })
     .catch(err => {
       return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({

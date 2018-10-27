@@ -184,15 +184,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
     });
   });
 
-  describe('----- /api/post/ endpoint -----', function() {
-
-    beforeEach(function() {
-      return seedPostData();
-    });
-  
-    afterEach(function() {
-      return tearDownDB();
-    });
+  describe('----- /api/posts/ endpoint -----', function() {
     
     describe('POST request', function() {
 
@@ -283,6 +275,36 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
           .send(nonValidPost)
           .then(function(res) {
             expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
+          });
+      });
+
+    });
+
+    describe('GET requests', function() {
+
+      beforeEach(function() {
+        return seedPostData();
+      });
+
+      afterEach(function() {
+        return tearDownDB();
+      });
+
+      // Testing only the Normal Case
+      it('Should retrieve all posts from the DB', function() {
+        let res;
+
+        return chai.request(app)
+          .get('/api/posts/')
+          .then(function(_res) {
+            res = _res;
+            expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+            expect(res.body).to.have.lengthOf.at.least(1);
+
+            return Post.countDocuments();
+          })
+          .then(count => {
+            expect(res.body).to.have.lengthOf(count);
           });
       });
 

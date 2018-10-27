@@ -25,10 +25,10 @@ const postSchema = Schema({
 });
 
 // Setup author populate in middleware
-postSchema.pre('find', function(next) {
-  this.populate('user');
-  next();
-});
+// postSchema.pre('find', function(next) {
+//   this.populate('user');
+//   next();
+// });
 
 // Add a serialize instance method to filter return data
 postSchema.methods.serialize = function() {
