@@ -30,11 +30,6 @@ postSchema.pre('find', function(next) {
   next();
 });
 
-postSchema.pre('findOne', function(next) {
-  this.populate('user');
-  next();
-})
-
 // Add a serialize instance method to filter return data
 postSchema.methods.serialize = function() {
   let user;

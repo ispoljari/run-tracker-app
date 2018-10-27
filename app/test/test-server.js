@@ -57,12 +57,15 @@ function generatePostData() {
 }
 
 function generateUserData() {
+  let wordCount;
+  let max;
+
   return {
     name: faker.name.firstName(),
     displayName: faker.name.jobTitle(),
     email: faker.internet.email(),
-    password: faker.lorem.sentence(),
-    avatar: faker.random.number()
+    password: faker.lorem.sentence(wordCount = 5),
+    avatar: faker.random.number(max = 30)
   }
 }
 
@@ -222,10 +225,8 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
 
             expect(res.body.dateTime).to.equal(newPost.dateTime);
             expect(res.body.dateTime).to.be.a('string');
-
             expect(res.body.user).to.not.be.null;
             expect(res.body.id).to.not.be.null;
-  
             expect(res.body.upvotes).to.have.lengthOf.at.least(1);
             expect(res.body.upvotes[0]).to.not.be.null;
             expect(res.body.upvotes[1]).to.not.be.null;
