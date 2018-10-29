@@ -45,19 +45,19 @@ router.post('/', (req, res) => {
   }
 
   // Check the 'upvotes' property
-  // if (upvotes.length > 0) {
-  //   const invalidIdFields = upvotes.filter(item => {
-  //     return !(mongoose.Types.ObjectId.isValid(item.userId));
-  //   });
+  if (upvotes.length > 0) {
+    const invalidIdFields = upvotes.filter(item => {
+      return !(mongoose.Types.ObjectId.isValid(item.userId));
+    });
 
-  //   if (invalidIdFields.length > 0) {
-  //     const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'  
-  //     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
-  //       code: HTTP_STATUS_CODES.BAD_REQUEST,
-  //       message: message
-  //     });
-  //   }
-  // }
+    if (invalidIdFields.length > 0) {
+      const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'  
+      return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+        code: HTTP_STATUS_CODES.BAD_REQUEST,
+        message: message
+      });
+    }
+  }
 
   User.findById(req.body.user)
     .then(user => {

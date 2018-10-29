@@ -231,7 +231,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
             newPost.user = userDB._id;
           })  
           .then(function() {
-            chai.request(app)
+            return chai.request(app)
             .post('/api/posts/')
             .send(newPost)
             .then(function(res) {
@@ -325,7 +325,24 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
           .then(function(_res) {
             res = _res;
             expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+            expect(res).to.be.json;
+            expect(res.body).to.be.a('array');
             expect(res.body).to.have.lengthOf.at.least(1);
+
+            res.body.forEach(function(post) {
+              expect(post).to.be.a('object');
+              expect(post).to.include.keys(
+                'distance', 'runTime', 'dateTime', 'user'
+              );
+            });
+
+            return Post.findById(res.body[0].id);
+          })
+          .then(function(post) {
+            expect(res.body[0].id).to.equal(post.id);
+            expect(res.body[0].distance).to.equal(post.distance);
+            expect(res.body[0].runTime).to.equal(post.runTime);
+            expect(res.body[0].dateTime).to.equal(post.dateTime);
 
             return Post.countDocuments();
           })
@@ -334,6 +351,34 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
           });
       });
 
+      it('Should retrieve a single post by ID from the DB', function() {
+        let res;
+
+        return Post.findOne()
+          .then(function(post) {
+            return post._id;
+          })
+          .then(function(id) {
+            return chai.request(app) 
+              .get(`/api/posts/${id}`)
+              .then(function(_res) {
+                res = _res;
+                expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+                expect(res.body).to.be.a('object');
+                expect(res.body).to.include.keys(
+                  'distance', 'runTime', 'dateTime', 'user'
+                );
+
+                return Post.findById(res.body.id)
+              })
+              .then(function(post) {
+                expect(res.body.id).to.equal(post.id);
+                expect(res.body.distance).to.equal(post.distance);
+                expect(res.body.runTime).to.equal(post.runTime);
+                expect(res.body.dateTime).to.equal(post.dateTime);
+              });
+          });
+      });
     });
 
   });
