@@ -125,8 +125,34 @@ router.get('/:id', (req, res) => {
 
 // Update a note (JWT protected)
 
-// router.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
+  if (!(req.params.id === req.body.id)) {
+    res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      message: 'Request path id and request body id values must match'
+    });
+  }
 
-// }); 
+  const updated = {};
+  const updateableFields = ['distance', 'runTime', 'dateTime'];
+  
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+
+    Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+      .populate('user')
+      .then(updatedPost => {
+        return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+      })
+      .catch(err => {
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+          code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+          message: 'Internal Server Error'
+        });
+      });
+  });
+}); 
 
 module.exports = {router};

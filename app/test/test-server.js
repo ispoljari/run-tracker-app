@@ -381,6 +381,53 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
       });
     });
 
+    describe('PUT requests', function() {
+
+      // Test the normal case
+      it('Should update the data fields of a post with a specific ID', function() {
+        const updateData = generatePostData();
+
+        return Post.findOne()
+          .then(function(post) {
+            updateData.id = post.id;
+
+            return chai.request(app)
+              .put(`/api/posts/${post.id}`)
+              .send(updateData);
+          })
+          .then(function(res) {
+            expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+            
+            return Post.findById(updateData.id);
+          })
+          .then(function(post){
+            expect(post.distance).to.equal(updateData.distance);
+            expect(post.runTime).to.equal(updateData.runTime);
+            expect(post.dateTime).to.equal(updateData.dateTime);
+          });
+      });
+    });
+
+    describe('DELETE requests', function() {
+      it('Should delete a post with a specific ID', function() {
+        let post = _post;
+
+        return Post.findOne()
+          .then(function(_post) {
+            post = _post;
+
+            return chai.request(app)
+              .delete(`/api/posts/${post.id}`);
+          })
+          .then(function(res) {
+            expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+            return Post.findById(post.id);
+          })
+          .then(function(_post) {
+            expect(_post).to.be.null;
+          });
+      });
+    });
   });
 
 });
