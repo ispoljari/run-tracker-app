@@ -381,6 +381,26 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
       });
     });
 
+    describe('PUT requests', function() {
+
+      // Test the normal case
+      it('Should update the field sent over', function() {
+        const updateData = generatePostData();
+        delete updateData.upvotes; // the fields sent over HTTP are: distance, runTime, dateTime, user
+
+        return Post.findOne()
+          .then(function(post) {
+            updateData.id = post.id;
+
+            return chai.request(app)
+              .put(`/api/posts/${updateData.id}`)
+              .send(updateData);
+          })
+          .then(function(res) {
+            expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+          })
+      });
+    });
   });
 
 });
