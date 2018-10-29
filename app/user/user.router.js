@@ -42,6 +42,7 @@ router.post('/', (req, res) => {
     if (count > 0) {
       return Promise.reject({
         code: HTTP_STATUS_CODES.BAD_REQUEST,
+        reason: 'ValidationError',
         message: 'Email already taken'
       });
     }
