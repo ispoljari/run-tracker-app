@@ -28,7 +28,6 @@ router.post('/', (req, res) => {
   }, userJoiSchema, {convert: false});
 
   if (validate.error) {
-    console.error(validate.error);
 
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
@@ -61,7 +60,6 @@ router.post('/', (req, res) => {
       return res.status(HTTP_STATUS_CODES.CREATED).json(user.serialize());
   })
   .catch(err => {
-    console.error(err);
 
     if (err.reason === 'ValidationError') {
       return res.status(err.code).json({

@@ -27,8 +27,6 @@ router.post('/', (req, res) => {
   }, postJoiSchema, {convert: false});
 
   if (validate.error) {
-    console.error(validate.error);
-
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
       message: validate.error.details[0].message
@@ -40,8 +38,6 @@ router.post('/', (req, res) => {
   // Check the 'user' property
   if (!(mongoose.Types.ObjectId.isValid(user))) {
     const message = 'The value of \'user\' is not in a valid ObjectId format.'
-    console.error(message);
-
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
       message: message
@@ -49,21 +45,19 @@ router.post('/', (req, res) => {
   }
 
   // Check the 'upvotes' property
-  if (upvotes.length > 0) {
-    const invalidIdFields = upvotes.filter(item => {
-      return !(mongoose.Types.ObjectId.isValid(item.userId));
-    });
+  // if (upvotes.length > 0) {
+  //   const invalidIdFields = upvotes.filter(item => {
+  //     return !(mongoose.Types.ObjectId.isValid(item.userId));
+  //   });
 
-    if (invalidIdFields.length > 0) {
-      const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'
-      console.error(message);
-  
-      return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
-        code: HTTP_STATUS_CODES.BAD_REQUEST,
-        message: message
-      });
-    }
-  }
+  //   if (invalidIdFields.length > 0) {
+  //     const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'  
+  //     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+  //       code: HTTP_STATUS_CODES.BAD_REQUEST,
+  //       message: message
+  //     });
+  //   }
+  // }
 
   User.findById(req.body.user)
     .then(user => {
@@ -79,8 +73,6 @@ router.post('/', (req, res) => {
           return res.status(HTTP_STATUS_CODES.CREATED).json(post.serialize());
         })
         .catch(err => {
-          console.error(err);
-
           return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
             code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
             message: 'Internal Server Error'
@@ -88,8 +80,6 @@ router.post('/', (req, res) => {
         });
       } else {
         const message = 'User not found.';
-        console.error(message);
-
         return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
           code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
           message: message
@@ -97,8 +87,6 @@ router.post('/', (req, res) => {
       }
     })
     .catch(err => {
-      console.error(err);
-
       return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
         code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
         message: 'Internal Server Error'
@@ -115,8 +103,6 @@ router.get('/', (req, res) => {
       return res.status(HTTP_STATUS_CODES.OK).json(posts.map(post => post.serialize()))
     })
     .catch(err => {
-      console.error(err);
-
       return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
         code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
         message: 'Internal Server Error'
@@ -133,8 +119,6 @@ router.get('/:id', (req, res) => {
     return res.status(HTTP_STATUS_CODES.OK).json(post.serialize());
   })
   .catch(err => {
-    console.error(err);
-
     return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
       code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
       message: 'Internal Server Error'

@@ -31,27 +31,62 @@ chai.use(chaiHttp);
 
 */
 
-function seedPostData() {
-  console.info('Seeding post data to test DB...');
+function seedData() {
+  console.info('Seeding post and user data to test DB...');
   const postSeedData = [];
+  const userSeedData = [];
 
   for (let i=0; i<=10; i++) {
+    userSeedData.push(generateUserData());
     postSeedData.push(generatePostData());
   }
 
-  return Post.insertMany(postSeedData);
+  /* 
+  
+  A user has to exist in the DB before a new post can be added 
+  Therefore, this is the data storing strategy;
+
+  1) Generate 10 user documents with random data
+  2) Generate 10 post documents with random data
+  3) Save the user documents in the DB
+  4) Retrieve the stored users from the DB and extract their ID's into a new array
+  5) Iterate through the the post documents and insert the retrieved user ID's
+  6) Save the modified post documents to the DB
+  
+  Now for every random post document there is a linked user document. Now, 
+  the test's won't fail when using the populate() function
+  */
+  
+  return User.insertMany(userSeedData)
+    .then(function(users) {
+      return users.map(function(user) {
+        return user._id
+      });
+    })
+    .then(function(ids) {
+      for (let i=0; i<ids.length; i++) {
+        postSeedData[i].user = ids[i];
+      }
+      return postSeedData;
+    })
+    .then(function (postSeedData) {
+      return Post.insertMany(postSeedData);
+    });
+}
+
+function generateDummyObjectID() {
+  return mongoose.Types.ObjectId();
 }
 
 function generatePostData() {
-  let id = mongoose.Types.ObjectId();
 
   return {
     distance: faker.random.number(),
     runTime: faker.random.number(),
     dateTime: faker.lorem.word(),
-    user: id,
+    user: generateDummyObjectID(),
     upvotes : [{
-      userId: id
+      userId: generateDummyObjectID()
     }]
   }
 }
@@ -82,7 +117,6 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
-
   after(function() {
     return stopServer();
   });
@@ -102,6 +136,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
   });
 
   describe('***** API resources *****', function() {
+
   
     describe('----- /api/users/ endpoint -----', function() {
   
@@ -148,13 +183,8 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
 
         // Fail Cases
         it('Should NOT add a new user to the DB (wrong data type sent)', function() {
-          const nonValidUser = {
-            name: faker.random.number(), // wrong data type
-            displayName: faker.name.jobTitle(),
-            email: faker.internet.email(),
-            password: faker.lorem.sentence(),
-            avatar: faker.random.number()
-          };
+          const nonValidUser = generateUserData();
+          nonValidUser.name = faker.random.number() // wrong data type
   
           return chai.request(app)
             .post('/api/users/')
@@ -165,12 +195,8 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
         });
 
         it('Should NOT add a new user to the DB (required key missing)', function() {
-          const nonValidUser = {
-            displayName: faker.name.jobTitle(),
-            email: faker.internet.email(),
-            password: faker.lorem.sentence(),
-            avatar: faker.random.number()
-          };
+          const nonValidUser = generateUserData();
+          delete nonValidUser.name; // delete required key
   
           return chai.request(app)
             .post('/api/users/')
@@ -185,6 +211,14 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
   });
 
   describe('----- /api/posts/ endpoint -----', function() {
+
+    beforeEach(function() {
+      return seedData();
+    });
+  
+    afterEach(function() {
+      return tearDownDB();
+    });
     
     describe('POST request', function() {
 
@@ -192,63 +226,60 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
       it('Should add a new post to the DB', function() {
         const newPost = generatePostData();
 
-        return chai.request(app)
-          .post('/api/posts/')
-          .send(newPost)
-          .then(function(res) {
-            expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
-            expect(res).to.be.json;
-            expect(res.body).to.be.a('object');
-            expect(res.body).to.include.keys(
-              'distance', 'runTime', 'dateTime', 'user', 'upvotes', 'id'
-            );
-            expect(res.body.upvotes).to.be.a('array');
-            expect(res.body.upvotes[0]).to.be.a('object');
-            expect(res.body.upvotes[0]).to.include.keys(
-              'userId'
-            );
+        return User.findOne()
+          .then(function(userDB) {
+            newPost.user = userDB._id;
+          })  
+          .then(function() {
+            chai.request(app)
+            .post('/api/posts/')
+            .send(newPost)
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
+              expect(res).to.be.json;
+              expect(res.body).to.be.a('object');
+              expect(res.body).to.include.keys(
+                'distance', 'runTime', 'dateTime', 'user', 'upvotes', 'id'
+              );
+              expect(res.body.upvotes).to.be.a('array');
+              expect(res.body.upvotes[0]).to.be.a('object');
+              expect(res.body.upvotes[0]).to.include.keys(
+                'userId'
+              );
 
-            // compare the API response with the sent data
-            expect(res.body.distance).to.equal(newPost.distance);
-            expect(res.body.distance).to.be.a('number');
-  
-            expect(res.body.runTime).to.equal(newPost.runTime);
-            expect(res.body.runTime).to.be.a('number');
+              // compare the API response with the sent data
+              expect(res.body.distance).to.equal(newPost.distance);
+              expect(res.body.distance).to.be.a('number');
+    
+              expect(res.body.runTime).to.equal(newPost.runTime);
+              expect(res.body.runTime).to.be.a('number');
 
-            expect(res.body.dateTime).to.equal(newPost.dateTime);
-            expect(res.body.dateTime).to.be.a('string');
-            expect(res.body.user).to.not.be.null;
-            expect(res.body.id).to.not.be.null;
-            expect(res.body.upvotes).to.have.lengthOf.at.least(1);
-            expect(res.body.upvotes[0]).to.not.be.null;
-            expect(res.body.upvotes[1]).to.not.be.null;
-  
-            return Post.findById(res.body.id);
-          })
-          .then(function(post) { //inspect the DB, and compare it's state to the API response
-          expect(post.distance).to.equal(newPost.distance);
-          expect(post.runTime).to.equal(newPost.runTime);
-          expect(post.dateTime).to.equal(newPost.dateTime);
-          expect(post.user).to.not.be.null;
-          expect(post.id).to.not.be.null;
-          expect(post.upvotes).to.have.lengthOf.at.least(1);
-          expect(post.upvotes[0]).to.not.be.null;
+              expect(res.body.dateTime).to.equal(newPost.dateTime);
+              expect(res.body.dateTime).to.be.a('string');
+              expect(res.body.user).to.not.be.null;
+              expect(res.body.id).to.not.be.null;
+              expect(res.body.upvotes).to.have.lengthOf.at.least(1);
+              expect(res.body.upvotes[0]).to.not.be.null;
+              expect(res.body.upvotes[1]).to.not.be.null;
+    
+              return Post.findById(res.body.id);
+            })
+            .then(function(post) { //inspect the DB, and compare it's state to the API response
+              expect(post.distance).to.equal(newPost.distance);
+              expect(post.runTime).to.equal(newPost.runTime);
+              expect(post.dateTime).to.equal(newPost.dateTime);
+              expect(post.user).to.not.be.null;
+              expect(post.id).to.not.be.null;
+              expect(post.upvotes).to.have.lengthOf.at.least(1);
+              expect(post.upvotes[0]).to.not.be.null;
+            })
           });
       });
 
       // Fail Cases
       it('Should NOT add a new post to the DB (wrong data type sent)', function() {
-        let id = mongoose.Types.ObjectId();
-
-        const nonValidPost = {
-          distance: faker.random.word(), // wrong data type
-          runTime: faker.random.number(),
-          dateTime: faker.lorem.word(),
-          user: id,
-          upvotes : [{
-            userId: id
-          }]
-        };
+        const nonValidPost = generatePostData();
+        nonValidPost.distance = faker.random.word(); // wrong data type
 
         return chai.request(app)
           .post('/api/posts/')
@@ -259,16 +290,8 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
       });
 
       it('Should NOT add a new post to the DB (required key missing)', function() {
-        let id = mongoose.Types.ObjectId();
-
-        const nonValidPost = {
-          distance: faker.random.number(), 
-          runTime: faker.random.number(),
-          dateTime: faker.lorem.word(),
-          upvotes : [{
-            userId: id
-          }]
-        };
+        const nonValidPost = generatePostData();
+        delete nonValidPost.user; // remove 'user'
 
         return chai.request(app)
           .post('/api/posts/')
@@ -278,17 +301,20 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
           });
       });
 
+      it('Should NOT add a new post to the DB if the user doesn\'t exist', function() {
+        const nonValidPost = generatePostData();
+        nonValidPost.user = '5bd3375a437fb9831fb25479' // non-existent user, but the ID is in a valid MongoDB UserID format
+
+        return chai.request(app)
+          .post('/api/posts/')
+          .send(nonValidPost)
+          .then(function(res) {
+            expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
+          });
+      });
     });
 
     describe('GET requests', function() {
-
-      beforeEach(function() {
-        return seedPostData();
-      });
-
-      afterEach(function() {
-        return tearDownDB();
-      });
 
       // Testing only the Normal Case
       it('Should retrieve all posts from the DB', function() {
@@ -303,7 +329,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
 
             return Post.countDocuments();
           })
-          .then(count => {
+          .then(function(count) {
             expect(res.body).to.have.lengthOf(count);
           });
       });
