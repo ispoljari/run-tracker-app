@@ -1,9 +1,12 @@
 'use strict';
 
 // Import 3rd party frameworks, libraries and/or config parameters
+require('dotenv').config();
+
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
+const passport = require('passport');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -25,6 +28,11 @@ app.use(express.json());
 // Import router modules
 const {router: usersRouter} = require('./user');
 const {router: postsRouter} = require('./post');
+const {router: authRouter} = require('./post');
+
+// Mount the passport authentication strategies as middleware
+const {localStrategy} = require('./auth');
+passport.use(localStrategy);
 
 /* Route handler for the /api/users/ endpoint
    Used to POST a new user to the DB, not protected */
@@ -33,6 +41,9 @@ app.use('/api/users', usersRouter);
 /* Route handler for the /api/posts/ endpoint 
    GET (all notes) operation is not protected. POST, PUT, DELETE operations are protected */
 app.use('/api/posts', postsRouter);
+
+// Login route handler
+app.use('/auth', authRouter);
 
 // Run/stop server
 
