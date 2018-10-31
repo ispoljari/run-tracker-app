@@ -3,6 +3,7 @@
 // Import 3rd party frameworks, libraries and/or config parameters
 const express = require('express');
 const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const {User} = require('../user');
 const {Post, postJoiSchema} = require('./post.model');
@@ -27,25 +28,146 @@ router.post('/', (req, res) => {
 
   if (validate.error) {
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
-      CODE: HTTP_STATUS_CODES.BAD_REQUEST,
-      reason: validate.error.name,
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
       message: validate.error.details[0].message
     });
   }
 
-  Post.create({
-    distance,
-    runTime,
-    dateTime,
-    user,
-    upvotes
-  })
+  // Additional validation: Check if user ID's are in a valid ObjectID format
+
+  // Check the 'user' property
+  if (!(mongoose.Types.ObjectId.isValid(user))) {
+    const message = 'The value of \'user\' is not in a valid ObjectId format.'
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      message: message
+    });
+  }
+
+  // Check the 'upvotes' property
+  if (upvotes) {
+    console.log(upvotes[upvotes.length-1].userId);
+    if (!(mongoose.Types.ObjectId.isValid(upvotes[upvotes.length-1].userId))) {
+      const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'  
+      return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+        code: HTTP_STATUS_CODES.BAD_REQUEST,
+        message: message
+      });
+    }
+  }
+
+  User.findById(req.body.user)
+    .then(user => {
+      if (user) {
+        Post.create({
+          distance,
+          runTime,
+          dateTime,
+          user,
+          upvotes
+        })
+        .then(post => {
+          return res.status(HTTP_STATUS_CODES.CREATED).json(post.serialize());
+        })
+        .catch(err => {
+          return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+            code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+            message: 'Internal Server Error'
+          });
+        });
+      } else {
+        const message = 'User not found.';
+        return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+          code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+          message: message
+        });
+      }
+    })
+    .catch(err => {
+      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error'
+      });
+    });
+});
+
+// Retrieve all existing notes (publicly accessible)
+
+router.get('/', (req, res) => {
+  Post.find()
+    .populate('user')
+    .then(posts => {
+      return res.status(HTTP_STATUS_CODES.OK).json(posts.map(post => post.serialize()))
+    })
+    .catch(err => {
+      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error'
+      });
+    })
+});
+
+// Retrieve a note by id, publicly accessible
+
+router.get('/:id', (req, res) => {
+  Post.findById(req.params.id)
+  .populate('user')
   .then(post => {
-    return res.status(HTTP_STATUS_CODES.CREATED).json(post.serialize());
+    return res.status(HTTP_STATUS_CODES.OK).json(post.serialize());
   })
   .catch(err => {
-    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(err);
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
   });
+});
+
+// Update a note (JWT protected)
+
+router.put('/:id', (req, res) => {
+  if (!(req.params.id === req.body.id)) {
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      message: 'Request path id and request body id values must match'
+    });
+  }
+
+  const updated = {};
+  const updateableFields = ['distance', 'runTime', 'dateTime'];
+  
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+
+  Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+  .populate('user')
+  .then(updatedPost => {
+    return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+  })
+  .catch(err => {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
+  });
+}); 
+
+// Delete a note (JWT auth required)
+
+router.delete('/:id', (req, res) => {
+  Post.findByIdAndRemove(req.params.id)
+    .then(() => {
+      return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
+    })
+    .catch(err => {
+      res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error'
+      });
+    });
 });
 
 module.exports = {router};

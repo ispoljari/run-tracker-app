@@ -24,11 +24,6 @@ const postSchema = Schema({
   upvotes: [upvoteSchema]
 });
 
-// Setup populate in middleware
-postSchema.pre('find', function(next) {
-  this.populate('User');
-  next();
-});
 
 // Add a serialize instance method to filter return data
 postSchema.methods.serialize = function() {

@@ -28,6 +28,7 @@ router.post('/', (req, res) => {
   }, userJoiSchema, {convert: false});
 
   if (validate.error) {
+
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
       reason: validate.error.name,
@@ -42,8 +43,7 @@ router.post('/', (req, res) => {
       return Promise.reject({
         code: HTTP_STATUS_CODES.BAD_REQUEST,
         reason: 'ValidationError',
-        message: 'Email already taken',
-        location: 'email' 
+        message: 'Email already taken'
       });
     }
     return User.hashPassword(password);
@@ -61,14 +61,80 @@ router.post('/', (req, res) => {
       return res.status(HTTP_STATUS_CODES.CREATED).json(user.serialize());
   })
   .catch(err => {
+
     if (err.reason === 'ValidationError') {
-      return res.status(err.code).json(err);
+      return res.status(err.code).json({
+        code: err.code,
+        message: err.message
+      });
     }
-    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-    message: 'Internal Server Error'});
+
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
   });
 });
 
-// PUT endpoint (protected)
+// GET user by ID
+router.get('/:id', (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      return res.status(HTTP_STATUS_CODES.OK).json(user.serialize());
+    })
+    .catch(err => {
+      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error.'
+      });
+    })
+});
+
+// PUT endpoint (JWT protected)
+
+router.put('/:id', (req, res) => {
+  if (!(req.params.id === req.body.id)) {
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      message: 'Request path id and request body id values must match'
+    });
+  }
+
+  const updated = {};
+  const updateableFields = ['name', 'displayName', 'avatar'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+
+  User.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+  .then(updatedUser => {
+    return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedUser.serialize());
+  })
+  .catch(err => {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    })
+  });
+});
+
+// DELETE enpoint (JWT protected)
+
+router.delete('/:id', (req, res) => {
+  User.findByIdAndRemove(req.params.id)
+    .then(() => {
+      return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
+    })
+    .catch(err => {
+      res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+      .json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error'
+      })
+    });
+});
 
 module.exports = {router};
