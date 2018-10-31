@@ -272,6 +272,27 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
             });
         });
       });
+
+      describe('DELETE request', function() {
+        it('Should delete a user by specific ID', function() {
+          let user;
+
+          return User.findOne()
+            .then(function(_user) {
+              user = _user;
+
+              return chai.request(app)
+                .delete(`/api/users/${user.id}`);
+            })
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+              return User.findById(user.id);
+            })
+            .then(function(_user) {
+              expect(_user).to.be.null;
+            });
+        });
+      });
     });
   });
 
