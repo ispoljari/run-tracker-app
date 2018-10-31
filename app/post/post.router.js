@@ -45,7 +45,7 @@ router.post('/', (req, res) => {
   }
 
   // Check the 'upvotes' property
-  if (upvotes.length > 0) {
+  if (upvotes) {
     console.log(upvotes[upvotes.length-1].userId);
     if (!(mongoose.Types.ObjectId.isValid(upvotes[upvotes.length-1].userId))) {
       const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'  
@@ -140,19 +140,18 @@ router.put('/:id', (req, res) => {
     if (field in req.body) {
       updated[field] = req.body[field];
     }
+  });
 
     Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
-      .populate('user')
-      .then(updatedPost => {
-        return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
-      })
-      .catch(err => {
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
-          code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-          message: 'Internal Server Error'
-        });
+    .then(updatedPost => {
+      return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+    })
+    .catch(err => {
+      res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error'
       });
-  });
+    });
 }); 
 
 module.exports = {router};

@@ -386,6 +386,8 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
       // Test the normal case
       it('Should update the data fields of a post with a specific ID', function() {
         const updateData = generatePostData();
+        delete updateData.user;
+        delete updateData.upvotes[0];
 
         return Post.findOne()
           .then(function(post) {
@@ -410,7 +412,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
 
     describe('DELETE requests', function() {
       it('Should delete a post with a specific ID', function() {
-        let post = _post;
+        let post;
 
         return Post.findOne()
           .then(function(_post) {
