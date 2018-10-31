@@ -207,6 +207,40 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
         });
     
       });
+
+      describe('GET request', function() {
+        it ('Should retrieve a single user by ID', function() {
+          let res;
+
+          //Normal case
+          return User.findOne()
+            .then(function(user) {
+              return user._id;
+            })
+            .then(function(id) {
+              return chai.request(app)
+              .get(`/api/users/${id}`)
+                .then(function(_res) {
+                  res = _res;
+                  expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+                  expect(res).to.be.a('object');
+                  expect(res.body).to.have.lengthOf.at.least(1);
+
+                  return User.findById(id)
+                })
+                .then(function(user) {
+                  expect(user.name).to.be.equal(res.name);
+                  expect(user.displayName).to.be.equal(res.displayName);
+                  expect(user.email).to.be.equal(res.email);
+
+                  if (user.avatar) {
+                    expect(user.avatar).to.be.equal(res.avatar);
+                  }
+                })
+            })
+        });
+      });
+
     });
   });
 
