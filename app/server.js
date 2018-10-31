@@ -30,8 +30,10 @@ const {router: usersRouter} = require('./user');
 const {router: postsRouter} = require('./post');
 const {router: authRouter} = require('./post');
 
-// Mount the passport authentication strategies as middleware
+// Import the passport local strategy
 const {localStrategy} = require('./auth');
+
+// Mount the passport authentication strategies as middleware
 passport.use(localStrategy);
 
 /* Route handler for the /api/users/ endpoint
