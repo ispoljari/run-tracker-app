@@ -76,6 +76,20 @@ router.post('/', (req, res) => {
   });
 });
 
+// GET user by ID
+router.get('/:id', (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      return res.status(HTTP_STATUS_CODES.OK).json(user.serialize());
+    })
+    .catch(err => {
+      return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error.'
+      });
+    })
+});
+
 // PUT endpoint (protected)
 
 module.exports = {router};

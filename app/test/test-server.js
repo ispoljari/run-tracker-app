@@ -224,19 +224,18 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
                   res = _res;
                   expect(res).to.have.status(HTTP_STATUS_CODES.OK);
                   expect(res).to.be.a('object');
-                  expect(res.body).to.have.lengthOf.at.least(1);
+                  expect(res.body).to.include.keys(
+                    'name', 'displayName', 'email', 'avatar'
+                  );
 
-                  return User.findById(id)
+                  return User.findById(id);
                 })
                 .then(function(user) {
-                  expect(user.name).to.be.equal(res.name);
-                  expect(user.displayName).to.be.equal(res.displayName);
-                  expect(user.email).to.be.equal(res.email);
-
-                  if (user.avatar) {
-                    expect(user.avatar).to.be.equal(res.avatar);
-                  }
-                })
+                  expect(user.name).to.be.equal(res.body.name);
+                  expect(user.displayName).to.be.equal(res.body.displayName);
+                  expect(user.email).to.be.equal(res.body.email);
+                  expect(user.avatar).to.be.equal(res.body.avatar);
+                });
             })
         });
       });
