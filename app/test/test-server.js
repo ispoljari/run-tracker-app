@@ -136,9 +136,16 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
   });
 
   describe('***** API resources *****', function() {
-
   
     describe('----- /api/users/ endpoint -----', function() {
+
+      beforeEach(function() {
+        return seedData();
+      });
+    
+      afterEach(function() {
+        return tearDownDB();
+      });
   
       describe('POST request', function() {
      
@@ -240,11 +247,38 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
         });
       });
 
+      describe('PUT requests', function() {
+        it('Should update the data fields of user with a specific ID', function() {
+          const updateData = generateUserData();
+          delete updateData.password;
+
+          return User.findOne()
+            .then(function(user) {
+              updateData.id = user._id;
+
+              return chai.request(app)
+                .put(`/api/users/${user.id}`)
+                .send(updateData);
+            })
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+              
+              return User.findById(updateData.id);
+            })
+            .then(function(user){
+              expect(user.name).to.be.equal(updateData.name);
+              expect(user.displayName).to.be.equal(updateData.displayName);
+              expect(user.email).to.be.equal(updateData.email);
+              expect(user.avatar).to.be.equal(updateData.avatar);
+            });
+        });
+      });
+
     });
   });
 
   describe('----- /api/posts/ endpoint -----', function() {
-
+    
     beforeEach(function() {
       return seedData();
     });
@@ -252,7 +286,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
     afterEach(function() {
       return tearDownDB();
     });
-    
+
     describe('POST request', function() {
 
       // Normal Case
