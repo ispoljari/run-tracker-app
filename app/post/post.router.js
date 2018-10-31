@@ -127,7 +127,7 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
   if (!(req.params.id === req.body.id)) {
-    res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
       message: 'Request path id and request body id values must match'
     });
@@ -142,16 +142,32 @@ router.put('/:id', (req, res) => {
     }
   });
 
-    Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
-    .then(updatedPost => {
-      return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+  Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+  .populate('user')
+  .then(updatedPost => {
+    return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+  })
+  .catch(err => {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
+  });
+}); 
+
+// Delete a note (JWT auth required)
+
+router.delete('/:id', (req, res) => {
+  Post.findByIdAndRemove(req.params.id)
+    .then(() => {
+      return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
     })
     .catch(err => {
       res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
         code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-        message: 'Internal Server Error'
+        message: 'Internal server error'
       });
     });
-}); 
+});
 
 module.exports = {router};
