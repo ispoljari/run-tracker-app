@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
 
+const {localAuth} = require('./auth.strategies');
+
 const createAuthToken = function(user) {
   return jwt.sign({user}, config.JWT_SECRET, {
     subject: user.email,
@@ -14,8 +16,6 @@ const createAuthToken = function(user) {
     algorithm: 'HS256'
   });
 }
-
-const localAuth = passport.authenticate('local', {session: false});
 
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user.serialize());

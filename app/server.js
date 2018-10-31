@@ -22,19 +22,17 @@ app.use(morgan('combined'));
 // Serve static assets to client
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Body parsing
-app.use(express.json());
-
 // Import router modules
 const {router: usersRouter} = require('./user');
 const {router: postsRouter} = require('./post');
-const {router: authRouter} = require('./post');
+const {router: authRouter, localStrategy} = require('./auth');
 
-// Import the passport local strategy
-const {localStrategy} = require('./auth');
 
 // Mount the passport authentication strategies as middleware
 passport.use(localStrategy);
+
+// Body parsing
+app.use(express.json());
 
 /* Route handler for the /api/users/ endpoint
    Used to POST a new user to the DB, not protected */
@@ -45,7 +43,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 
 // Login route handler
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 
 // Run/stop server
 

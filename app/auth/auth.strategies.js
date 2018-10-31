@@ -1,14 +1,17 @@
 'use strict';
 
+const passport = require('passport');
 const {Strategy: LocalStrategy} = require('passport-local');
 
 const {User} = require('../user');
 const {JWT_SECRET} = require('../config');
 
-const localStrategy = new LocalStrategy((email, password, callback) => {
+const localStrategy = new LocalStrategy({
+  usernameField: 'email'
+}, (username, password, callback) => {
   let user; 
   
-  User.findOne({email})
+  User.findOne({username: username})
     .then(_user => {
       user = _user;
 
@@ -38,3 +41,7 @@ const localStrategy = new LocalStrategy((email, password, callback) => {
       return callback(err, false);
     });
 });
+
+const localAuth = passport.authenticate('local', {session: false});
+
+module.exports = {localStrategy, localAuth};
