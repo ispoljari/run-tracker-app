@@ -90,6 +90,35 @@ router.get('/:id', (req, res) => {
     })
 });
 
-// PUT endpoint (protected)
+// PUT endpoint (JWT protected)
+
+router.put('/:id', (req, res) => {
+  if (!(req.params.id === req.body.id)) {
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
+      code: HTTP_STATUS_CODES.BAD_REQUEST,
+      message: 'Request path id and request body id values must match'
+    });
+  }
+
+  const updated = {};
+  const updateableFields = ['name', 'displayName', 'avatar'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+
+  User.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+  .then(updatedUser => {
+    return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedUser.serialize());
+  })
+  .catch(err => {
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    })
+  });
+});
 
 module.exports = {router};

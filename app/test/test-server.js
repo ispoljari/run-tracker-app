@@ -268,12 +268,10 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
             .then(function(user){
               expect(user.name).to.be.equal(updateData.name);
               expect(user.displayName).to.be.equal(updateData.displayName);
-              expect(user.email).to.be.equal(updateData.email);
               expect(user.avatar).to.be.equal(updateData.avatar);
             });
         });
       });
-
     });
   });
 
