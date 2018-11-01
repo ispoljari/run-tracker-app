@@ -160,7 +160,7 @@ router.put('/:id', jwtAuth, (req, res) => {
 
 // Delete a note (JWT auth required)
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwtAuth, (req, res) => {
   Post.findByIdAndRemove(req.params.id)
     .then(() => {
       return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
