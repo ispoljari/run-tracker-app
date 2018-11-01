@@ -7,7 +7,8 @@ const {User} = require('../user');
 const {JWT_SECRET} = require('../config');
 
 const localStrategy = new LocalStrategy({
-  usernameField: 'email'
+  usernameField: 'email',
+  passwordField: 'password'
 }, (username, password, callback) => {
   let user; 
   
