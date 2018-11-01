@@ -37,11 +37,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Import router modules
 const {router: usersRouter} = require('./user');
 const {router: postsRouter} = require('./post');
-const {router: authRouter, localStrategy} = require('./auth');
+const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
 
 
 // Mount the passport authentication strategies as middleware
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 // Body parsing
 app.use(express.json());

@@ -12,8 +12,11 @@ const {HTTP_STATUS_CODES} = require('../config');
 // Mount the router middleware
 const router = express.Router();
 
+// Import jwt authorization middleware
+const {jwtAuth} = require('../auth');
+
 // Create a New Note (JWT protected)
-router.post('/', (req, res) => {
+router.post('/', jwtAuth, (req, res) => {
   // Extract the received data from req.body
   let {distance, runTime, dateTime, user, upvotes} = req.body;
 

@@ -2,6 +2,7 @@
 
 const passport = require('passport');
 const {Strategy: LocalStrategy} = require('passport-local');
+const {Strategy: JwtStrategy, ExtractJwt} = require('passport-jwt');
 
 const {User} = require('../user');
 const {JWT_SECRET} = require('../config');
@@ -40,6 +41,16 @@ const localStrategy = new LocalStrategy((username, password, callback) => {
     });
 });
 
+const jwtStrategy = new JwtStrategy({
+  secretOrKey: JWT_SECRET,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+  algorithms: ['HS256']
+}, (payload, done) => {
+  done(null, payload.user);
+});
+
 const localAuth = passport.authenticate('local', {session: false});
 
-module.exports = {localStrategy, localAuth};
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+module.exports = {localStrategy, jwtStrategy,  localAuth, jwtAuth};
