@@ -83,6 +83,13 @@ router.post('/', (req, res) => {
 router.get('/:id', jwtAuth, (req, res) => {
   User.findById(req.params.id)
     .then(user => {
+      if (!user) {
+        return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({
+          code: HTTP_STATUS_CODES.NOT_FOUND,
+          message: 'The requested user doesn\'t exist.'
+        })
+      }
+
       return res.status(HTTP_STATUS_CODES.OK).json(user.serialize());
     })
     .catch(err => {
