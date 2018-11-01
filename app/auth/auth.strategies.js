@@ -6,10 +6,7 @@ const {Strategy: LocalStrategy} = require('passport-local');
 const {User} = require('../user');
 const {JWT_SECRET} = require('../config');
 
-const localStrategy = new LocalStrategy({
-  usernameField: 'email',
-  passwordField: 'password'
-}, (username, password, callback) => {
+const localStrategy = new LocalStrategy((username, password, callback) => {
   let user; 
   
   User.findOne({username: username})

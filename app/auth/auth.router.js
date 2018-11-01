@@ -11,7 +11,7 @@ const {localAuth} = require('./auth.strategies');
 
 const createAuthToken = function(user) {
   return jwt.sign({user}, config.JWT_SECRET, {
-    subject: user.email,
+    subject: user.username,
     expiresIn: config.JWT_EXPIRY,
     algorithm: 'HS256'
   });

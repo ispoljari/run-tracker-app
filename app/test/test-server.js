@@ -98,7 +98,7 @@ function generateUserData() {
   return {
     name: faker.name.firstName(),
     displayName: faker.name.jobTitle(),
-    email: faker.internet.email(),
+    username: faker.internet.email(),
     password: faker.lorem.sentence(wordCount = 5),
     avatar: faker.random.number(max = 30)
   }
@@ -161,7 +161,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
               expect(res).to.be.json;
               expect(res.body).to.be.a('object');
               expect(res.body).to.include.keys(
-                'name', 'displayName', 'email', 'avatar', 'id'
+                'name', 'displayName', 'username', 'avatar', 'id'
               );
               expect(res.body.id).to.not.be.null;
 
@@ -172,8 +172,8 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
               expect(res.body.displayName).to.equal(newUser.displayName);
               expect(res.body.displayName).to.be.a('string');
     
-              expect(res.body.email).to.equal(newUser.email);
-              expect(res.body.email).to.be.a('string');
+              expect(res.body.username).to.equal(newUser.username);
+              expect(res.body.username).to.be.a('string');
     
               expect(res.body.avatar).to.equal(newUser.avatar);
               expect(res.body.avatar).to.be.a('number');
@@ -183,7 +183,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
             .then(function(user) { //inspect the DB, and compare it's state to the API response
               expect(user.name).to.equal(newUser.name);
               expect(user.displayName).to.equal(newUser.displayName);
-              expect(user.email).to.equal(newUser.email);
+              expect(user.username).to.equal(newUser.username);
               expect(user.avatar).to.equal(newUser.avatar);
             });
         });
@@ -232,7 +232,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
                   expect(res).to.have.status(HTTP_STATUS_CODES.OK);
                   expect(res).to.be.a('object');
                   expect(res.body).to.include.keys(
-                    'name', 'displayName', 'email', 'avatar'
+                    'name', 'displayName', 'username', 'avatar'
                   );
 
                   return User.findById(id);
@@ -240,7 +240,7 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
                 .then(function(user) {
                   expect(user.name).to.be.equal(res.body.name);
                   expect(user.displayName).to.be.equal(res.body.displayName);
-                  expect(user.email).to.be.equal(res.body.email);
+                  expect(user.username).to.be.equal(res.body.username);
                   expect(user.avatar).to.be.equal(res.body.avatar);
                 });
             })

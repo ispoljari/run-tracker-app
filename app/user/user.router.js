@@ -16,13 +16,13 @@ router.post('/', (req, res) => {
   // If the user doesn't select an avatar, assign a random index
   let randomAvatarIndex = Math.floor(Math.random()*30);
 
-  let {email, password, name, displayName, avatar = randomAvatarIndex} = req.body;
+  let {username, password, name, displayName, avatar = randomAvatarIndex} = req.body;
 
   // ADD user data validation
   const validate = Joi.validate({
     name,
     displayName,
-    email,
+    username,
     password,
     avatar
   }, userJoiSchema, {convert: false});
@@ -36,14 +36,14 @@ router.post('/', (req, res) => {
     });
   }
 
-  User.find({email})
+  User.find({username})
   .countDocuments()
   .then(count => {
     if (count > 0) {
       return Promise.reject({
         code: HTTP_STATUS_CODES.BAD_REQUEST,
         reason: 'ValidationError',
-        message: 'Email already taken'
+        message: 'Username already taken'
       });
     }
     return User.hashPassword(password);
@@ -52,7 +52,7 @@ router.post('/', (req, res) => {
     return User.create({
       name,
       displayName,
-      email,
+      username,
       password: passwordHash,
       avatar
     });

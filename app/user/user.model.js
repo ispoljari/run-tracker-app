@@ -15,7 +15,7 @@ const Schema = mongoose.Schema;
 const userSchema = Schema({
   name: String,
   displayName: String,
-  email: {
+  username: {
     type: String,
     unique: true /* Ensure that this field is unique (no duplicates) in the DB */
   },
@@ -27,7 +27,7 @@ userSchema.methods.serialize = function() {
   return {
     id: this._id,
     name: this.name,
-    email: this.email,
+    username: this.username,
     displayName: this.displayName,
     avatar: this.avatar
   };
@@ -45,7 +45,7 @@ userSchema.methods.validatePassword = function(password) {
 const userJoiSchema = Joi.object().keys({
   name: Joi.string().min(1).trim().required(),
   displayName: Joi.string().min(1).trim().required(),
-  email: Joi.string().email().trim().required(),
+  username: Joi.string().email().trim().required(),
   password: Joi.string().min(10).max(72).trim().required(),
   avatar: Joi.number().integer()
 });
