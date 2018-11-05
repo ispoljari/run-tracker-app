@@ -1,7 +1,13 @@
 'use strict';
+const result = require('dotenv').config();
+
+if (result.error) {
+  throw result.error
+  console.log(result.parsed)
+}
+ 
 
 // Import 3rd party frameworks, libraries and/or config parameters
-require('dotenv').config();
 
 const express = require('express');
 const morgan = require('morgan');

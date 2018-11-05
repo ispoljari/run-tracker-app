@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
 
-const {localAuth} = require('./auth.strategies');
+const {localAuth, jwtAuth} = require('./auth.strategies');
 
 const createAuthToken = function(user) {
   return jwt.sign({user}, config.JWT_SECRET, {
@@ -17,9 +17,17 @@ const createAuthToken = function(user) {
   });
 }
 
+// Login with correct username/password
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user.serialize());
   return res.json({authToken});
 });
+
+// Refresh JWT after expiry date
+router.post('/refresh', jwtAuth, (req, res) => {
+  const authToken = createAuthToken(req.user);
+  return res.json({authToken});
+});
+
 
 module.exports = {router};
