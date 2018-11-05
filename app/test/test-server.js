@@ -294,228 +294,227 @@ describe('///////////// INTEGRATION TESTS //////////', function() {
         });
       });
     });
-  });
-
-  describe('----- /api/posts/ endpoint -----', function() {
+ 
+    describe('----- /api/posts/ endpoint -----', function() {
+      
+      beforeEach(function() {
+        return seedData();
+      });
     
-    beforeEach(function() {
-      return seedData();
-    });
-  
-    afterEach(function() {
-      return tearDownDB();
-    });
-
-    describe('POST request', function() {
-
-      // Normal Case
-      it('Should add a new post to the DB', function() {
-        const newPost = generatePostData();
-
-        return User.findOne()
-          .then(function(userDB) {
-            newPost.user = userDB._id;
-          })  
-          .then(function() {
-            return chai.request(app)
-            .post('/api/posts/')
-            .send(newPost)
-            .then(function(res) {
-              expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
-              expect(res).to.be.json;
-              expect(res.body).to.be.a('object');
-              expect(res.body).to.include.keys(
-                'distance', 'runTime', 'dateTime', 'user', 'upvotes', 'id'
-              );
-              expect(res.body.upvotes).to.be.a('array');
-              expect(res.body.upvotes[0]).to.be.a('object');
-              expect(res.body.upvotes[0]).to.include.keys(
-                'userId'
-              );
-
-              // compare the API response with the sent data
-              expect(res.body.distance).to.equal(newPost.distance);
-              expect(res.body.distance).to.be.a('number');
-    
-              expect(res.body.runTime).to.equal(newPost.runTime);
-              expect(res.body.runTime).to.be.a('number');
-
-              expect(res.body.dateTime).to.equal(newPost.dateTime);
-              expect(res.body.dateTime).to.be.a('string');
-              expect(res.body.user).to.not.be.null;
-              expect(res.body.id).to.not.be.null;
-              expect(res.body.upvotes).to.have.lengthOf.at.least(1);
-              expect(res.body.upvotes[0]).to.not.be.null;
-              expect(res.body.upvotes[1]).to.not.be.null;
-    
-              return Post.findById(res.body.id);
-            })
-            .then(function(post) { //inspect the DB, and compare it's state to the API response
-              expect(post.distance).to.equal(newPost.distance);
-              expect(post.runTime).to.equal(newPost.runTime);
-              expect(post.dateTime).to.equal(newPost.dateTime);
-              expect(post.user).to.not.be.null;
-              expect(post.id).to.not.be.null;
-              expect(post.upvotes).to.have.lengthOf.at.least(1);
-              expect(post.upvotes[0]).to.not.be.null;
-            })
-          });
+      afterEach(function() {
+        return tearDownDB();
       });
 
-      // Fail Cases
-      it('Should NOT add a new post to the DB (wrong data type sent)', function() {
-        const nonValidPost = generatePostData();
-        nonValidPost.distance = faker.random.word(); // wrong data type
+      describe('POST request', function() {
 
-        return chai.request(app)
-          .post('/api/posts/')
-          .send(nonValidPost)
-          .then(function(res) {
-            expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
-          });
-      });
+        // Normal Case
+        it('Should add a new post to the DB', function() {
+          const newPost = generatePostData();
 
-      it('Should NOT add a new post to the DB (required key missing)', function() {
-        const nonValidPost = generatePostData();
-        delete nonValidPost.user; // remove 'user'
-
-        return chai.request(app)
-          .post('/api/posts/')
-          .send(nonValidPost)
-          .then(function(res) {
-            expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
-          });
-      });
-
-      it('Should NOT add a new post to the DB if the user doesn\'t exist', function() {
-        const nonValidPost = generatePostData();
-        nonValidPost.user = '5bd3375a437fb9831fb25479' // non-existent user, but the ID is in a valid MongoDB UserID format
-
-        return chai.request(app)
-          .post('/api/posts/')
-          .send(nonValidPost)
-          .then(function(res) {
-            expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
-          });
-      });
-    });
-
-    describe('GET requests', function() {
-
-      // Testing only the Normal Case
-      it('Should retrieve all posts from the DB', function() {
-        let res;
-
-        return chai.request(app)
-          .get('/api/posts/')
-          .then(function(_res) {
-            res = _res;
-            expect(res).to.have.status(HTTP_STATUS_CODES.OK);
-            expect(res).to.be.json;
-            expect(res.body).to.be.a('array');
-            expect(res.body).to.have.lengthOf.at.least(1);
-
-            res.body.forEach(function(post) {
-              expect(post).to.be.a('object');
-              expect(post).to.include.keys(
-                'distance', 'runTime', 'dateTime', 'user'
-              );
-            });
-
-            return Post.findById(res.body[0].id);
-          })
-          .then(function(post) {
-            expect(res.body[0].id).to.equal(post.id);
-            expect(res.body[0].distance).to.equal(post.distance);
-            expect(res.body[0].runTime).to.equal(post.runTime);
-            expect(res.body[0].dateTime).to.equal(post.dateTime);
-
-            return Post.countDocuments();
-          })
-          .then(function(count) {
-            expect(res.body).to.have.lengthOf(count);
-          });
-      });
-
-      it('Should retrieve a single post by ID from the DB', function() {
-        let res;
-
-        return Post.findOne()
-          .then(function(post) {
-            return post._id;
-          })
-          .then(function(id) {
-            return chai.request(app) 
-              .get(`/api/posts/${id}`)
-              .then(function(_res) {
-                res = _res;
-                expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+          return User.findOne()
+            .then(function(userDB) {
+              newPost.user = userDB._id;
+            })  
+            .then(function() {
+              return chai.request(app)
+              .post('/api/posts/')
+              .send(newPost)
+              .then(function(res) {
+                expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
+                expect(res).to.be.json;
                 expect(res.body).to.be.a('object');
                 expect(res.body).to.include.keys(
-                  'distance', 'runTime', 'dateTime', 'user'
+                  'distance', 'runTime', 'dateTime', 'user', 'upvotes', 'id'
+                );
+                expect(res.body.upvotes).to.be.a('array');
+                expect(res.body.upvotes[0]).to.be.a('object');
+                expect(res.body.upvotes[0]).to.include.keys(
+                  'userId'
                 );
 
-                return Post.findById(res.body.id)
+                // compare the API response with the sent data
+                expect(res.body.distance).to.equal(newPost.distance);
+                expect(res.body.distance).to.be.a('number');
+      
+                expect(res.body.runTime).to.equal(newPost.runTime);
+                expect(res.body.runTime).to.be.a('number');
+
+                expect(res.body.dateTime).to.equal(newPost.dateTime);
+                expect(res.body.dateTime).to.be.a('string');
+                expect(res.body.user).to.not.be.null;
+                expect(res.body.id).to.not.be.null;
+                expect(res.body.upvotes).to.have.lengthOf.at.least(1);
+                expect(res.body.upvotes[0]).to.not.be.null;
+                expect(res.body.upvotes[1]).to.not.be.null;
+      
+                return Post.findById(res.body.id);
               })
-              .then(function(post) {
-                expect(res.body.id).to.equal(post.id);
-                expect(res.body.distance).to.equal(post.distance);
-                expect(res.body.runTime).to.equal(post.runTime);
-                expect(res.body.dateTime).to.equal(post.dateTime);
+              .then(function(post) { //inspect the DB, and compare it's state to the API response
+                expect(post.distance).to.equal(newPost.distance);
+                expect(post.runTime).to.equal(newPost.runTime);
+                expect(post.dateTime).to.equal(newPost.dateTime);
+                expect(post.user).to.not.be.null;
+                expect(post.id).to.not.be.null;
+                expect(post.upvotes).to.have.lengthOf.at.least(1);
+                expect(post.upvotes[0]).to.not.be.null;
+              })
+            });
+        });
+
+        // Fail Cases
+        it('Should NOT add a new post to the DB (wrong data type sent)', function() {
+          const nonValidPost = generatePostData();
+          nonValidPost.distance = faker.random.word(); // wrong data type
+
+          return chai.request(app)
+            .post('/api/posts/')
+            .send(nonValidPost)
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
+            });
+        });
+
+        it('Should NOT add a new post to the DB (required key missing)', function() {
+          const nonValidPost = generatePostData();
+          delete nonValidPost.user; // remove 'user'
+
+          return chai.request(app)
+            .post('/api/posts/')
+            .send(nonValidPost)
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
+            });
+        });
+
+        it('Should NOT add a new post to the DB if the user doesn\'t exist', function() {
+          const nonValidPost = generatePostData();
+          nonValidPost.user = '5bd3375a437fb9831fb25479' // non-existent user, but the ID is in a valid MongoDB UserID format
+
+          return chai.request(app)
+            .post('/api/posts/')
+            .send(nonValidPost)
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
+            });
+        });
+      });
+
+      describe('GET requests', function() {
+
+        // Testing only the Normal Case
+        it('Should retrieve all posts from the DB', function() {
+          let res;
+
+          return chai.request(app)
+            .get('/api/posts/')
+            .then(function(_res) {
+              res = _res;
+              expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+              expect(res).to.be.json;
+              expect(res.body).to.be.a('array');
+              expect(res.body).to.have.lengthOf.at.least(1);
+
+              res.body.forEach(function(post) {
+                expect(post).to.be.a('object');
+                expect(post).to.include.keys(
+                  'distance', 'runTime', 'dateTime', 'user'
+                );
               });
-          });
+
+              return Post.findById(res.body[0].id);
+            })
+            .then(function(post) {
+              expect(res.body[0].id).to.equal(post.id);
+              expect(res.body[0].distance).to.equal(post.distance);
+              expect(res.body[0].runTime).to.equal(post.runTime);
+              expect(res.body[0].dateTime).to.equal(post.dateTime);
+
+              return Post.countDocuments();
+            })
+            .then(function(count) {
+              expect(res.body).to.have.lengthOf(count);
+            });
+        });
+
+        it('Should retrieve a single post by ID from the DB', function() {
+          let res;
+
+          return Post.findOne()
+            .then(function(post) {
+              return post._id;
+            })
+            .then(function(id) {
+              return chai.request(app) 
+                .get(`/api/posts/${id}`)
+                .then(function(_res) {
+                  res = _res;
+                  expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+                  expect(res.body).to.be.a('object');
+                  expect(res.body).to.include.keys(
+                    'distance', 'runTime', 'dateTime', 'user'
+                  );
+
+                  return Post.findById(res.body.id)
+                })
+                .then(function(post) {
+                  expect(res.body.id).to.equal(post.id);
+                  expect(res.body.distance).to.equal(post.distance);
+                  expect(res.body.runTime).to.equal(post.runTime);
+                  expect(res.body.dateTime).to.equal(post.dateTime);
+                });
+            });
+        });
       });
-    });
 
-    describe('PUT requests', function() {
+      describe('PUT requests', function() {
 
-      // Test the normal case
-      it('Should update the data fields of a post with a specific ID', function() {
-        const updateData = generatePostData();
-        delete updateData.user;
-        delete updateData.upvotes[0];
+        // Test the normal case
+        it('Should update the data fields of a post with a specific ID', function() {
+          const updateData = generatePostData();
+          delete updateData.user;
+          delete updateData.upvotes[0];
 
-        return Post.findOne()
-          .then(function(post) {
-            updateData.id = post.id;
+          return Post.findOne()
+            .then(function(post) {
+              updateData.id = post.id;
 
-            return chai.request(app)
-              .put(`/api/posts/${post.id}`)
-              .send(updateData);
-          })
-          .then(function(res) {
-            expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
-            
-            return Post.findById(updateData.id);
-          })
-          .then(function(post){
-            expect(post.distance).to.equal(updateData.distance);
-            expect(post.runTime).to.equal(updateData.runTime);
-            expect(post.dateTime).to.equal(updateData.dateTime);
-          });
+              return chai.request(app)
+                .put(`/api/posts/${post.id}`)
+                .send(updateData);
+            })
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+              
+              return Post.findById(updateData.id);
+            })
+            .then(function(post){
+              expect(post.distance).to.equal(updateData.distance);
+              expect(post.runTime).to.equal(updateData.runTime);
+              expect(post.dateTime).to.equal(updateData.dateTime);
+            });
+        });
       });
-    });
 
-    describe('DELETE requests', function() {
-      it('Should delete a post with a specific ID', function() {
-        let post;
+      describe('DELETE requests', function() {
+        it('Should delete a post with a specific ID', function() {
+          let post;
 
-        return Post.findOne()
-          .then(function(_post) {
-            post = _post;
+          return Post.findOne()
+            .then(function(_post) {
+              post = _post;
 
-            return chai.request(app)
-              .delete(`/api/posts/${post.id}`);
-          })
-          .then(function(res) {
-            expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
-            return Post.findById(post.id);
-          })
-          .then(function(_post) {
-            expect(_post).to.be.null;
-          });
+              return chai.request(app)
+                .delete(`/api/posts/${post.id}`);
+            })
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+              return Post.findById(post.id);
+            })
+            .then(function(_post) {
+              expect(_post).to.be.null;
+            });
+        });
       });
     });
   });
-
 });
