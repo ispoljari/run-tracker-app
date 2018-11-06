@@ -1,4 +1,10 @@
 'use strict';
+const result = require('dotenv').config();
+
+if (result.error) {
+  console.log(result.parsed);
+  throw result.error
+}
 
 // Import 3rd party frameworks, libraries or project modules
 const chai = require('chai');
@@ -6,10 +12,13 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-const {User} = require('.');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const {User} = require('../user');
 const {Post} = require('../post');
 
-const {TEST_DATABASE_URL, HTTP_STATUS_CODES} = require('../../config');
+const {TEST_DATABASE_URL, HTTP_STATUS_CODES, JWT_SECRET} = require('../../config');
 const {app, runServer, stopServer} = require('../server');
 
 // Setup the expect syntax from chai
@@ -111,7 +120,7 @@ function tearDownDB() {
 
 // Test if the server is sending static files, from the /public folder, to the client
 
-describe('///////////// INTEGRATION TESTS //////////', function() {
+describe('///////////// API RESOURCES //////////', function() {
 
   before(function() {
     return runServer(TEST_DATABASE_URL);

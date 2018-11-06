@@ -55,7 +55,7 @@ function tearDownDB() {
   return mongoose.connection.dropDatabase();
 }
 
-describe('***** AUTH endpoints *****', function() {
+describe('///////////// API AUTHORIZATION //////////', function() {
   let jwtTokenOld, 
       newUser, 
       username, 
@@ -77,7 +77,7 @@ describe('***** AUTH endpoints *****', function() {
       });
   });
 
-  describe('----- /api/auth endpoint -----', function() {
+  describe('----- /api/auth/login endpoint -----', function() {
 
     // Normal case
     it('Should return a valid JWT token', function() {
@@ -97,13 +97,47 @@ describe('***** AUTH endpoints *****', function() {
         });
     });
 
-    it('Should exchange the expired JWT token for a new one', function() {
+    // Fail case
+    it('Should reject auhorization if incorrect username provided', function() {
+      return chai.request(app)
+        .post('/api/auth/login')
+        .send({username: 'dummyName', password})
+        .then(function(res) {
+          expect(res).to.have.status(HTTP_STATUS_CODES.UNAUTHORIZED);
+        });
+    });
+
+    // Fail case
+    it('Should reject auhorization if incorrect password provided', function() {
+    return chai.request(app)
+      .post('/api/auth/login')
+      .send({username, password: 'dummyPass'})
+      .then(function(res) {
+        expect(res).to.have.status(HTTP_STATUS_CODES.UNAUTHORIZED);
+      });
+    });
+  });
+
+  describe('----- /api/auth/refresh endpoint -----', function() {
+
+    // Normal case
+    it('Should exchange the old, but valid JWT token for a new one', function() {
       return chai.request(app)
         .post('/api/auth/refresh')
         .set('Authorization', `Bearer ${jwtTokenOld}`)
         .then(function(res) {
           let jwtTokenNew = res.body.authToken;
           validateResponse(res, jwtTokenNew);
+        });
+    });
+
+     //Fail case
+     it('Should reject issuing a new token if the old one is not valid', function() {
+      return chai.request(app)
+        .post('/api/auth/refresh')
+        .set('Authorization', 'Bearer dummy234434token')
+        .then(function(res) {
+          expect(res).to.have.status(HTTP_STATUS_CODES.UNAUTHORIZED);
         });
     });
   });
