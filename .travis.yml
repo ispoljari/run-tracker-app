@@ -9,7 +9,9 @@ deploy:
   app: pure-peak-20096
   on:
     repo: ispoljari/run-tracker-app
-  
 branches:
   only:
-    - master
+  - master
+before_install:
+- openssl aes-256-cbc -K $encrypted_bf2abbc3aa7a_key -iv $encrypted_bf2abbc3aa7a_iv
+  -in .env.enc -out .env -d
