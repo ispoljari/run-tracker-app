@@ -27,12 +27,6 @@ const expect = chai.expect;
 // Setup chai HTTP layer testing middleware
 chai.use(chaiHttp);
 
-// Dummy data 
-const userData = {
-  postSeedData: {},
-  userSeedData: {},
-  jwtToken: ''
-}
 
 /* INTEGRATION TESTS STRATEGY
 
@@ -46,15 +40,15 @@ const userData = {
 
 */
 
+// Dummy data 
+const userData = {
+  postSeedData: {},
+  userSeedData: {},
+  jwtToken: ''
+}
+
 function seedData() {
   console.info('Seeding post and user data to test DB...');
-
-  // for (let i=0; i<=5; i++) {
-  //   userSeedData.push(generateUserData());
-  //   postSeedData.push(generatePostData());
-  // }
-
-  // const promises = [];
 
   const promise = new Promise(function(resolve, reject) {
     userData.userSeedData = generateUserData();
@@ -62,6 +56,7 @@ function seedData() {
     resolve(userData.userSeedData);
   });
 
+  // Hash the password of the random generated user, save the user to the DB, then connect the user to the post
   return promise.then(function(randomUser) {
     return User.hashPassword(randomUser.password)
       .then(function(hashedPassword) {
@@ -78,74 +73,6 @@ function seedData() {
         return Post.create(userData.postSeedData);
       });
   });
-
-  // Hash the password of each random generated user into the DB to enable later authentication through login
-  // userSeedData.forEach(function(user) {
-  //   promises.push(
-  //     User.hashPassword(user.password)
-  //       .then(function(hashedPassword) {
-  //         User.create({
-  //           name: user.name,
-  //           displayName: user.displayName,
-  //           username: user.username,
-  //           password: hashedPassword,
-  //           avatar: user.avatar
-  //         });
-  //       })
-  //   )
-  // });
-
-  /* 
-  A user has to exist in the DB before a new post can be added 
-  Therefore, this is the data storing strategy;
-
-  1) Generate 10 user documents with random data
-  2) Generate 10 post documents with random data
-  3) Save the user documents in the DB
-  4) Retrieve the stored users from the DB and extract their ID's into a new array
-  5) Iterate through the the post documents and insert the retrieved user ID's
-  6) Save the modified post documents to the DB
-  
-  Now for every random post document there is a linked user document. Now, 
-  the test's won't fail when using the populate() function
-  */
-  // let users;
-
-  // Promise.all(promises)
-  //   .then(function() {
-  //     return User.find({})
-  //   })
-  //   .then(function(_users) {
-  //     users = _users;
-  //     return users.map(function(user) {
-  //       return user._id
-  //     });
-  //   })
-  //   .then(function(ids) {
-  //     for (let i=0; i<ids.length; i++) {
-  //       postSeedData[i].user = ids[i];
-  //     }
-  //     return postSeedData;
-  //   })
-  //   .then(function (postSeedData) {
-  //     return Post.insertMany(postSeedData);
-  //   });
-
-  // return User.insertMany(userSeedData)
-  //   .then(function(users) {
-  //     return users.map(function(user) {
-  //       return user._id
-  //     });
-  //   })
-  //   .then(function(ids) {
-  //     for (let i=0; i<ids.length; i++) {
-  //       postSeedData[i].user = ids[i];
-  //     }
-  //     return postSeedData;
-  //   })
-  //   .then(function (postSeedData) {
-  //     return Post.insertMany(postSeedData);
-  //   });
 }
 
 function generateDummyObjectID() {
