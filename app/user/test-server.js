@@ -6,10 +6,10 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-const {User} = require('../user');
+const {User} = require('.');
 const {Post} = require('../post');
 
-const {TEST_DATABASE_URL, HTTP_STATUS_CODES} = require('../config');
+const {TEST_DATABASE_URL, HTTP_STATUS_CODES} = require('../../config');
 const {app, runServer, stopServer} = require('../server');
 
 // Setup the expect syntax from chai

@@ -2,11 +2,10 @@
 const result = require('dotenv').config();
 
 if (result.error) {
+  console.log(result.parsed);
   throw result.error
-  console.log(result.parsed)
 }
  
-
 // Import 3rd party frameworks, libraries and/or config parameters
 
 const express = require('express');
@@ -17,7 +16,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const {DATABASE_URL, TEST_DATABASE_URL, PORT, HTTP_STATUS_CODES} = require('./config');
+const {DATABASE_URL, TEST_DATABASE_URL, PORT, HTTP_STATUS_CODES} = require('../config');
 
 // Initialize an express app
 const app = express();
@@ -44,7 +43,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 const {router: usersRouter} = require('./user');
 const {router: postsRouter} = require('./post');
 const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
-
 
 // Mount the passport authentication strategies as middleware
 passport.use(localStrategy);

@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const {User} = require('../user');
 const {Post, postJoiSchema} = require('./post.model');
-const {HTTP_STATUS_CODES} = require('../config');
+const {HTTP_STATUS_CODES} = require('../../config');
 
 // Mount the router middleware
 const router = express.Router();

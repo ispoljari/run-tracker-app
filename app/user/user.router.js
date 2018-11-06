@@ -5,7 +5,7 @@ const express = require('express');
 const Joi = require('joi');
 
 const {User, userJoiSchema} = require('./user.model');
-const {HTTP_STATUS_CODES} = require('../config');
+const {HTTP_STATUS_CODES} = require('../../config');
 
 // Mount the router middleware
 const router = express.Router();
