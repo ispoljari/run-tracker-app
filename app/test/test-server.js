@@ -347,6 +347,7 @@ describe('///////////// API RESOURCES //////////', function() {
 
               return chai.request(app)
                 .put(`/api/users/${user.id}`)
+                .set('Authorization', `Bearer ${userData.jwtToken}`)
                 .send(updateData);
             })
             .then(function(res) {
@@ -371,7 +372,8 @@ describe('///////////// API RESOURCES //////////', function() {
               user = _user;
 
               return chai.request(app)
-                .delete(`/api/users/${user.id}`);
+                .delete(`/api/users/${user.id}`)
+                .set('Authorization', `Bearer ${userData.jwtToken}`)
             })
             .then(function(res) {
               expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
@@ -407,6 +409,7 @@ describe('///////////// API RESOURCES //////////', function() {
             .then(function() {
               return chai.request(app)
               .post('/api/posts/')
+              .set('Authorization', `Bearer ${userData.jwtToken}`)
               .send(newPost)
               .then(function(res) {
                 expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
@@ -457,6 +460,7 @@ describe('///////////// API RESOURCES //////////', function() {
 
           return chai.request(app)
             .post('/api/posts/')
+            .set('Authorization', `Bearer ${userData.jwtToken}`)
             .send(nonValidPost)
             .then(function(res) {
               expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
@@ -469,6 +473,7 @@ describe('///////////// API RESOURCES //////////', function() {
 
           return chai.request(app)
             .post('/api/posts/')
+            .set('Authorization', `Bearer ${userData.jwtToken}`)
             .send(nonValidPost)
             .then(function(res) {
               expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
@@ -481,6 +486,7 @@ describe('///////////// API RESOURCES //////////', function() {
 
           return chai.request(app)
             .post('/api/posts/')
+            .set('Authorization', `Bearer ${userData.jwtToken}`)
             .send(nonValidPost)
             .then(function(res) {
               expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
@@ -569,6 +575,7 @@ describe('///////////// API RESOURCES //////////', function() {
 
               return chai.request(app)
                 .put(`/api/posts/${post.id}`)
+                .set('Authorization', `Bearer ${userData.jwtToken}`)
                 .send(updateData);
             })
             .then(function(res) {
@@ -593,7 +600,8 @@ describe('///////////// API RESOURCES //////////', function() {
               post = _post;
 
               return chai.request(app)
-                .delete(`/api/posts/${post.id}`);
+                .delete(`/api/posts/${post.id}`)
+                .set('Authorization', `Bearer ${userData.jwtToken}`);
             })
             .then(function(res) {
               expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
