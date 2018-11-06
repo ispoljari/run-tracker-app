@@ -27,6 +27,12 @@ const expect = chai.expect;
 // Setup chai HTTP layer testing middleware
 chai.use(chaiHttp);
 
+// Dummy data 
+const userData = {
+  postSeedData: {},
+  userSeedData: {},
+  jwtToken: ''
+}
 
 /* INTEGRATION TESTS STRATEGY
 
@@ -42,16 +48,54 @@ chai.use(chaiHttp);
 
 function seedData() {
   console.info('Seeding post and user data to test DB...');
-  const postSeedData = [];
-  const userSeedData = [];
 
-  for (let i=0; i<=10; i++) {
-    userSeedData.push(generateUserData());
-    postSeedData.push(generatePostData());
-  }
+  // for (let i=0; i<=5; i++) {
+  //   userSeedData.push(generateUserData());
+  //   postSeedData.push(generatePostData());
+  // }
+
+  // const promises = [];
+
+  const promise = new Promise(function(resolve, reject) {
+    userData.userSeedData = generateUserData();
+    userData.postSeedData = generatePostData();
+    resolve(userData.userSeedData);
+  });
+
+  return promise.then(function(randomUser) {
+    return User.hashPassword(randomUser.password)
+      .then(function(hashedPassword) {
+        return User.create({
+          name: randomUser.name,
+          displayName: randomUser.displayName,
+          username: randomUser.username,
+          password: hashedPassword,
+          avatar: randomUser.avatar
+        })
+      })
+      .then(function(userDB) {
+        userData.postSeedData.user = userDB._id;
+        return Post.create(userData.postSeedData);
+      });
+  });
+
+  // Hash the password of each random generated user into the DB to enable later authentication through login
+  // userSeedData.forEach(function(user) {
+  //   promises.push(
+  //     User.hashPassword(user.password)
+  //       .then(function(hashedPassword) {
+  //         User.create({
+  //           name: user.name,
+  //           displayName: user.displayName,
+  //           username: user.username,
+  //           password: hashedPassword,
+  //           avatar: user.avatar
+  //         });
+  //       })
+  //   )
+  // });
 
   /* 
-  
   A user has to exist in the DB before a new post can be added 
   Therefore, this is the data storing strategy;
 
@@ -65,22 +109,43 @@ function seedData() {
   Now for every random post document there is a linked user document. Now, 
   the test's won't fail when using the populate() function
   */
-  
-  return User.insertMany(userSeedData)
-    .then(function(users) {
-      return users.map(function(user) {
-        return user._id
-      });
-    })
-    .then(function(ids) {
-      for (let i=0; i<ids.length; i++) {
-        postSeedData[i].user = ids[i];
-      }
-      return postSeedData;
-    })
-    .then(function (postSeedData) {
-      return Post.insertMany(postSeedData);
-    });
+  // let users;
+
+  // Promise.all(promises)
+  //   .then(function() {
+  //     return User.find({})
+  //   })
+  //   .then(function(_users) {
+  //     users = _users;
+  //     return users.map(function(user) {
+  //       return user._id
+  //     });
+  //   })
+  //   .then(function(ids) {
+  //     for (let i=0; i<ids.length; i++) {
+  //       postSeedData[i].user = ids[i];
+  //     }
+  //     return postSeedData;
+  //   })
+  //   .then(function (postSeedData) {
+  //     return Post.insertMany(postSeedData);
+  //   });
+
+  // return User.insertMany(userSeedData)
+  //   .then(function(users) {
+  //     return users.map(function(user) {
+  //       return user._id
+  //     });
+  //   })
+  //   .then(function(ids) {
+  //     for (let i=0; i<ids.length; i++) {
+  //       postSeedData[i].user = ids[i];
+  //     }
+  //     return postSeedData;
+  //   })
+  //   .then(function (postSeedData) {
+  //     return Post.insertMany(postSeedData);
+  //   });
 }
 
 function generateDummyObjectID() {
@@ -130,7 +195,7 @@ describe('///////////// API RESOURCES //////////', function() {
     return stopServer();
   });
 
-  describe('***** Client receiving static files ****', function() {
+  describe('***** Static files ****', function() {
 
     describe('----- Main page (index.html) -----', function() {
 
@@ -144,12 +209,26 @@ describe('///////////// API RESOURCES //////////', function() {
     });
   });
 
-  describe('***** API resources *****', function() {
-  
+  describe('***** Endpoints *****', function() {
     describe('----- /api/users/ endpoint -----', function() {
 
       beforeEach(function() {
-        return seedData();
+        return seedData()
+          .then(function() {
+            return userData.userSeedData;
+          })
+          .then(function(user) {
+            // Obtain a valid JWT token
+            return chai.request(app)
+            .post('/api/auth/login')
+            .send({
+              username: user.username,
+              password: user.password
+            })
+            .then(function(res) {
+              userData.jwtToken = res.body.authToken;
+            })
+          });
       });
     
       afterEach(function() {
@@ -236,22 +315,23 @@ describe('///////////// API RESOURCES //////////', function() {
             .then(function(id) {
               return chai.request(app)
               .get(`/api/users/${id}`)
-                .then(function(_res) {
-                  res = _res;
-                  expect(res).to.have.status(HTTP_STATUS_CODES.OK);
-                  expect(res).to.be.a('object');
-                  expect(res.body).to.include.keys(
-                    'name', 'displayName', 'username', 'avatar'
-                  );
+              .set('Authorization', `Bearer ${userData.jwtToken}`)
+              .then(function(_res) {
+                res = _res;
+                expect(res).to.have.status(HTTP_STATUS_CODES.OK);
+                expect(res).to.be.a('object');
+                expect(res.body).to.include.keys(
+                  'name', 'displayName', 'username', 'avatar'
+                );
 
-                  return User.findById(id);
-                })
-                .then(function(user) {
-                  expect(user.name).to.be.equal(res.body.name);
-                  expect(user.displayName).to.be.equal(res.body.displayName);
-                  expect(user.username).to.be.equal(res.body.username);
-                  expect(user.avatar).to.be.equal(res.body.avatar);
-                });
+                return User.findById(id);
+              })
+              .then(function(user) {
+                expect(user.name).to.be.equal(res.body.name);
+                expect(user.displayName).to.be.equal(res.body.displayName);
+                expect(user.username).to.be.equal(res.body.username);
+                expect(user.avatar).to.be.equal(res.body.avatar);
+              });
             })
         });
       });
