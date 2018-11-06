@@ -7,13 +7,16 @@ const mongoose = require('mongoose');
 
 const {User} = require('../user');
 const {Post, postJoiSchema} = require('./post.model');
-const {HTTP_STATUS_CODES} = require('../config');
+const {HTTP_STATUS_CODES} = require('../../config');
 
 // Mount the router middleware
 const router = express.Router();
 
+// Import jwt authorization middleware
+const {jwtAuth} = require('../auth');
+
 // Create a New Note (JWT protected)
-router.post('/', (req, res) => {
+router.post('/', jwtAuth, (req, res) => {
   // Extract the received data from req.body
   let {distance, runTime, dateTime, user, upvotes} = req.body;
 
@@ -125,7 +128,7 @@ router.get('/:id', (req, res) => {
 
 // Update a note (JWT protected)
 
-router.put('/:id', (req, res) => {
+router.put('/:id', jwtAuth, (req, res) => {
   if (!(req.params.id === req.body.id)) {
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
@@ -157,7 +160,7 @@ router.put('/:id', (req, res) => {
 
 // Delete a note (JWT auth required)
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwtAuth, (req, res) => {
   Post.findByIdAndRemove(req.params.id)
     .then(() => {
       return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();

@@ -5,10 +5,13 @@ const express = require('express');
 const Joi = require('joi');
 
 const {User, userJoiSchema} = require('./user.model');
-const {HTTP_STATUS_CODES} = require('../config');
+const {HTTP_STATUS_CODES} = require('../../config');
 
 // Mount the router middleware
 const router = express.Router();
+
+// Import jwt authorization middleware
+const {jwtAuth} = require('../auth');
 
 // Create a New User
 router.post('/', (req, res) => {
@@ -16,13 +19,13 @@ router.post('/', (req, res) => {
   // If the user doesn't select an avatar, assign a random index
   let randomAvatarIndex = Math.floor(Math.random()*30);
 
-  let {email, password, name, displayName, avatar = randomAvatarIndex} = req.body;
+  let {username, password, name, displayName, avatar = randomAvatarIndex} = req.body;
 
   // ADD user data validation
   const validate = Joi.validate({
     name,
     displayName,
-    email,
+    username,
     password,
     avatar
   }, userJoiSchema, {convert: false});
@@ -36,14 +39,14 @@ router.post('/', (req, res) => {
     });
   }
 
-  User.find({email})
+  User.find({username})
   .countDocuments()
   .then(count => {
     if (count > 0) {
       return Promise.reject({
         code: HTTP_STATUS_CODES.BAD_REQUEST,
         reason: 'ValidationError',
-        message: 'Email already taken'
+        message: 'Username already taken'
       });
     }
     return User.hashPassword(password);
@@ -52,7 +55,7 @@ router.post('/', (req, res) => {
     return User.create({
       name,
       displayName,
-      email,
+      username,
       password: passwordHash,
       avatar
     });
@@ -77,9 +80,16 @@ router.post('/', (req, res) => {
 });
 
 // GET user by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', jwtAuth, (req, res) => {
   User.findById(req.params.id)
     .then(user => {
+      if (!user) {
+        return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({
+          code: HTTP_STATUS_CODES.NOT_FOUND,
+          message: 'The requested user doesn\'t exist.'
+        })
+      }
+
       return res.status(HTTP_STATUS_CODES.OK).json(user.serialize());
     })
     .catch(err => {
@@ -92,7 +102,7 @@ router.get('/:id', (req, res) => {
 
 // PUT endpoint (JWT protected)
 
-router.put('/:id', (req, res) => {
+router.put('/:id', jwtAuth, (req, res) => {
   if (!(req.params.id === req.body.id)) {
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
@@ -123,7 +133,7 @@ router.put('/:id', (req, res) => {
 
 // DELETE enpoint (JWT protected)
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwtAuth, (req, res) => {
   User.findByIdAndRemove(req.params.id)
     .then(() => {
       return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
