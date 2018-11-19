@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
 
 module.exports = {
   entry: ['@babel/polyfill', './app/public/src/js/app.js'],
@@ -19,16 +18,12 @@ module.exports = {
       },
     ],
     port: 3000,
-  //   historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './app/public/src/index.html'
     })
-    // new webpack.HotModuleReplacementPlugin({
-    //   multiStep: true
-    // })
   ],
   module: {
     rules: [
