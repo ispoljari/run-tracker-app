@@ -1,10 +1,5 @@
 'use strict';
-const result = require('dotenv').config();
-
-if (result.error) {
-  console.log(result.parsed);
-  throw result.error
-}
+require('dotenv').config();
  
 // Import 3rd party frameworks, libraries and/or config parameters
 
