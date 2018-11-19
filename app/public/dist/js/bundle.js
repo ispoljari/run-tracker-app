@@ -90,23 +90,10 @@
 /*!**********************************!*\
   !*** ./app/public/src/js/app.js ***!
   \**********************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _test__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./test */ \"./app/public/src/js/test.js\");\n// $(startApp);\n// function startApp() {\n//   registerEventListeners();\n// }\n// function registerEventListeners() {\n//   profileMenuListener();\n// }\n// function profileMenuListener() {\n//   $('.js-avatar').on('click', function(event) {\n//     event.stopPropagation();\n//     toggleProfileMenu();\n//   });\n//   $('body').on('click', () => {\n//     if (isProfileMenuOpen()) {\n//       closeProfileMenu();\n//     }\n//   });\n// }\n// function toggleProfileMenu() {\n//   $('.js-profile-options').toggleClass('profile-options--toggle-visibility');\n// }\n// function isProfileMenuOpen() {\n//   return $('.js-profile-options').hasClass('profile-options--toggle-visibility');\n// }\n// function closeProfileMenu() {\n//   $('.js-profile-options').removeClass('profile-options--toggle-visibility');\n// }\n\nvar nums = [1, 2, 3];\nconsole.log(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"].a);\nconsole.log(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"].b);\nconsole.log(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"].c);\nconsole.log(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"].d);\nconsole.log(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"].e());\nconsole.log(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"].sumNumbers.apply(_test__WEBPACK_IMPORTED_MODULE_0__[\"obj\"], nums));\n\n//# sourceURL=webpack:///./app/public/src/js/app.js?");
-
-/***/ }),
-
-/***/ "./app/public/src/js/test.js":
-/*!***********************************!*\
-  !*** ./app/public/src/js/test.js ***!
-  \***********************************/
-/*! exports provided: obj */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"obj\", function() { return obj; });\nvar obj = {\n  a: 1,\n  b: '2',\n  c: 'I am imported',\n  d: \"I am a template string \".concat(undefined.a),\n  e: function e() {\n    return 'I am coming from inside an arrow function!';\n  },\n  sumNumbers: function sumNumbers(a, b, c) {\n    return a + b + c;\n  }\n};\n\n//# sourceURL=webpack:///./app/public/src/js/test.js?");
+eval("// $(startApp);\n// function startApp() {\n//   registerEventListeners();\n// }\n// function registerEventListeners() {\n//   profileMenuListener();\n// }\n// function profileMenuListener() {\n//   $('.js-avatar').on('click', function(event) {\n//     event.stopPropagation();\n//     toggleProfileMenu();\n//   });\n//   $('body').on('click', () => {\n//     if (isProfileMenuOpen()) {\n//       closeProfileMenu();\n//     }\n//   });\n// }\n// function toggleProfileMenu() {\n//   $('.js-profile-options').toggleClass('profile-options--toggle-visibility');\n// }\n// function isProfileMenuOpen() {\n//   return $('.js-profile-options').hasClass('profile-options--toggle-visibility');\n// }\n// function closeProfileMenu() {\n//   $('.js-profile-options').removeClass('profile-options--toggle-visibility');\n// }\n\n/*  ------ PURE JS ----- */\n// App Controller\n\n//# sourceURL=webpack:///./app/public/src/js/app.js?");
 
 /***/ }),
 
