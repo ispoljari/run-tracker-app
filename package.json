@@ -4,7 +4,10 @@
   "description": "This app enables users to log their runs, analyse their progress on a weekly basis, and share their posts with other users on the platform",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start-dev": "webpack-dev-server --mode development --port 3000 && nodemon server.js",
+    "build-dev": "webpack --mode development",
+    "build-prod": "webpack --mode production",
+    "start-prod": "node server.js",
     "test": "mocha ./app/test/ --exit"
   },
   "repository": {
@@ -41,7 +44,11 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "faker": "^4.1.0",
+    "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.5"
+    "nodemon": "^1.18.5",
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }
