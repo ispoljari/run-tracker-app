@@ -19,7 +19,7 @@ const {User} = require('../user');
 const {Post} = require('../post');
 
 const {TEST_DATABASE_URL, HTTP_STATUS_CODES, JWT_SECRET} = require('../../config');
-const {app, runServer, stopServer} = require('../server');
+const {app, runServer, stopServer} = require('../../server');
 
 // Setup the expect syntax from chai
 const expect = chai.expect;

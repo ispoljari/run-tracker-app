@@ -16,7 +16,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const {DATABASE_URL, TEST_DATABASE_URL, PORT, HTTP_STATUS_CODES} = require('../config');
+const {DATABASE_URL, TEST_DATABASE_URL, PORT, HTTP_STATUS_CODES} = require('./config');
 
 // Initialize an express app
 const app = express();
@@ -37,12 +37,12 @@ app.use(function (req, res, next) {
 });
 
 // Serve static assets to client
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/app/public')));
 
 // Import router modules
-const {router: usersRouter} = require('./user');
-const {router: postsRouter} = require('./post');
-const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
+const {router: usersRouter} = require('./app/user');
+const {router: postsRouter} = require('./app/post');
+const {router: authRouter, localStrategy, jwtStrategy} = require('./app/auth');
 
 // Mount the passport authentication strategies as middleware
 passport.use(localStrategy);
