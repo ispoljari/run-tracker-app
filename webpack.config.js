@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './app/public/src/js/app.js',
+  entry: ['@babel/polyfill', './app/public/src/js/app.js'],
   output: {
     path: path.resolve(__dirname, './app/public/dist'),
     filename: 'js/bundle.js'
@@ -31,5 +31,16 @@ module.exports = {
     // new webpack.HotModuleReplacementPlugin({
     //   multiStep: true
     // })
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  }
 }

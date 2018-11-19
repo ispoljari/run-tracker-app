@@ -33,6 +33,13 @@
 //   $('.js-profile-options').removeClass('profile-options--toggle-visibility');
 // }
 
-import string from './test';
+import {obj} from './test';
 
-console.log(string());
+const nums = [1,2,3];
+
+console.log(obj.a);
+console.log(obj.b);
+console.log(obj.c);
+console.log(obj.d);
+console.log(obj.e());
+console.log(obj.sumNumbers(...nums));
