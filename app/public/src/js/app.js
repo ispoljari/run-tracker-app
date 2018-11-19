@@ -38,3 +38,5 @@
 /*  ------ PURE JS ----- */ 
 
 // App Controller
+
+console.log('Hello!');

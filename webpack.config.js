@@ -8,21 +8,19 @@ module.exports = {
     path: path.resolve(__dirname, './app/public/dist'),
     filename: 'js/bundle.js'
   },
-  // devServer: {
-  //   contentBase: path.resolve(__dirname, './app/public/dist'),
+  devServer: {
+    contentBase: path.resolve(__dirname, './app/public/dist'),
+    watchContentBase: true,
+    proxy: [
+      {
+        context: ['/api'],  
+        target: 'http://localhost:8080', 
+        secure: false,
+      },
+    ],
+    port: 3000,
   //   historyApiFallback: true,
-  //   hot: true,
-  //   inline: true,
-  
-  //   host: 'localhost', // Defaults to `localhost`
-  //   port: 3000, // Defaults to 8080
-  //   proxy: {
-  //     '^/api/*': {
-  //       target: 'http://localhost:8080/api/',
-  //       secure: false
-  //     }
-  //   }
-  // },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
