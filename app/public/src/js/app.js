@@ -1,3 +1,5 @@
+/*  ------ JQUERY ----- */ 
+
 // $(startApp);
 
 // function startApp() {
@@ -40,10 +42,11 @@
 // App Controller
 
 // Enable live reloading of HTML and CSS while in development mode. 
-
 // Implemented using .env global variables -> Setup with NPM (--env.NODE_ENV=dev) and compiled with webpack (webpack.DefinePlugin) 
 
 if (process.env.NODE_ENV === 'dev') {
   require('../index.html');
   require('../../dist/css/main.css');
 }
+
+console.log('Hello');

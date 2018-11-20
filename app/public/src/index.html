@@ -20,13 +20,13 @@
       <header role="banner">
 
         <div class="header">
-          <div class="header__logo header__logo--hover">
+          <div class="header__logo-container">
             <a href="#">
-              <img src="svg/running-logged.svg" alt="Runner logo" class="logo-img">
+              <img src="svg/running-logged.svg" alt="Runner logo" class="header__logo-img">
             </a>
           </div>
 
-          <nav role="navigation" class="header__nav">
+          <nav role="navigation" class="header__nav-container">
             <ul class="menu">
               <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--mobile-S">
                 <a href="#2" class="menu__link">My Runs</a> 
@@ -45,7 +45,8 @@
                 </li>
             </ul>
           </nav>
-          <div class="profile-options js-profile-options">
+
+          <div class="header__profile-options js-profile-options">
             <ul class="profile-menu">
               <li class="profile-menu__item profile--menu__item--emphasize">
                 <p>Wolfgang A. Mozart</p>
@@ -75,7 +76,7 @@
           </div>
         </div>
 
-        <div class="heading">
+        <div class="header__heading">
           <h1 class="heading__title">
             Put on your running shoes, go outside and start running! When you're done, come back here and log your activity.
             <br/> 
@@ -95,8 +96,11 @@
 
         <main role="main">
           <div class="content">
-
             <section role="region">
+              
+              <!-- Run posts -->
+              <!-- ********* -->
+
               <div class="content__post">
                 <div class="post-avatar">
                   <img src="svg/monsters/svg/001-monster-27.svg" alt="An image of a random monster">
@@ -127,6 +131,41 @@
                   </div>
                 </div>
               </div>
+
+              <div class="content__post">
+                  <div class="post-avatar">
+                    <img src="svg/monsters/svg/002-monster-26.svg" alt="An image of a random monster">
+                  </div>
+                  <div class="post-info">
+                    <div class="post-header">
+                      <div class="post-header__user">
+                        <a href="#">
+                          <h2>Steven Segal</h2>
+                        </a>
+                      </div>
+                      <div class="post-header__datetime">
+                        <p>16th November 2018. at 08:30</p>
+                      </div>
+                    </div>
+                    <div class="post-data">
+                      <div class="post-data__distance post-data__distance--style-results">
+                        <p>Distance</p>
+                        <p>15 km</p>
+                      </div>
+                      <div class="post-data__time post-data__distance--style-results">
+                        <p>Run Time</p>
+                        <p>1hr15min</p>
+                      </div>
+                      <div class="post-data__average-speed post-data__distance--style-results">
+                        <p>Average speed</p> <p>5:00/km</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ***** -->
+                <!-- ***** -->
+
             </section>
           </div>
         </main>
