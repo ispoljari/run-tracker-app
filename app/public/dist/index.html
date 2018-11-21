@@ -20,32 +20,39 @@
       <header role="banner">
 
         <div class="header">
-          <div class="header__logo header__logo--hover">
+          <div class="header__logo-container">
             <a href="#">
-              <img src="svg/running-logged.svg" alt="Runner logo" class="logo-img">
+              <img src="svg/running-nlg.svg" alt="Runner logo" class="header__logo-img">
             </a>
           </div>
 
-          <nav role="navigation" class="header__nav">
+          <nav role="navigation" class="header__nav-container">
             <ul class="menu">
-              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--mobile-S">
+              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--mobile-S menu__item--hidden">
                 <a href="#2" class="menu__link">My Runs</a> 
               </li>
-              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--mobile-M">
+              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--mobile-M menu__item--hidden">
                 <a href="#3" class="menu__link">Analytics</a>
               </li>
-              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover">
+              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--hidden">
                 <a href="#4" class="menu__link">Add New Run</a>
               </li>
-              <li class="menu__item menu__item--avatar-hover js-avatar">
-                  <a href="#4" class="menu__link">
-                    <img src="svg/monster.svg" alt="An image of a random monster " class="menu__avatar menu__avatar--mobile">
+              <li class="menu__item menu__item--avatar-hover js-avatar menu__item--hidden">
+                  <a href="#5" class="menu__link">
+                    <img src="svg/monsters/monster-1.svg" alt="An image of a random monster " class="menu__avatar menu__avatar--mobile">
                     <i class="fa fa-angle-down fa_angle--mobile"></i>
                   </a>
-                </li>
+              </li>
+              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover">
+                <a href="#6" class="menu__link">Register</a>
+              </li>
+              <li class="menu__item menu__item--border menu__item--shadow menu__item--hover">
+                <a href="#7" class="menu__link">Login</a>
+              </li>
             </ul>
           </nav>
-          <div class="profile-options js-profile-options">
+
+          <div class="header__profile-options js-profile-options">
             <ul class="profile-menu">
               <li class="profile-menu__item profile--menu__item--emphasize">
                 <p>Wolfgang A. Mozart</p>
@@ -75,7 +82,7 @@
           </div>
         </div>
 
-        <div class="heading">
+        <div class="header__heading">
           <h1 class="heading__title">
             Put on your running shoes, go outside and start running! When you're done, come back here and log your activity.
             <br/> 
@@ -95,11 +102,14 @@
 
         <main role="main">
           <div class="content">
-
             <section role="region">
+              
+              <!-- Run posts -->
+              <!-- ********* -->
+
               <div class="content__post">
                 <div class="post-avatar">
-                  <img src="svg/monsters/svg/001-monster-27.svg" alt="An image of a random monster">
+                  <img src="svg/monsters/monster-15.svg" alt="An image of a random monster">
                 </div>
                 <div class="post-info">
                   <div class="post-header">
@@ -127,6 +137,41 @@
                   </div>
                 </div>
               </div>
+
+              <div class="content__post">
+                  <div class="post-avatar">
+                    <img src="svg/monsters/monster-21.svg" alt="An image of a random monster">
+                  </div>
+                  <div class="post-info">
+                    <div class="post-header">
+                      <div class="post-header__user">
+                        <a href="#">
+                          <h2>Steven Segal</h2>
+                        </a>
+                      </div>
+                      <div class="post-header__datetime">
+                        <p>16th November 2018. at 08:30</p>
+                      </div>
+                    </div>
+                    <div class="post-data">
+                      <div class="post-data__distance post-data__distance--style-results">
+                        <p>Distance</p>
+                        <p>15 km</p>
+                      </div>
+                      <div class="post-data__time post-data__distance--style-results">
+                        <p>Run Time</p>
+                        <p>1hr15min</p>
+                      </div>
+                      <div class="post-data__average-speed post-data__distance--style-results">
+                        <p>Average speed</p> <p>5:00/km</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ***** -->
+                <!-- ***** -->
+
             </section>
           </div>
         </main>
