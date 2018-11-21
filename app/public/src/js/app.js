@@ -9,7 +9,11 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
-import {DOMelements, controlHooksStrings} from './views/view.base';
+import {
+  DOMelements, 
+  controlHooksStrings, 
+  menuIdentifiers
+} from './views/view.base';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
@@ -26,23 +30,40 @@ function startApp() {
 }
 
 function registerEventListeners() {
-  controlDropDownMenu();
+  navMenuController();
 }
 
-/* ------- DROPDOWN MENU SUB-CONTROLLER ------- */
-/* -------------------------------------------- */
+/* ---------------------------------------- */
+/* ------- NAVIGATION MENU CONTROLLER ----- */
+/* ---------------------------------------- */
 
-function controlDropDownMenu() {
-  DOMelements.menuAvatar.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleDropDownList();
+function navMenuController() {
+  DOMelements.navMenu.addEventListener('click', e => {
+    e.stopPropagation(); // stop the event bubbling to the top of the DOM tree (body)
 
-    // Enable closing the dropdown menu by clicking outside of it
-    DOMelements.body.addEventListener('click', () => {
-      if (isDropDownListOpen()) {
-        closeDropDownList();
-      }
-    });
+    const targetElement = e.target.closest('li');
+
+    if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
+      dropDownListSubController();
+    } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
+      registerSubController();
+    }
+
+  });
+}
+
+/* ---------------------------------------- */
+/* ------ DROPDOWN LIST SUBCONTROLLER ----- */
+
+
+function dropDownListSubController() {
+  toggleDropDownList();
+
+  // Enable closing the dropdown menu by clicking outside of it
+  DOMelements.body.addEventListener('click', () => {
+    if (isDropDownListOpen()) {
+      closeDropDownList();
+    }
   });
 }
 
@@ -58,5 +79,10 @@ function closeDropDownList() {
   DOMelements.menuDropDownList.classList.remove(controlHooksStrings.dropDownToggleVisibility);
 }
 
-/* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
 /* -------------------------------------------- */
+/* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
+
+function registerSubController() {
+
+}
+
