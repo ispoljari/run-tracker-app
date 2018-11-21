@@ -75,6 +75,16 @@
   border-radius: 5px;
 }
 
+.menu__item:nth-child(5) {
+  /* Styles */
+  background-color: greenyellow;
+}
+
+.menu__item:nth-child(6) {
+  /* Styles */
+  background-color: wheat;
+}
+
 .menu__item--shadow {
   /* Styles */
   box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
