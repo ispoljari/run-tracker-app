@@ -131,6 +131,7 @@ a {
 
 .header__heading {
   /* Layout */
+  padding: 5px;
   margin-top: 10px;
 
   /* Styles */
@@ -382,8 +383,4 @@ a {
 .dropDownList--toggle-visibility {
   /* Layout */
   display: block;
-}
-
-.header__heading--padding {
-  padding: 5px;
 }

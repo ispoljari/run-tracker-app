@@ -5,7 +5,8 @@ export const DOMelements = {
   body: document.body,
   navMenu: document.querySelector('.js-header__nav'),
   menuDropDownList: document.querySelector('.js-dropdown-list'),
-  introTextHeader: document.querySelector('.js-header__heading')
+  headerHeading: document.querySelector('.js-header__heading'),
+  headerLogo: document.querySelector('.js-header__logo'),
 }
 
 export const menuIdentifiers = {
@@ -19,5 +20,4 @@ export const menuIdentifiers = {
 
 export const controledHooksStrings = {
   dropDownToggleVisibility: 'dropDownList--toggle-visibility',
-  introTextHeaderPadding: 'header__heading--padding'
 }

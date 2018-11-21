@@ -30,7 +30,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function registerEventListeners() {
+  logoController();
   navMenuController();
+}
+
+/* ---------------------------------------- */
+/* ------------ LOGO CONTROLLER ----------- */
+/* ---------------------------------------- */
+
+function logoController() {
+  DOMelements.headerLogo.addEventListener('click', e => {
+    clearHomePage();
+    renderHomePage();
+  });
+}
+
+function clearHomePage() {
+  // If 
+  headerView.removeIntroHeading();
+}
+
+function renderHomePage() {
+  // TODO: 
+  // --> If Logged Out
+
+  // Render Header components
+  headerView.renderIntroHeading();
+
+  // Render Main Content Components
+
+
+  // TODO: 
+  // 1) If Logged In
+
 }
 
 /* ---------------------------------------- */

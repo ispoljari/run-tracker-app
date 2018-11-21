@@ -5,8 +5,8 @@ import {
 } from './view.base';
 
 export const removeIntroHeading = () => {
-  DOMelements.introTextHeader.innerHTML = '';
-  DOMelements.introTextHeader.classList.remove(controledHooksStrings.introTextHeaderPadding)
+  DOMelements.headerHeading.innerHTML = '';
+  DOMelements.headerHeading.style.padding = 0;
 }
 
 export const renderIntroHeading = () => {
@@ -17,8 +17,8 @@ export const renderIntroHeading = () => {
     <span class="heading__subtitle">
         <span>Run Tracker</span> enables you to easily track and analyze your progress on a weekly basis, and share your activity with other users on the platform.
     </span>
-  </h1>`
+  </h1>`;
 
-  DOMelements.introTextHeader.insertAdjacentElement('afterbegin', textMarkup);
-  DOMelements.introTextHeader.classList.add(controledHooksStrings.introTextHeaderPadding);
+  DOMelements.headerHeading.insertAdjacentHTML('afterbegin', textMarkup);
+  DOMelements.headerHeading.style.padding = '5px';
 }
