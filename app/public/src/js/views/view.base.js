@@ -1,3 +1,6 @@
+/* ---------------------------------------- */
+/* ------------ EXPORT DATA OBJ ----------- */
+
 export const DOMelements = {
   body: document.body,
   navMenu: document.querySelector('.js-header__nav'),

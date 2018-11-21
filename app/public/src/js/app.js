@@ -15,6 +15,8 @@ import {
   menuIdentifiers
 } from './views/view.base';
 
+import * as navMenuView from './views/view.nav-menu';
+
 /* ---------------------------------------- */
 /* ---------------------------------------- */
 /* ------------ APP CONTROLLER ------------ */
@@ -57,26 +59,14 @@ function navMenuController() {
 
 
 function dropDownListSubController() {
-  toggleDropDownList();
+  navMenuView.toggleDropDownList();
 
   // Enable closing the dropdown menu by clicking outside of it
   DOMelements.body.addEventListener('click', () => {
-    if (isDropDownListOpen()) {
-      closeDropDownList();
+    if (navMenuView.isDropDownListOpen()) {
+      navMenuView.closeDropDownList();
     }
   });
-}
-
-function toggleDropDownList() {
-  DOMelements.menuDropDownList.classList.toggle(controlHooksStrings.dropDownToggleVisibility);
-}
-
-function isDropDownListOpen() {
-  return DOMelements.menuDropDownList.classList.contains(controlHooksStrings.dropDownToggleVisibility);
-}
-
-function closeDropDownList() {
-  DOMelements.menuDropDownList.classList.remove(controlHooksStrings.dropDownToggleVisibility);
 }
 
 /* -------------------------------------------- */
