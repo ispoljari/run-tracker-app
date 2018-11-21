@@ -3,18 +3,18 @@
 
 import {
   DOMelements, 
-  controlHooksStrings, 
+  controledHooksStrings, 
   menuIdentifiers
 } from './view.base';
 
 export const toggleDropDownList = () => {
-  DOMelements.menuDropDownList.classList.toggle(controlHooksStrings.dropDownToggleVisibility);
+  DOMelements.menuDropDownList.classList.toggle(controledHooksStrings.dropDownToggleVisibility);
 }
 
 export const isDropDownListOpen = () => {
-  return DOMelements.menuDropDownList.classList.contains(controlHooksStrings.dropDownToggleVisibility);
+  return DOMelements.menuDropDownList.classList.contains(controledHooksStrings.dropDownToggleVisibility);
 }
 
 export const closeDropDownList = () => {
-  DOMelements.menuDropDownList.classList.remove(controlHooksStrings.dropDownToggleVisibility);
+  DOMelements.menuDropDownList.classList.remove(controledHooksStrings.dropDownToggleVisibility);
 }

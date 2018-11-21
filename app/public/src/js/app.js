@@ -11,11 +11,12 @@ if (process.env.NODE_ENV === 'dev') {
 
 import {
   DOMelements, 
-  controlHooksStrings, 
+  controledHooksStrings, 
   menuIdentifiers
 } from './views/view.base';
 
 import * as navMenuView from './views/view.nav-menu';
+import * as headerView from './views/view.header';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
@@ -24,12 +25,9 @@ import * as navMenuView from './views/view.nav-menu';
 /* ---------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
-  startApp();
+  registerEventListeners();
 }, false);
 
-function startApp() {
-  registerEventListeners();
-}
 
 function registerEventListeners() {
   navMenuController();
@@ -45,12 +43,15 @@ function navMenuController() {
 
     const targetElement = e.target.closest('li');
 
-    if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
-      dropDownListSubController();
-    } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
-      registerSubController();
-    }
+    if (targetElement) {
 
+      if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
+        dropDownListSubController();
+      } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
+        registerSubController();
+      }
+
+    }
   });
 }
 
@@ -73,6 +74,6 @@ function dropDownListSubController() {
 /* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
 
 function registerSubController() {
-
+ headerView.removeIntroHeading();
 }
 
