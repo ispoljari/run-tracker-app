@@ -49,4 +49,3 @@ if (process.env.NODE_ENV === 'dev') {
   require('../../dist/css/main.css');
 }
 
-console.log('Hello');
