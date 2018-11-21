@@ -1,5 +1,5 @@
 /* ---------------------------------------- */
-/* ------------ EXPORT DATA OBJ ----------- */
+/* ----------- EXPORT DOM CONST's --------- */
 
 export const DOMelements = {
   body: document.body,

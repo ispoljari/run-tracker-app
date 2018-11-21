@@ -14,6 +14,7 @@ import {
   controledHooksStrings, 
   menuIdentifiers
 } from './views/view.base';
+import {appState} from './state/state.app';
 
 import * as navMenuView from './views/view.nav-menu';
 import * as headerView from './views/view.header';
@@ -40,14 +41,12 @@ function registerEventListeners() {
 
 function logoController() {
   DOMelements.headerLogo.addEventListener('click', e => {
-    clearHomePage();
-    renderHomePage();
+    if (appState.currentView !== 'home') {
+      clearCurrentPage();
+      renderHomePage();
+    }
+    appState.currentView = 'home';
   });
-}
-
-function clearHomePage() {
-  // If 
-  headerView.removeIntroHeading();
 }
 
 function renderHomePage() {
@@ -55,14 +54,21 @@ function renderHomePage() {
   // --> If Logged Out
 
   // Render Header components
-  headerView.renderIntroHeading();
+  if (appState.loggedIn === false) {
+    headerView.renderIntroHeading();
+  }
 
   // Render Main Content Components
-
 
   // TODO: 
   // 1) If Logged In
 
+}
+
+function clearCurrentPage() {
+  if (appState.currentView !== 'home' && appState.loggedIn === false) {
+    headerView.removeIntroHeading();
+  }
 }
 
 /* ---------------------------------------- */
@@ -106,6 +112,7 @@ function dropDownListSubController() {
 /* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
 
 function registerSubController() {
- headerView.removeIntroHeading();
+  appState.currentView = menuIdentifiers.register;
+  clearCurrentPage();
 }
 
