@@ -2,6 +2,10 @@
 /* ---------------- HEADER COMPONENTS -------------- */
 /* ------------------------------------------------- */
 
+body {
+  letter-spacing: 0.0525em;
+}
+
 .header {
   /* Layout */
   position: relative;
@@ -222,7 +226,7 @@ a {
 
 .content {
   /* Layout */
-  padding: 10px;
+  padding: 5px;
 }
 
 .content__post {
@@ -303,6 +307,10 @@ a {
 
 /* --------------- REGISTRATION FORM --------------- */
 
+.registration {
+  margin-top: 5px;
+}
+
 .registration fieldset {
   /* Styles */
   border: none;
@@ -311,13 +319,30 @@ a {
 
 .registration__container {
   /* Layout */
-  max-width: 250px;
+  max-width: 270px;
   margin: 0 auto;
+
+  /* Styles */
+  background-color: #e5e5e5;
+  padding: 10px 10px;
+  border-radius: 5px;
+}
+
+.registration legend {
+  /* Layout */
+  display: block;
+
+  /* Styles */
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .registration label {
   /* Layout */
   display: block;
+
+  /* Styles */
+  font-weight: bold;
 }
 
 .registration input {
@@ -343,17 +368,23 @@ a {
   margin-top: 12px;
 }
 
+.registration__legend {
+  margin-bottom: 20px;
+}
+
 .registration__submit {
   /* Layout */
-  margin-top: 20px;
+  margin-top: 15px;
 
   /* Style */
-  border: 1px solid #cccccc;
+  font-weight: bold;
+  border: 2px solid black;
   border-radius: 5px;
   background-color: white;
   padding: 5px;
   width: 100%;
   cursor: pointer;
+  box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
 }
 
 /* ------------------------------------------------- */
