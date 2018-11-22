@@ -9,15 +9,21 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
+// Import DOM classes and dynamic hooks
 import {
   DOMelements, 
   controledHooksStrings, 
   menuIdentifiers
 } from './views/view.base';
+
+// Import app state
 import {appState} from './state/state.app';
 
+// Import /views modules
 import * as navMenuView from './views/view.nav-menu';
 import * as headerView from './views/view.header';
+import * as mainView from './views/view.main';
+import * as footerView from './views/view.footer';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
@@ -41,34 +47,30 @@ function registerEventListeners() {
 
 function logoController() {
   DOMelements.headerLogo.addEventListener('click', e => {
-    if (appState.currentView !== 'home') {
+    if (appState.session.currentView !== 'home') {
       clearCurrentPage();
       renderHomePage();
     }
-    appState.currentView = 'home';
+    appState.session.currentView = 'home';
   });
 }
 
 function renderHomePage() {
-  // TODO: 
-  // --> If Logged Out
-
-  // Render Header components
-  if (appState.loggedIn === false) {
+  if (appState.session.loggedIn === false) {
     headerView.renderIntroHeading();
   }
 
-  // Render Main Content Components
-
-  // TODO: 
-  // 1) If Logged In
-
+  mainView.renderPosts();
+  footerView.renderIconsCredit();
 }
 
 function clearCurrentPage() {
-  if (appState.currentView !== 'home' && appState.loggedIn === false) {
+  if (appState.session.currentView === 'home' && appState.session.loggedIn === false) {
     headerView.removeIntroHeading();
   }
+
+  mainView.removeMainContent();
+  footerView.removeIconsCredit();
 }
 
 /* ---------------------------------------- */
@@ -86,9 +88,13 @@ function navMenuController() {
       if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
         dropDownListSubController();
       } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
+        clearCurrentPage();
         registerSubController();
       }
-
+      
+      if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList) {
+        appState.session.currentView = targetElement.dataset.menuType;
+      }
     }
   });
 }
@@ -112,7 +118,6 @@ function dropDownListSubController() {
 /* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
 
 function registerSubController() {
-  appState.currentView = menuIdentifiers.register;
-  clearCurrentPage();
+  // some code
 }
 

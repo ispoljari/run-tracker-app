@@ -5,8 +5,10 @@ export const DOMelements = {
   body: document.body,
   navMenu: document.querySelector('.js-header__nav'),
   menuDropDownList: document.querySelector('.js-dropdown-list'),
-  headerHeading: document.querySelector('.js-header__heading'),
+  heading: document.querySelector('.js-header__heading'),
   headerLogo: document.querySelector('.js-header__logo'),
+  mainContent: document.querySelector('.js-main-content'),
+  iconsCredit: document.querySelector('.js-credit')
 }
 
 export const menuIdentifiers = {
@@ -20,4 +22,6 @@ export const menuIdentifiers = {
 
 export const controledHooksStrings = {
   dropDownToggleVisibility: 'dropDownList--toggle-visibility',
+  headingToggleVisibility: 'header__heading--toggle-visibility',
+  iconsCreditToggleVisibility: 'credit--toggle-visibility'
 }

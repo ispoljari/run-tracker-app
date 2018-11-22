@@ -2,6 +2,8 @@
 /* ------------ EXPORT APP STATE ---------- */
 
 export const appState = {
-  currentView: 'home',
-  loggedIn: false
+  session: {
+    currentView: 'home',
+    loggedIn: false
+  }
 }

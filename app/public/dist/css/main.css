@@ -376,7 +376,10 @@ a {
 /* -------------------- menu items ----------------- */
 
 
-.menu__item--hidden {
+.menu__item--hidden,
+.header__heading--toggle-visibility,
+.credit--toggle-visibility {
+  /* Layout */
   display: none;
 }
 
