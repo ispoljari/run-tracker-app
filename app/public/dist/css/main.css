@@ -1,5 +1,6 @@
 /* ------------------------------------------------- */
 /* ---------------- HEADER COMPONENTS -------------- */
+/* ------------------------------------------------- */
 
 .header {
   /* Layout */
@@ -215,6 +216,9 @@ a {
 
 /* ------------------------------------------------- */
 /* ---------------------MAIN CONTENT---------------- */
+/* ------------------------------------------------- */
+
+/* ------------------------ POSTS ------------------ */
 
 .content {
   /* Layout */
@@ -297,8 +301,64 @@ a {
   display: inline-block;
 }
 
+/* --------------- REGISTRATION FORM --------------- */
+
+.registration fieldset {
+  /* Styles */
+  border: none;
+  padding: 0;
+}
+
+.registration__container {
+  /* Layout */
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.registration label {
+  /* Layout */
+  display: block;
+}
+
+.registration input {
+  /* Layout */
+  display: block;
+  margin-top: 4px;
+
+  /* Styles */
+  padding: 3px;
+  min-width: 250px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+
+.registration__first-name,
+.registration__last-name,
+.registration__email,
+.registration__password,
+.registration__password-confirm {
+  /* Layout */
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.registration__submit {
+  /* Layout */
+  margin-top: 20px;
+
+  /* Style */
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  background-color: white;
+  padding: 5px;
+  width: 100%;
+  cursor: pointer;
+}
+
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
+/* ------------------------------------------------- */
 
 .credit {
   /* Layout */
@@ -313,6 +373,8 @@ a {
 
 /* ------------------------------------------------- */
 /* --------------------MEDIA QUERIES---------------- */
+/* ------------------------------------------------- */
+
 @media screen and (min-device-width: 420px) {
   .menu__item--mobile-S {
     /* Layout */
@@ -367,14 +429,6 @@ a {
 /* ------------------------------------------------- */
 /* ------ JS dynamically added/removed classes ----- */
 /* ------------------------------------------------- */
-
-
-/* ---------------- HEADER COMPONENTS -------------- */
-/* ------------------------------------------------- */
-
-
-/* -------------------- menu items ----------------- */
-
 
 .menu__item--hidden,
 .header__heading--toggle-visibility,
