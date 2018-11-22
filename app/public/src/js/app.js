@@ -65,10 +65,7 @@ function renderHomePage() {
 }
 
 function clearCurrentPage() {
-  if (appState.session.currentView === 'home' && appState.session.loggedIn === false) {
-    headerView.removeIntroHeading();
-  }
-
+  headerView.removeIntroHeading();
   mainView.removeMainContent();
   footerView.removeIconsCredit();
 }
@@ -88,8 +85,9 @@ function navMenuController() {
       if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
         dropDownListSubController();
       } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
-        clearCurrentPage();
         registerSubController();
+      } else if (targetElement.dataset.menuType === menuIdentifiers.login) {
+        loginSubController();
       }
       
       if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList) {
@@ -118,6 +116,16 @@ function dropDownListSubController() {
 /* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
 
 function registerSubController() {
-  // some code
+  if (appState.session.currentView !== 'register') {
+    clearCurrentPage();
+  }
 }
 
+/* -------------------------------------------- */
+/* ------- LOGIN BUTTON SUB-CONTROLLER ----- */
+
+function loginSubController() {
+  if (appState.session.currentView !== 'login') {
+  clearCurrentPage();
+  }
+}

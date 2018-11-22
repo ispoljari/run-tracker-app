@@ -5,9 +5,13 @@ import {
 } from './view.base';
 
 export const removeIconsCredit = () => {
-  DOMelements.iconsCredit.classList.add(controledHooksStrings.iconsCreditToggleVisibility);
+  if (!DOMelements.iconsCredit.classList.contains(controledHooksStrings.iconsCreditToggleVisibility)) {
+    DOMelements.iconsCredit.classList.add(controledHooksStrings.iconsCreditToggleVisibility);
+  }
 }
 
 export const renderIconsCredit = () => {
-  DOMelements.iconsCredit.classList.remove(controledHooksStrings.iconsCreditToggleVisibility);
+  if (DOMelements.iconsCredit.classList.contains(controledHooksStrings.iconsCreditToggleVisibility)) {
+    DOMelements.iconsCredit.classList.remove(controledHooksStrings.iconsCreditToggleVisibility);
+  }
 }
