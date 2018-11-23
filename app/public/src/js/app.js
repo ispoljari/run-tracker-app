@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function registerEventListeners() {
-  documentLevelController();
-  logoController();
-  navMenuController();
+  documentLevelController(); // Register global event listeners
+  logoController(); // Open home page
+  navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
 }
 
 /* ---------------------------------------- */
@@ -54,6 +54,9 @@ function documentLevelController() {
     // Enable closing the login menu by clicking outside of it
     if(headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
       headerView.closeLoginMenu();
+
+      detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+      appState.registeredClickEvents.logInMenu = false;
     }
   });
 }
@@ -103,13 +106,12 @@ function navMenuController() {
     const targetElement = e.target.closest('li');
 
     if (targetElement) {
-
       if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
         dropDownListSubController();
       } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
-        registerSubController();
+        registerViewSubController();
       } else if (targetElement.dataset.menuType === menuIdentifiers.login) {
-        loginSubController();
+        loginMenuSubController();
       }
       
       if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList && targetElement.dataset.menuType !== menuIdentifiers.login) {
@@ -120,7 +122,7 @@ function navMenuController() {
 }
 
 /* ---------------------------------------- */
-/* ------ DROPDOWN LIST SUBCONTROLLER ----- */
+/* --- AVATAR DROPDOWN LIST SUBCONTROLLER -- */
 
 
 function dropDownListSubController() {
@@ -128,9 +130,9 @@ function dropDownListSubController() {
 }
 
 /* -------------------------------------------- */
-/* ------- REGISTER BUTTON SUB-CONTROLLER ----- */
+/* ---- REGISTER VIEW (PAGE) SUB-CONTROLLER --- */
 
-function registerSubController() {
+function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
     mainView.renderRegistrationForm();
@@ -138,8 +140,39 @@ function registerSubController() {
 }
 
 /* -------------------------------------------- */
-/* ------- LOGIN BUTTON SUB-CONTROLLER ----- */
+/* ---------- LOGIN MENU SUB-CONTROLLER ------- */
 
-function loginSubController() {
+function loginMenuSubController() {
   headerView.toggleLoginMenu();
+  if (!appState.registeredClickEvents.logInMenu) {
+    logInUserController(); // Process existing user login and open new session
+  } else {
+    detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  }
+  // toggle event state
+  appState.registeredClickEvents.logInMenu = !appState.registeredClickEvents.logInMenu;
+}
+
+/* ---------------------------------------- */
+/* --------- LOGIN USER CONTROLLER -------- */
+/* ---------------------------------------- */
+
+function logInUserController() {
+  attachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+} 
+
+function loginSubmitEvent(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  console.log('Hello!');
+}
+
+/* --------- GLOBAL HELP FUNCTIONS ------- */
+
+function detachEventListener(element, eventType, fn) {
+  element.removeEventListener(eventType, fn);
+}
+
+function attachEventListener(element, eventType, fn) {
+  element.addEventListener(eventType, fn);
 }

@@ -9,7 +9,8 @@ export const DOMelements = {
   heading: document.querySelector('.js-header__heading'),
   headerLogo: document.querySelector('.js-header__logo'),
   mainContent: document.querySelector('.js-main-content'),
-  iconsCredit: document.querySelector('.js-credit')
+  iconsCredit: document.querySelector('.js-credit'),
+  loginForm: document.querySelector('.js-login__form')
 }
 
 export const DOMstrings = {
