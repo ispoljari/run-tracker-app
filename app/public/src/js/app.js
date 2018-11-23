@@ -46,38 +46,43 @@ function registerEventListeners() {
 /* ---------------------------------------- */
 
 function documentLevelController() {
-  DOMelements.body.addEventListener('click', e => {
-    // Enable closing the dropdown menu by clicking outside of it
-    if (headerView.isDropDownListOpen() && !isTargetElementInsideOf(e, DOMstrings.menuDropDownList)) {
-      headerView.closeDropDownList();
-    }
-    // Enable closing the login menu by clicking outside of it
-    if(headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
-      headerView.closeLoginMenu();
+  attachEventListener(DOMelements.body, 'click', bodyClickEvent)
+}
 
-      detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
-      appState.registeredClickEvents.logInMenu = false;
-    }
-  });
+function bodyClickEvent(e) {
+  // Enable closing the dropdown menu by clicking outside of it
+  if (headerView.isDropDownListOpen() && !isTargetElementInsideOf(e, DOMstrings.menuDropDownList)) {
+    headerView.closeDropDownList();
+  }
+  // Enable closing the login menu by clicking outside of it
+  if(headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
+    headerView.closeLoginMenu();
+
+    detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+    appState.registeredClickEvents.logInMenu = false;
+  }
 }
 
 function isTargetElementInsideOf(event, parent) {
-  return event.target.closest('div').classList.contains(parent);
+  if (event.target !==  DOMelements.body) {
+    return event.target.closest('div').classList.contains(parent);
+  }
 }
-
 
 /* ---------------------------------------- */
 /* ------------ LOGO CONTROLLER ----------- */
 /* ---------------------------------------- */
 
 function logoController() {
-  DOMelements.headerLogo.addEventListener('click', e => {
-    if (appState.session.currentView !== 'home') {
-      clearCurrentPage();
-      renderHomePage();
-    }
-    appState.session.currentView = 'home';
-  });
+  attachEventListener(DOMelements.headerLogo, 'click', logoClickEvent);
+}
+
+function logoClickEvent(e) {
+  if (appState.session.currentView !== 'home') {
+    clearCurrentPage();
+    renderHomePage();
+  }
+  appState.session.currentView = 'home';
 }
 
 function renderHomePage() {
@@ -100,30 +105,31 @@ function clearCurrentPage() {
 /* ---------------------------------------- */
 
 function navMenuController() {
-  DOMelements.navMenu.addEventListener('click', e => {
-    e.stopPropagation(); // stop the event bubbling to the top of the DOM tree (body)
+  attachEventListener(DOMelements.navMenu, 'click', navMenuClickEvent);
+}
 
-    const targetElement = e.target.closest('li');
+function navMenuClickEvent(e) {
+  e.stopPropagation(); // stop the event bubbling to the top of the DOM tree (body)
 
-    if (targetElement) {
-      if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
-        dropDownListSubController();
-      } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
-        registerViewSubController();
-      } else if (targetElement.dataset.menuType === menuIdentifiers.login) {
-        loginMenuSubController();
-      }
-      
-      if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList && targetElement.dataset.menuType !== menuIdentifiers.login) {
-        appState.session.currentView = targetElement.dataset.menuType;
-      }
+  const targetElement = e.target.closest('li');
+
+  if (targetElement) {
+    if (targetElement.dataset.menuType === menuIdentifiers.dropDownList) {
+      dropDownListSubController();
+    } else if (targetElement.dataset.menuType === menuIdentifiers.register) {
+      registerViewSubController();
+    } else if (targetElement.dataset.menuType === menuIdentifiers.login) {
+      loginMenuSubController();
     }
-  });
+    
+    if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList && targetElement.dataset.menuType !== menuIdentifiers.login) {
+      appState.session.currentView = targetElement.dataset.menuType;
+    }
+  }
 }
 
 /* ---------------------------------------- */
 /* --- AVATAR DROPDOWN LIST SUBCONTROLLER -- */
-
 
 function dropDownListSubController() {
   headerView.toggleDropDownList();
