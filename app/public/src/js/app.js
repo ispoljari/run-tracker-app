@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'dev') {
 // Import DOM classes and dynamic hooks
 import {
   DOMelements, 
-  controledHooksStrings, 
+  DOMstrings, 
   menuIdentifiers
 } from './views/view.base';
 
@@ -48,14 +48,18 @@ function registerEventListeners() {
 function documentLevelController() {
   DOMelements.body.addEventListener('click', e => {
     // Enable closing the dropdown menu by clicking outside of it
-    if (headerView.isDropDownListOpen() && !e.target.closest('div').classList.contains('dropdown-list')) {
+    if (headerView.isDropDownListOpen() && !isTargetElementInsideOf(e, DOMstrings.menuDropDownList)) {
       headerView.closeDropDownList();
     }
     // Enable closing the login menu by clicking outside of it
-    if(headerView.isLoginMenuOpen() && !e.target.closest('div').classList.contains('login-menu')) {
+    if(headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
       headerView.closeLoginMenu();
     }
   });
+}
+
+function isTargetElementInsideOf(event, parent) {
+  return event.target.closest('div').classList.contains(parent);
 }
 
 

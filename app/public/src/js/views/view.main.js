@@ -1,7 +1,5 @@
 import {
-  DOMelements, 
-  controledHooksStrings, 
-  menuIdentifiers
+  DOMelements
 } from './view.base';
 
 export const removeMainContent = () => {

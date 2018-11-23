@@ -1,7 +1,6 @@
 import {
   DOMelements, 
   controledHooksStrings, 
-  menuIdentifiers
 } from './view.base';
 
 // Navigation avatar drop-down menu

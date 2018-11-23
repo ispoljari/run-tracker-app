@@ -12,6 +12,11 @@ export const DOMelements = {
   iconsCredit: document.querySelector('.js-credit')
 }
 
+export const DOMstrings = {
+  menuDropDownList: 'js-dropdown-list',
+  loginMenu: 'js-login-menu'
+}
+
 export const menuIdentifiers = {
   myRuns: 'myRuns',
   analytics: 'analytics',
@@ -25,5 +30,5 @@ export const controledHooksStrings = {
   dropDownToggleVisibility: 'dropDownList--toggle-visibility',
   loginMenuToggleVisibility: 'login--toggle-visibility',
   headingToggleVisibility: 'header__heading--toggle-visibility',
-  iconsCreditToggleVisibility: 'credit--toggle-visibility'
+  iconsCreditToggleVisibility: 'credit--toggle-visibility',
 }

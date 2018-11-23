@@ -1,7 +1,6 @@
 import {
   DOMelements, 
-  controledHooksStrings, 
-  menuIdentifiers
+  controledHooksStrings
 } from './view.base';
 
 export const removeIconsCredit = () => {
