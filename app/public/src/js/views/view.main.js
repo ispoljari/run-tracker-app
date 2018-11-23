@@ -44,7 +44,7 @@ export const renderPosts = () => {
 
 export const renderRegistrationForm = () => {
   const htmlString = 
-  `<form action="#" class="registration">
+  `<form action="#" class="registration js-registration">
     <div class="registration__container">
       <fieldset>
         <div class="registration__legend">

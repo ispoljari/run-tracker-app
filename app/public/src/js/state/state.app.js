@@ -7,6 +7,7 @@ export const appState = {
     loggedIn: false
   },
   registeredClickEvents: {
-    logInMenu: false
+    logInMenu: false,
+    registerForm: false
   }
 }

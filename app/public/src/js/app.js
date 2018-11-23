@@ -95,9 +95,31 @@ function renderHomePage() {
 }
 
 function clearCurrentPage() {
-  headerView.removeIntroHeading();
-  mainView.removeMainContent();
-  footerView.removeIconsCredit();
+  // Remove current content
+  headerView.removeIntroHeading(); // TODO: IF LOGGED OUT
+  mainView.removeMainContent(); 
+  footerView.removeIconsCredit(); // TODO: IF CURR.VIEW = HOME
+
+  // TODO: DECIDE IF THIS FUNCTIONALITY IS NEEDED
+  // Close all open drop downlists and menus
+  // if (headerView.isLoginMenuOpen()) {
+  //   headerView.closeLoginMenu();
+  // }
+
+  // if (headerView.isDropDownListOpen()) {
+  //   headerView.closeDropDownList();
+
+  //   if (appState.registeredClickEvents.logInMenu) {
+  //     detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  //   } 
+  //   appState.registeredClickEvents.logInMenu = false;
+  // }
+
+  // Detach event listeners
+  if (appState.registeredClickEvents.registerForm) {
+    detachEventListener(DOMelements.mainContent, 'submit', registerSubmitEvent);
+    appState.registeredClickEvents.registerForm = false;
+  }
 }
 
 /* ---------------------------------------- */
@@ -141,7 +163,9 @@ function dropDownListSubController() {
 function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
+
     mainView.renderRegistrationForm();
+    registerNewUserController(); // Process existing user login and open new session
   }
 }
 
@@ -160,6 +184,24 @@ function loginMenuSubController() {
 }
 
 /* ---------------------------------------- */
+/* ----- REGISTER NEW USER CONTROLLER ----- */
+/* ---------------------------------------- */
+
+function registerNewUserController() {
+  attachEventListener(DOMelements.mainContent, 'submit', registerSubmitEvent);
+  appState.registeredClickEvents.registerForm = true;
+}
+
+function registerSubmitEvent(e) {
+  e.preventDefault();
+
+  // console.log('Hello!');
+  // console.log(e.target);
+
+  // TODO: CLEAR INPUT FIELDS
+}
+
+/* ---------------------------------------- */
 /* --------- LOGIN USER CONTROLLER -------- */
 /* ---------------------------------------- */
 
@@ -170,7 +212,9 @@ function logInUserController() {
 function loginSubmitEvent(e) {
   e.stopPropagation();
   e.preventDefault();
-  console.log('Hello!');
+
+  console.log('Hello');
+  // TODO: CLEAR INPUT FIELDS
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */

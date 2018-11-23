@@ -10,7 +10,8 @@ export const DOMelements = {
   headerLogo: document.querySelector('.js-header__logo'),
   mainContent: document.querySelector('.js-main-content'),
   iconsCredit: document.querySelector('.js-credit'),
-  loginForm: document.querySelector('.js-login__form')
+  loginForm: document.querySelector('.js-login__form'),
+  registerForm: document.querySelector('.js-registration')
 }
 
 export const DOMstrings = {
