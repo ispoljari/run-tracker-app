@@ -46,13 +46,13 @@ function registerEventListeners() {
 /* ---------------------------------------- */
 
 function documentLevelController() {
-  DOMelements.body.addEventListener('click', () => {
+  DOMelements.body.addEventListener('click', e => {
     // Enable closing the dropdown menu by clicking outside of it
-    if (headerView.isDropDownListOpen()) {
+    if (headerView.isDropDownListOpen() && !e.target.closest('div').classList.contains('dropdown-list')) {
       headerView.closeDropDownList();
     }
     // Enable closing the login menu by clicking outside of it
-    if(headerView.isLoginMenuOpen()) {
+    if(headerView.isLoginMenuOpen() && !e.target.closest('div').classList.contains('login-menu')) {
       headerView.closeLoginMenu();
     }
   });
