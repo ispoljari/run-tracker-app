@@ -37,7 +37,7 @@
               <li class="menu__item menu__item--border menu__item--shadow menu__item--hover menu__item--hidden" data-menu-type="addNewRun">
                 <a href="#" class="menu__link">Add New Run</a>
               </li>
-              <li class="menu__item menu__item--avatar-hover menu__item--hidden" data-menu-type="dropDownList">
+              <li class="menu__item menu__item--avatar-hover" data-menu-type="dropDownList">
                 <a href="#" class="menu__link">
                   <img src="svg/monsters/monster-1.svg" alt="An image of a random monster " class="menu__avatar menu__avatar--mobile">
                   <i class="fa fa-angle-down fa_angle--mobile"></i>
@@ -80,9 +80,24 @@
               </li>
             </ul>
           </div>
+
+          <div class="login-menu js-login-menu login-menu--box-style">
+            <form action="#" class="login__form">
+              <label>
+                Email (username):
+                <input type="email" name="email" placeholder="demo" required>
+              </label>
+              <label>
+                Password:
+                <input type="password" name="password" placeholder="demo" required>
+              </label>
+              <button type="form" class="btn-style">Login</button>
+            </form>
+          </div>
         </div>
 
-        <!-- <div class="header__heading js-header__heading">
+
+        <div class="header__heading js-header__heading">
           <h1 class="heading__title">
             Put on your running shoes, go outside and start running! When you're done, come back here and log your activity.
             <br/> 
@@ -90,7 +105,7 @@
                <span>Run Tracker</span> enables you to easily track and analyze your progress on a weekly basis, and share your activity with other users on the platform.
             </span>
           </h1>
-        </div> -->
+        </div>
 
       </header>
 
@@ -107,7 +122,7 @@
               <!-- Run posts -->
               <!-- ********* -->
 
-              <!-- <div class="content__post">
+              <div class="content__post">
                 <div class="post-avatar">
                   <img src="svg/monsters/monster-15.svg" alt="An image of a random monster">
                 </div>
@@ -139,87 +154,35 @@
               </div>
 
               <div class="content__post">
-                  <div class="post-avatar">
-                    <img src="svg/monsters/monster-21.svg" alt="An image of a random monster">
-                  </div>
-                  <div class="post-info">
-                    <div class="post-header">
-                      <div class="post-header__user">
-                        <a href="#">
-                          <h2>Steven Segal</h2>
-                        </a>
-                      </div>
-                      <div class="post-header__datetime">
-                        <p>16th November 2018. at 08:30</p>
-                      </div>
+                <div class="post-avatar">
+                  <img src="svg/monsters/monster-21.svg" alt="An image of a random monster">
+                </div>
+                <div class="post-info">
+                  <div class="post-header">
+                    <div class="post-header__user">
+                      <a href="#">
+                        <h2>Steven Segal</h2>
+                      </a>
                     </div>
-                    <div class="post-data">
-                      <div class="post-data__distance post-data__distance--style-results">
-                        <p>Distance</p>
-                        <p>15 km</p>
-                      </div>
-                      <div class="post-data__time post-data__distance--style-results">
-                        <p>Run Time</p>
-                        <p>1hr15min</p>
-                      </div>
-                      <div class="post-data__average-speed post-data__distance--style-results">
-                        <p>Average speed</p> <p>5:00/km</p>
-                      </div>
+                    <div class="post-header__datetime">
+                      <p>16th November 2018. at 08:30</p>
                     </div>
                   </div>
-                </div> -->
-
-                <!-- ******** -->
-                <!-- Register -->
-                <!-- ******** -->
-
-                <form action="#" class="registration">
-                  <div class="registration__container">
-                    <fieldset>
-                      <div class="registration__legend">
-                        <legend>Create New Account:</legend>
-                      </div>
-  
-                      <div class="registration__first-name">
-                        <label>
-                          First Name:
-                          <input type="text" placeholder="John" name="first-name" required>
-                        </label>
-                      </div>
-  
-                      <div class="registration__last-name">
-                        <label>
-                          Last Name:
-                          <input type="text" placeholder="Smith" name="last-name" required>
-                        </label>
-                      </div>
-  
-                      <div class="registration__email">
-                        <label>
-                          Email:
-                          <input type="email" name="email" placeholder="john.smith@gmail.com" required>
-                        </label>
-                      </div>
-                      
-                      <div class="registration__password">
-                        <label>
-                          Password:
-                          <input type="password" name="password" required>
-                        </label>
-                      </div>
-  
-                      <div class="registration__password-confirm">
-                        <label>
-                          Confirm Password:
-                          <input type="password" name="password-confirm" required>
-                        </label>
-                      </div>
-                    </fieldset>
-  
-                    <button type="submit" class="registration__submit">Submit</button>
+                  <div class="post-data">
+                    <div class="post-data__distance post-data__distance--style-results">
+                      <p>Distance</p>
+                      <p>15km</p>
+                    </div>
+                    <div class="post-data__time post-data__distance--style-results">
+                      <p>Run Time</p>
+                      <p>1hr15min</p>
+                    </div>
+                    <div class="post-data__average-speed post-data__distance--style-results">
+                      <p>Average speed</p> <p>15:00/km</p>
+                    </div>
                   </div>
-                </form>
-
+                </div>
+              </div>
 
             </section>
           </div>
@@ -234,9 +197,9 @@
       <footer role="contentinfo">
 
         <!-- Credit the avatar icon authors -->
-        <!-- <div class="credit js-credit">
+        <div class="credit js-credit">
           <div class="credit__text">Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Monster">Monster</a> and <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"     title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"     title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-        </div>  -->
+        </div> 
 
       </footer>
     </div>

@@ -20,7 +20,6 @@ import {
 import {appState} from './state/state.app';
 
 // Import /views modules
-import * as navMenuView from './views/view.nav-menu';
 import * as headerView from './views/view.header';
 import * as mainView from './views/view.main';
 import * as footerView from './views/view.footer';
@@ -37,9 +36,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function registerEventListeners() {
+  documentLevelController();
   logoController();
   navMenuController();
 }
+
+/* ---------------------------------------- */
+/* ------ DOCUMENT-LEVEL CONTROLLER ------- */
+/* ---------------------------------------- */
+
+function documentLevelController() {
+  DOMelements.body.addEventListener('click', () => {
+    // Enable closing the dropdown menu by clicking outside of it
+    if (headerView.isDropDownListOpen()) {
+      headerView.closeDropDownList();
+    }
+    // Enable closing the login menu by clicking outside of it
+    if(headerView.isLoginMenuOpen()) {
+      headerView.closeLoginMenu();
+    }
+  });
+}
+
 
 /* ---------------------------------------- */
 /* ------------ LOGO CONTROLLER ----------- */
@@ -90,7 +108,7 @@ function navMenuController() {
         loginSubController();
       }
       
-      if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList) {
+      if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList && targetElement.dataset.menuType !== menuIdentifiers.login) {
         appState.session.currentView = targetElement.dataset.menuType;
       }
     }
@@ -102,14 +120,7 @@ function navMenuController() {
 
 
 function dropDownListSubController() {
-  navMenuView.toggleDropDownList();
-
-  // Enable closing the dropdown menu by clicking outside of it
-  DOMelements.body.addEventListener('click', () => {
-    if (navMenuView.isDropDownListOpen()) {
-      navMenuView.closeDropDownList();
-    }
-  });
+  headerView.toggleDropDownList();
 }
 
 /* -------------------------------------------- */
@@ -118,6 +129,7 @@ function dropDownListSubController() {
 function registerSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
+    mainView.renderRegistrationForm();
   }
 }
 
@@ -125,7 +137,5 @@ function registerSubController() {
 /* ------- LOGIN BUTTON SUB-CONTROLLER ----- */
 
 function loginSubController() {
-  if (appState.session.currentView !== 'login') {
-  clearCurrentPage();
-  }
+  headerView.toggleLoginMenu();
 }

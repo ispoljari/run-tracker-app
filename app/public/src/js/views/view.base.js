@@ -5,6 +5,7 @@ export const DOMelements = {
   body: document.body,
   navMenu: document.querySelector('.js-header__nav'),
   menuDropDownList: document.querySelector('.js-dropdown-list'),
+  loginMenu: document.querySelector('.js-login-menu'),
   heading: document.querySelector('.js-header__heading'),
   headerLogo: document.querySelector('.js-header__logo'),
   mainContent: document.querySelector('.js-main-content'),
@@ -22,6 +23,7 @@ export const menuIdentifiers = {
 
 export const controledHooksStrings = {
   dropDownToggleVisibility: 'dropDownList--toggle-visibility',
+  loginMenuToggleVisibility: 'login--toggle-visibility',
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility'
 }

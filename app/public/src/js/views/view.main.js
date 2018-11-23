@@ -41,5 +41,61 @@ export const renderPosts = () => {
     </div>
   </div>`
 
-  DOMelements.mainContent.insertAdjacentHTML('beforeend', htmlString);
+  appendHtmlToMainContent(htmlString);
+}
+
+export const renderRegistrationForm = () => {
+  const htmlString = 
+  `<form action="#" class="registration">
+    <div class="registration__container">
+      <fieldset>
+        <div class="registration__legend">
+          <legend>Create New Account:</legend>
+        </div>
+
+        <div class="registration__first-name">
+          <label>
+            First Name:
+            <input type="text" placeholder="John" name="first-name" required>
+          </label>
+        </div>
+
+        <div class="registration__last-name">
+          <label>
+            Last Name:
+            <input type="text" placeholder="Smith" name="last-name" required>
+          </label>
+        </div>
+
+        <div class="registration__email">
+          <label>
+            Email (username):
+            <input type="email" name="email" placeholder="john.smith@gmail.com" required>
+          </label>
+        </div>
+        
+        <div class="registration__password">
+          <label>
+            Password:
+            <input type="password" name="password" placeholder="abcd1234" required>
+          </label>
+        </div>
+
+        <div class="registration__password-confirm">
+          <label>
+            Confirm Password:
+            <input type="password" placeholder="abcd1234" name="password-confirm" required>
+          </label>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="registration__submit btn-style">Submit</button>
+    </div>
+  </form>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
+function appendHtmlToMainContent(html) {
+  DOMelements.mainContent.insertAdjacentHTML('beforeend', html);
 }
