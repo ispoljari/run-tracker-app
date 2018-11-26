@@ -7,27 +7,51 @@ import {
 // Navigation menu buttons (show/hide)
 
 export const hideRegisterButton = () => {
-  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.register}"]`)[0].classList.add(controledHooksStrings.navigationItemsToggleVisibility);
+  DOMelements.navMenuItems.logedOut.register.classList.add(controledHooksStrings.navMenuItemHide);
+}
+
+export const showRegisterButton = () => {
+  DOMelements.navMenuItems.logedOut.register.classList.remove(controledHooksStrings.navMenuItemHide);
 }
 
 export const hideLoginButton = () => {
-  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.login}"]`)[0].classList.add(controledHooksStrings.navigationItemsToggleVisibility);
+  DOMelements.navMenuItems.logedOut.login.classList.add(controledHooksStrings.navMenuItemHide);
+}
+
+export const showLoginButton = () => {
+  DOMelements.navMenuItems.logedOut.login.classList.remove(controledHooksStrings.navMenuItemHide);
 }
 
 export const showMyRunsButton = () => {
-  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.myRuns}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+  DOMelements.navMenuItems.logedIn.myRuns.classList.remove(controledHooksStrings.navMenuItemHide);
+}
+
+export const hideMyRunsButton = () => {
+  DOMelements.navMenuItems.logedIn.myRuns.classList.add(controledHooksStrings.navMenuItemHide);
 }
 
 export const showAnalyticsButton = () => {
-  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.analytics}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+  DOMelements.navMenuItems.logedIn.analytics.classList.remove(controledHooksStrings.navMenuItemHide);
+}
+
+export const hideAnalyticsButton = () => {
+  DOMelements.navMenuItems.logedIn.analytics.classList.add(controledHooksStrings.navMenuItemHide);
 }
 
 export const showAddNewRunButton = () => {
-  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.addNewRun}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+  DOMelements.navMenuItems.logedIn.addNewRun.classList.remove(controledHooksStrings.navMenuItemHide);
+}
+
+export const hideAddNewRunButton = () => {
+  DOMelements.navMenuItems.logedIn.addNewRun.classList.add(controledHooksStrings.navMenuItemHide);
 }
 
 export const showAvatarDropDownListButton = () => {
-  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.dropDownList}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+  DOMelements.navMenuItems.logedIn.avatarDropDown.classList.remove(controledHooksStrings.navMenuItemHide);
+}
+
+export const hideAvatarDropDownListButton = () => {
+  DOMelements.navMenuItems.logedIn.avatarDropDown.classList.add(controledHooksStrings.navMenuItemHide);
 }
 
 // Navigation avatar drop-down menu

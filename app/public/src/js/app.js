@@ -13,7 +13,8 @@ if (process.env.NODE_ENV === 'dev') {
 import {
   DOMelements, 
   DOMstrings, 
-  menuIdentifiers
+  menuIdentifiers,
+  dropDownIdentifiers
 } from './views/view.base';
 
 // Import app state
@@ -46,7 +47,7 @@ function registerEventListeners() {
 /* ---------------------------------------- */
 
 function documentLevelController() {
-  attachEventListener(DOMelements.body, 'click', bodyClickEvent)
+  attachEventListener([DOMelements.body], 'click', [bodyClickEvent])
 }
 
 function bodyClickEvent(e) {
@@ -71,7 +72,7 @@ function isTargetElementInsideOf(event, parent) {
 /* ---------------------------------------- */
 
 function logoController() {
-  attachEventListener(DOMelements.headerLogo, 'click', logoClickEvent);
+  attachEventListener([DOMelements.headerLogo], 'click', [logoClickEvent]);
 }
 
 function logoClickEvent(e) {
@@ -114,7 +115,7 @@ function clearCurrentPage() {
 
   // Detach event listeners
   if (appState.registeredClickEvents.registerForm) {
-    detachEventListener(DOMelements.mainContent, 'submit', registerSubmitEvent);
+    detachEventListener([DOMelements.mainContent], 'submit', [registerSubmitEvent]);
     appState.registeredClickEvents.registerForm = false;
   }
 }
@@ -124,7 +125,7 @@ function clearCurrentPage() {
 /* ---------------------------------------- */
 
 function navMenuController() {
-  attachEventListener(DOMelements.navMenu, 'click', navMenuClickEvent);
+  attachEventListener([DOMelements.navMenu], 'click', [navMenuClickEvent]);
 }
 
 function navMenuClickEvent(e) {
@@ -156,7 +157,15 @@ function dropDownListSubController() {
   if (!appState.registeredClickEvents.dropDownList) {
     dropDownListController(); // Process existing user login and open new session
   } else {
-    // detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+    detachEventListener(    [DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+      DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
+      DOMelements.navMenuItems.logedIn.dropDownList.analytics,
+      DOMelements.navMenuItems.logedIn.dropDownList.logout],
+      'click',
+      [dropDownMyProfileClickEvent,
+      dropDownMyRunsClickEvent,
+      dropDownAnalyticsClickEvent,
+      dropDownLogoutClickEvent]);
   }
   // toggle event state
   appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
@@ -182,7 +191,7 @@ function loginMenuSubController() {
   if (!appState.registeredClickEvents.logInMenu) {
     logInUserController(); // Process existing user login and open new session
   } else {
-    detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+    detachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
   }
   // toggle event state
   appState.registeredClickEvents.logInMenu = !appState.registeredClickEvents.logInMenu;
@@ -193,7 +202,7 @@ function loginMenuSubController() {
 /* ---------------------------------------- */
 
 function registerNewUserController() {
-  attachEventListener(DOMelements.mainContent, 'submit', registerSubmitEvent);
+  attachEventListener([DOMelements.mainContent], 'submit', [registerSubmitEvent]);
   appState.registeredClickEvents.registerForm = true;
 }
 
@@ -211,7 +220,7 @@ function registerSubmitEvent(e) {
 /* ---------------------------------------- */
 
 function logInUserController() {
-  attachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  attachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
 } 
 
 function loginSubmitEvent(e) {
@@ -233,7 +242,7 @@ function loginSubmitEvent(e) {
 
 function closeLoginMenu() {
   headerView.closeLoginMenu();
-  detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  detachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
   appState.registeredClickEvents.logInMenu = false;
 }
 
@@ -261,23 +270,91 @@ function showLoggedInMenuItems() {
 /* ---------------------------------------- */
 
 function dropDownListController() {
-  // attachEventListener
+  attachEventListener([DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+  DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
+  DOMelements.navMenuItems.logedIn.dropDownList.analytics,
+  DOMelements.navMenuItems.logedIn.dropDownList.logout],
+  'click',
+  [dropDownMyProfileClickEvent,
+   dropDownMyRunsClickEvent,
+   dropDownAnalyticsClickEvent,
+   dropDownLogoutClickEvent]);
+}
+
+function dropDownMyProfileClickEvent() {
+  // some code
+  console.log('My Profile Hello!');
+}
+
+function dropDownMyRunsClickEvent() {
+  // some code
+  console.log('My Runs Hello!');
+}
+
+function dropDownAnalyticsClickEvent() {
+  // some code
+  console.log('Analytics Hello!');
+}
+
+function dropDownLogoutClickEvent() {
+  appState.session.loggedIn = false;
+  closeDropDownList();
+  exitLoggedInSessionMode();
 }
 
 function closeDropDownList() {
   headerView.closeDropDownList();
-  // detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  detachEventListener(    [DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+  DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
+  DOMelements.navMenuItems.logedIn.dropDownList.analytics,
+  DOMelements.navMenuItems.logedIn.dropDownList.logout],
+  'click',
+  [dropDownMyProfileClickEvent,
+  dropDownMyRunsClickEvent,
+  dropDownAnalyticsClickEvent,
+  dropDownLogoutClickEvent]);
   appState.registeredClickEvents.dropDownList = false;
+}
+
+function exitLoggedInSessionMode() {
+  showLoggedOutMenuItems();
+  hideLoggedInMenuItems();
+  clearCurrentPage();
+  renderHomePage();
+}
+
+function showLoggedOutMenuItems() {
+  headerView.showLoginButton();
+  headerView.showRegisterButton();
+}
+
+function hideLoggedInMenuItems() {
+  headerView.hideMyRunsButton();
+  headerView.hideAnalyticsButton();
+  headerView.hideAddNewRunButton();
+  headerView.hideAvatarDropDownListButton();
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
 
-function detachEventListener(element, eventType, fn) {
-  element.removeEventListener(eventType, fn);
+function detachEventListener(elements, eventType, fns) {
+  if (elements.length === fns.length) {
+    let i = 0;
+    elements.forEach(element => {
+      element.removeEventListener(eventType, fns[i]);
+      i++;
+    });
+  }
 }
 
-function attachEventListener(element, eventType, fn) {
-  element.addEventListener(eventType, fn);
+function attachEventListener(elements, eventType, fns) {
+  if (elements.length === fns.length) {
+    let i = 0;
+    elements.forEach(element => {
+      element.addEventListener(eventType, fns[i]);
+      i++;
+    });
+  }
 }
 
 function clearInputFields(...fnArr) {
