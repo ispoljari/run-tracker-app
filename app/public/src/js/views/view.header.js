@@ -14,9 +14,21 @@ export const hideLoginButton = () => {
   document.querySelectorAll(`[data-menu-type="${menuIdentifiers.login}"]`)[0].classList.add(controledHooksStrings.navigationItemsToggleVisibility);
 }
 
-// export const showMyRunsButton = () => {
+export const showMyRunsButton = () => {
+  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.myRuns}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+}
 
-// }
+export const showAnalyticsButton = () => {
+  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.analytics}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+}
+
+export const showAddNewRunButton = () => {
+  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.addNewRun}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+}
+
+export const showAvatarDropDownListButton = () => {
+  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.dropDownList}"]`)[0].classList.remove(controledHooksStrings.navigationItemsToggleVisibility);
+}
 
 // Navigation avatar drop-down menu
 

@@ -217,7 +217,7 @@ function loginSubmitEvent(e) {
     appState.session.loggedIn = true;
     clearInputFields(headerView.clearLoginUsername, headerView.clearLoginPassword);
     closeLoginMenu();
-    enterUserSessionMode();
+    enterLoggedInSessionMode();
   } else {
     console.log('Your credentials are invalid.') // TODO: Display error message to the user
   }
@@ -229,11 +229,16 @@ function closeLoginMenu() {
   appState.registeredClickEvents.logInMenu = false;
 }
 
-function enterUserSessionMode() {
+function enterLoggedInSessionMode() {
   // Hide register and login buttons
   headerView.hideLoginButton();
   headerView.hideRegisterButton();
   // Show My Runs, Analytics, Add New Run and avatar drop down list
+  headerView.showMyRunsButton();
+  headerView.showAnalyticsButton();
+  headerView.showAddNewRunButton();
+  headerView.showAvatarDropDownListButton();
+
   // Remove header info text
 }
 
