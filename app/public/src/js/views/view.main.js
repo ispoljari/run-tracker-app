@@ -42,6 +42,27 @@ export const renderPosts = () => {
   appendHtmlToMainContent(htmlString);
 }
 
+export const renderProfileBanner = () => {
+  const htmlString = 
+  `<div class="content__profile-banner">
+    <div class="profile-banner__inner-container">
+      <div class="profile-banner__avatar-img">
+        <img src="svg/monsters/monster-1.svg" alt="An image of a random monster">
+      </div>
+      <div class="profile-banner__info">
+        <div class="profile-info__full-name">
+          <h2>Wolfgang A. Mozart</h2>
+        </div>
+        <div class="profile-info__display-name">
+          <p>@dementor</p>
+        </div>
+      </div>
+    </div>
+  </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
 export const renderRegistrationForm = () => {
   const htmlString = 
   `<form action="#" class="registration js-registration">

@@ -86,6 +86,8 @@ function logoClickEvent(e) {
 function renderHomePage() {
   if (appState.session.loggedIn === false) {
     headerView.renderIntroHeading();
+  } else if (appState.session.loggedIn === true) {
+    mainView.renderProfileBanner();
   }
 
   mainView.renderPosts();
