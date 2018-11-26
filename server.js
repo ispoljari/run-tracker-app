@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
 });
 
 // Serve static assets to client
-app.use(express.static(path.join(__dirname, '/app/public')));
+app.use(express.static(path.join(__dirname, '/app/public/dist')));
 
 // Import router modules
 const {router: usersRouter} = require('./app/user');
