@@ -205,7 +205,7 @@ a {
   /* Styles */
   background-color: #f9f5f5;
   border-radius: 5px;
-  max-width: 200px;
+  max-width: 240px;
 }
 
 .login__form {
@@ -444,6 +444,10 @@ a {
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
 /* ------------------------------------------------- */
+
+footer {
+  margin-bottom: 10px;
+}
 
 .credit {
   /* Layout */
