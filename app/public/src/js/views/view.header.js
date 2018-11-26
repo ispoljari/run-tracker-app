@@ -1,7 +1,22 @@
 import {
   DOMelements, 
-  controledHooksStrings, 
+  controledHooksStrings,
+  menuIdentifiers 
 } from './view.base';
+
+// Navigation menu buttons (show/hide)
+
+export const hideRegisterButton = () => {
+  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.register}"]`)[0].classList.add(controledHooksStrings.navigationItemsToggleVisibility);
+}
+
+export const hideLoginButton = () => {
+  document.querySelectorAll(`[data-menu-type="${menuIdentifiers.login}"]`)[0].classList.add(controledHooksStrings.navigationItemsToggleVisibility);
+}
+
+// export const showMyRunsButton = () => {
+
+// }
 
 // Navigation avatar drop-down menu
 

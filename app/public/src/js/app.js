@@ -229,6 +229,14 @@ function closeLoginMenu() {
   appState.registeredClickEvents.logInMenu = false;
 }
 
+function enterUserSessionMode() {
+  // Hide register and login buttons
+  headerView.hideLoginButton();
+  headerView.hideRegisterButton();
+  // Show My Runs, Analytics, Add New Run and avatar drop down list
+  // Remove header info text
+}
+
 /* --------- GLOBAL HELP FUNCTIONS ------- */
 
 function detachEventListener(element, eventType, fn) {

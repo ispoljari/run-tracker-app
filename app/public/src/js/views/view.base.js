@@ -46,4 +46,5 @@ export const controledHooksStrings = {
   loginMenuToggleVisibility: 'login--toggle-visibility',
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
+  navigationItemsToggleVisibility: 'menu__item--hidden'
 }
