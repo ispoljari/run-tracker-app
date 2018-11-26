@@ -38,7 +38,14 @@ export const menuIdentifiers = {
   addNewRun: 'addNewRun',
   dropDownList: 'dropDownList',
   register: 'register',
-  login: 'login'
+  login: 'login',
+}
+
+export const dropDownIdentifiers = {
+  myProfile: 'myProfile',
+  myRuns: 'myRuns',
+  analytics: 'analytics',
+  logout: 'logout'
 }
 
 export const controledHooksStrings = {
