@@ -12,6 +12,7 @@ export const appState = {
   },
   registeredClickEvents: {
     logInMenu: false,
-    registerForm: false
+    registerForm: false,
+    dropDownList: false
   }
 }

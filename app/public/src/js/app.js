@@ -52,7 +52,7 @@ function documentLevelController() {
 function bodyClickEvent(e) {
   // Enable closing the dropdown menu by clicking outside of it
   if (headerView.isDropDownListOpen() && !isTargetElementInsideOf(e, DOMstrings.menuDropDownList)) {
-    headerView.closeDropDownList();
+    closeDropDownList();
   }
   // Enable closing the login menu by clicking outside of it
   if (headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
@@ -93,7 +93,7 @@ function renderHomePage() {
 
 function clearCurrentPage() {
   // Remove current content
-  headerView.removeIntroHeading(); // TODO: IF LOGGED OUT
+  headerView.removeIntroHeading();
   mainView.removeMainContent(); 
   footerView.removeIconsCredit(); // TODO: IF CURR.VIEW = HOME
 
@@ -148,10 +148,18 @@ function navMenuClickEvent(e) {
 }
 
 /* ---------------------------------------- */
-/* --- AVATAR DROPDOWN LIST SUBCONTROLLER -- */
+/* -- AVATAR DROPDOWN LIST SUBCONTROLLER -- */
 
 function dropDownListSubController() {
   headerView.toggleDropDownList();
+
+  if (!appState.registeredClickEvents.dropDownList) {
+    dropDownListController(); // Process existing user login and open new session
+  } else {
+    // detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  }
+  // toggle event state
+  appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
 }
 
 /* -------------------------------------------- */
@@ -230,16 +238,36 @@ function closeLoginMenu() {
 }
 
 function enterLoggedInSessionMode() {
-  // Hide register and login buttons
+  hideLoggedOutMenuItems();
+  showLoggedInMenuItems();
+  clearCurrentPage();
+  renderHomePage();
+}
+
+function hideLoggedOutMenuItems() {
   headerView.hideLoginButton();
   headerView.hideRegisterButton();
-  // Show My Runs, Analytics, Add New Run and avatar drop down list
+}
+
+function showLoggedInMenuItems() {
   headerView.showMyRunsButton();
   headerView.showAnalyticsButton();
   headerView.showAddNewRunButton();
   headerView.showAvatarDropDownListButton();
+}
 
-  // Remove header info text
+/* ---------------------------------------- */
+/* --- AVATAR DROPDOWN LIST CONTROLLER ---- */
+/* ---------------------------------------- */
+
+function dropDownListController() {
+  // attachEventListener
+}
+
+function closeDropDownList() {
+  headerView.closeDropDownList();
+  // detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  appState.registeredClickEvents.dropDownList = false;
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
