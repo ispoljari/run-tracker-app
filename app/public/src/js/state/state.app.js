@@ -4,6 +4,10 @@
 export const appState = {
   session: {
     currentView: 'home',
+    logginCredentials: {
+      username: 'demo@run-tracker.test',
+      password: 'demo'
+    },
     loggedIn: false
   },
   registeredClickEvents: {

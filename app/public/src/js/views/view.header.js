@@ -46,3 +46,19 @@ export const isLoginMenuOpen = () => {
 export const closeLoginMenu = () => {
   DOMelements.loginMenu.classList.remove(controledHooksStrings.loginMenuToggleVisibility);
 }
+
+export const getLoginUsername = () => {
+  return DOMelements.inputFields.login.username.value;
+}
+
+export const getLoginPassword = () => {
+  return DOMelements.inputFields.login.password.value;
+}
+
+export const clearLoginUsername = () => {
+  DOMelements.inputFields.login.username.value = '';
+}
+
+export const clearLoginPassword = () => {
+  DOMelements.inputFields.login.password.value = '';
+}

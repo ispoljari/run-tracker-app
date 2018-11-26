@@ -54,35 +54,35 @@ export const renderRegistrationForm = () => {
         <div class="registration__first-name">
           <label>
             First Name:
-            <input type="text" placeholder="John" name="first-name" required>
+            <input type="text" placeholder="John" name="first-name" class="registration__input-first-name" required>
           </label>
         </div>
 
         <div class="registration__last-name">
           <label>
             Last Name:
-            <input type="text" placeholder="Smith" name="last-name" required>
+            <input type="text" placeholder="Smith" name="last-name" class="registration__input-last-name" required>
           </label>
         </div>
 
         <div class="registration__email">
           <label>
             Email (username):
-            <input type="email" name="email" placeholder="john.smith@gmail.com" required>
+            <input type="email" name="email" placeholder="john.smith@gmail.com" class="registration__input-username" required>
           </label>
         </div>
         
         <div class="registration__password">
           <label>
             Password:
-            <input type="password" name="password" placeholder="abcd1234" required>
+            <input type="password" name="password" placeholder="abcd1234" class="registration__input-password" required>
           </label>
         </div>
 
         <div class="registration__password-confirm">
           <label>
             Confirm Password:
-            <input type="password" placeholder="abcd1234" name="password-confirm" required>
+            <input type="password" placeholder="abcd1234" name="password-confirm" class="registration__input-repeatPassword" required>
           </label>
         </div>
       </fieldset>

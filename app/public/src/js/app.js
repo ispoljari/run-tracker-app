@@ -55,11 +55,8 @@ function bodyClickEvent(e) {
     headerView.closeDropDownList();
   }
   // Enable closing the login menu by clicking outside of it
-  if(headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
-    headerView.closeLoginMenu();
-
-    detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
-    appState.registeredClickEvents.logInMenu = false;
+  if (headerView.isLoginMenuOpen() && !isTargetElementInsideOf(e, DOMstrings.loginMenu)) {
+    closeLoginMenu();
   }
 }
 
@@ -213,8 +210,23 @@ function loginSubmitEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 
-  console.log('Hello');
-  // TODO: CLEAR INPUT FIELDS
+  const username = headerView.getLoginUsername();
+  const password = headerView.getLoginPassword();
+
+  if (username === appState.session.logginCredentials.username && password === appState.session.logginCredentials.password) {
+    appState.session.loggedIn = true;
+    clearInputFields(headerView.clearLoginUsername, headerView.clearLoginPassword);
+    closeLoginMenu();
+    enterUserSessionMode();
+  } else {
+    console.log('Your credentials are invalid.') // TODO: Display error message to the user
+  }
+}
+
+function closeLoginMenu() {
+  headerView.closeLoginMenu();
+  detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
+  appState.registeredClickEvents.logInMenu = false;
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
@@ -225,4 +237,10 @@ function detachEventListener(element, eventType, fn) {
 
 function attachEventListener(element, eventType, fn) {
   element.addEventListener(eventType, fn);
+}
+
+function clearInputFields(...fnArr) {
+  fnArr.forEach(fn => {
+    fn();
+  })
 }
