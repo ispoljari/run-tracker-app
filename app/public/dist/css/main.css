@@ -227,7 +227,7 @@ a {
   margin-top: 5px;
 
   /* Styles */
-  padding: 3px;
+  padding: 5px;
   width: 100%;
   min-height: 25px;
   border-radius: 5px;
@@ -439,7 +439,7 @@ a {
   width: 100%;
   max-width: 420px;
   background-color: #e5e5e5;
-  padding: 20px 10px;
+  padding: 30px 10px;
   border-radius: 5px;
 }
 
@@ -465,7 +465,7 @@ a {
 .registration input {
   /* Layout */
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
 
   /* Styles */
   padding: 5px;
@@ -496,7 +496,7 @@ a {
 .registration__submit {
   /* Layout */
   display: block;
-  margin: 15px auto 0 auto;
+  margin: 25px auto 0 auto;
 
   /* Layout */
   max-width: 250px;
