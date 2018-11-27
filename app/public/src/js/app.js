@@ -13,8 +13,7 @@ if (process.env.NODE_ENV === 'dev') {
 import {
   DOMelements, 
   DOMstrings, 
-  menuIdentifiers,
-  dropDownIdentifiers
+  menuIdentifiers
 } from './views/view.base';
 
 // Import app state
@@ -32,11 +31,11 @@ import * as footerView from './views/view.footer';
 /* ---------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
-  registerEventListeners();
+  initializeAppControllers();
 }, false);
 
 
-function registerEventListeners() {
+function initializeAppControllers() {
   documentLevelController(); // Register global event listeners
   logoController(); // Open home page
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
@@ -90,6 +89,11 @@ function renderHomePage() {
     mainView.renderProfileBanner();
   }
 
+  renderMainPosts();
+}
+
+function renderMainPosts() {
+  mainView.renderPostsTitle();
   mainView.renderPosts();
   footerView.renderIconsCredit();
 }
@@ -291,6 +295,10 @@ function dropDownMyProfileClickEvent() {
 function dropDownMyRunsClickEvent() {
   // some code
   console.log('My Runs Hello!');
+  clearCurrentPage();
+  mainView.renderProfileBanner();
+  renderMainPosts(); // TODO: Render only logged users posts
+  closeDropDownList();
 }
 
 function dropDownAnalyticsClickEvent() {

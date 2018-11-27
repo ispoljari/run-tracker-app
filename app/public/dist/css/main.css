@@ -333,7 +333,7 @@ a {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  margin: 40px auto 0 auto;
+  margin: 25px auto 0 auto;
   padding: 10px;
 
   /* Style */
@@ -343,6 +343,15 @@ a {
           box-shadow: 4px 4px 0px 0px rgba(162, 162, 162, 0.75);
   background-color: azure;
   max-width: 420px;
+}
+
+.content__heading-posts {
+  max-width: 420px;
+  margin: 40px auto 0 auto;
+}
+
+.content__heading-posts h2 {
+  font-size: 1.8em;
 }
 
 .post-avatar {
@@ -398,6 +407,10 @@ a {
 .post-data__average-speed {
   /* Layout */
   display: block;
+}
+
+.post-header__user h3 {
+  font-size: 1.6em;
 }
 
 .post-data__distance,

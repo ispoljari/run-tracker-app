@@ -2,8 +2,19 @@ import {
   DOMelements
 } from './view.base';
 
+// Main page
+
 export const removeMainContent = () => {
   DOMelements.mainContent.innerHTML = '';
+}
+
+export const renderPostsTitle = () => {
+  const htmlString = 
+  `<div class="content__heading-posts">
+    <h2>Recent Posts</h2>
+   </div>`
+
+  appendHtmlToMainContent(htmlString);
 }
 
 export const renderPosts = () => {
@@ -16,7 +27,7 @@ export const renderPosts = () => {
       <div class="post-header">
         <div class="post-header__user">
           <a href="#">
-            <h2>John Smith</h2>
+            <h3>John Smith</h3>
           </a>
         </div>
         <div class="post-header__datetime">
@@ -42,26 +53,7 @@ export const renderPosts = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderProfileBanner = () => {
-  const htmlString = 
-  `<div class="content__profile-banner">
-    <div class="profile-banner__inner-container">
-      <div class="profile-banner__avatar-img">
-        <img src="svg/monsters/monster-1.svg" alt="An image of a random monster">
-      </div>
-      <div class="profile-banner__info">
-        <div class="profile-info__full-name">
-          <h2>Wolfgang A. Mozart</h2>
-        </div>
-        <div class="profile-info__display-name">
-          <p>@dementor</p>
-        </div>
-      </div>
-    </div>
-  </div>`
-
-  appendHtmlToMainContent(htmlString);
-}
+// Register page
 
 export const renderRegistrationForm = () => {
   const htmlString = 
@@ -114,6 +106,31 @@ export const renderRegistrationForm = () => {
 
   appendHtmlToMainContent(htmlString);
 }
+
+// My Runs page
+
+export const renderProfileBanner = () => {
+  const htmlString = 
+  `<div class="content__profile-banner">
+    <div class="profile-banner__inner-container">
+      <div class="profile-banner__avatar-img">
+        <img src="svg/monsters/monster-1.svg" alt="An image of a random monster">
+      </div>
+      <div class="profile-banner__info">
+        <div class="profile-info__full-name">
+          <h2>Wolfgang A. Mozart</h2>
+        </div>
+        <div class="profile-info__display-name">
+          <p>@dementor</p>
+        </div>
+      </div>
+    </div>
+  </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
+// Help functions
 
 function appendHtmlToMainContent(html) {
   DOMelements.mainContent.insertAdjacentHTML('beforeend', html);
