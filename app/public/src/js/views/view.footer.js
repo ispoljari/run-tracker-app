@@ -1,7 +1,7 @@
 import {
   DOMelements, 
   controledHooksStrings
-} from './view.base';
+} from './view.static-dom-base';
 
 export const removeIconsCredit = () => {
   if (!DOMelements.iconsCredit.classList.contains(controledHooksStrings.iconsCreditToggleVisibility)) {

@@ -14,10 +14,13 @@ import {
   DOMelements, 
   DOMstrings, 
   menuIdentifiers
-} from './views/view.base';
+} from './views/view.static-dom-base';
 
 // Import app state
 import {appState} from './state/state.app';
+
+// Import /models modules
+import User from './models/model.user';
 
 // Import /views modules
 import * as headerView from './views/view.header';
@@ -98,21 +101,6 @@ function clearCurrentPage() {
   headerView.removeIntroHeading();
   mainView.removeMainContent(); 
   footerView.removeIconsCredit(); // TODO: IF CURR.VIEW = HOME
-
-  // TODO: DECIDE IF THIS FUNCTIONALITY IS NEEDED
-  // Close all open drop downlists and menus
-  // if (headerView.isLoginMenuOpen()) {
-  //   headerView.closeLoginMenu();
-  // }
-
-  // if (headerView.isDropDownListOpen()) {
-  //   headerView.closeDropDownList();
-
-  //   if (appState.registeredClickEvents.logInMenu) {
-  //     detachEventListener(DOMelements.loginForm, 'submit', loginSubmitEvent);
-  //   } 
-  //   appState.registeredClickEvents.logInMenu = false;
-  // }
 
   // Detach event listeners
   if (appState.registeredClickEvents.registerForm) {
@@ -222,11 +210,31 @@ function registerNewUserController() {
 
 function registerSubmitEvent(e) {
   e.preventDefault();
-
-  // console.log('Hello!');
   // console.log(e.target);
 
+  // dinamic import register input fields
+  dynamicImportRegisterFormDomElements()
+    .then(res => {
+      console.log(res.inputFields);
+    });
+
+
+  // const newUser = mainView.getRegistrationFormData();
+  // console.log(DOMelements.inputFields);
+
+  // Validate Input Data
+  // Check if password and repeat password are the same
+
+  // if (newUser.password !== newUser.repeatPassword) {
+  //   console.log('The passwords are not matching.');
+  // }
+
   // TODO: CLEAR INPUT FIELDS
+}
+
+async function dynamicImportRegisterFormDomElements() {
+  return await import('./views/view.dynamic-dom-register-form')
+;
 }
 
 /* ---------------------------------------- */

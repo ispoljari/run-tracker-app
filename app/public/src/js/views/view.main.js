@@ -1,6 +1,6 @@
 import {
   DOMelements
-} from './view.base';
+} from './view.static-dom-base';
 
 // Main page
 
@@ -97,14 +97,14 @@ export const renderRegistrationForm = () => {
         <div class="registration__password">
           <label>
             Password:
-            <input type="password" name="password" placeholder="abcd1234" class="registration__input-password" required>
+            <input type="password" name="password" placeholder="abcd1234" pattern=".{10,72}" title="10 characters minimum, 72 characters maximum" class="registration__input-password" required>
           </label>
         </div>
 
         <div class="registration__password-confirm">
           <label>
             Confirm Password:
-            <input type="password" placeholder="abcd1234" name="password-confirm" class="registration__input-repeatPassword" required>
+            <input type="password" placeholder="abcd1234" pattern=".{10,72}" title="10 characters minimum, 72 characters maximum" name="password-confirm" class="registration__input-repeatPassword" required>
           </label>
         </div>
       </fieldset>
@@ -114,6 +114,17 @@ export const renderRegistrationForm = () => {
   </form>`
 
   appendHtmlToMainContent(htmlString);
+}
+
+export const getRegistrationFormData = () => {
+  console.log(DOMelements.inputFields.register.firstName);
+  return {
+    firstName: DOMelements.inputFields.register.firstName.value,
+    lastName: DOMelements.inputFields.register.lastName.value,
+    username: DOMelements.inputFields.register.username.value,
+    password: DOMelements.inputFields.register.password.value,
+    repeatPassword: DOMelements.inputFields.register.repeatPassword.value
+  };
 }
 
 // My Runs page
