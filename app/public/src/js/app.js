@@ -146,12 +146,23 @@ function navMenuClickEvent(e) {
       registerViewSubController();
     } else if (targetElement.dataset.menuType === menuIdentifiers.login) {
       loginMenuSubController();
+    } else if (targetElement.dataset.menuType === menuIdentifiers.addNewRun) {
+      addNewRunViewSubController();
+    } else if (targetElement.dataset.menuType === menuIdentifiers.myRuns) {
+      myRunsViewSubController();
+    } else if (targetElement.dataset.menuType === menuIdentifiers.analytics) {
+      analyticsViewSubController();
     }
     
     if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList && targetElement.dataset.menuType !== menuIdentifiers.login) {
       appState.session.currentView = targetElement.dataset.menuType;
     }
   }
+}
+
+function addNewRunViewSubController() {
+  // some code
+  console.log('Add new run hello!');
 }
 
 /* ---------------------------------------- */
@@ -168,10 +179,10 @@ function dropDownListSubController() {
       DOMelements.navMenuItems.logedIn.dropDownList.analytics,
       DOMelements.navMenuItems.logedIn.dropDownList.logout],
       'click',
-      [dropDownMyProfileClickEvent,
-      dropDownMyRunsClickEvent,
-      dropDownAnalyticsClickEvent,
-      dropDownLogoutClickEvent]);
+      [myProfileViewSubController,
+      myRunsViewSubController,
+      analyticsViewSubController,
+      logoutSubController]);
   }
   // toggle event state
   appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
@@ -281,32 +292,35 @@ function dropDownListController() {
   DOMelements.navMenuItems.logedIn.dropDownList.analytics,
   DOMelements.navMenuItems.logedIn.dropDownList.logout],
   'click',
-  [dropDownMyProfileClickEvent,
-   dropDownMyRunsClickEvent,
-   dropDownAnalyticsClickEvent,
-   dropDownLogoutClickEvent]);
+  [myProfileViewSubController,
+   myRunsViewSubController,
+   analyticsViewSubController,
+   logoutSubController]);
 }
 
-function dropDownMyProfileClickEvent() {
+function myProfileViewSubController() {
   // some code
   console.log('My Profile Hello!');
 }
 
-function dropDownMyRunsClickEvent() {
+function myRunsViewSubController() {
   // some code
   console.log('My Runs Hello!');
-  clearCurrentPage();
-  mainView.renderProfileBanner();
-  renderMainPosts(); // TODO: Render only logged users posts
+
+  if (appState.session.currentView !== 'myRuns') {
+    clearCurrentPage();
+    mainView.renderProfileBanner();
+    renderMainPosts(); // TODO: Render only logged users posts
+  }
   closeDropDownList();
 }
 
-function dropDownAnalyticsClickEvent() {
+function analyticsViewSubController() {
   // some code
   console.log('Analytics Hello!');
 }
 
-function dropDownLogoutClickEvent() {
+function logoutSubController() {
   appState.session.loggedIn = false;
   closeDropDownList();
   exitLoggedInSessionMode();
@@ -319,10 +333,10 @@ function closeDropDownList() {
   DOMelements.navMenuItems.logedIn.dropDownList.analytics,
   DOMelements.navMenuItems.logedIn.dropDownList.logout],
   'click',
-  [dropDownMyProfileClickEvent,
-  dropDownMyRunsClickEvent,
-  dropDownAnalyticsClickEvent,
-  dropDownLogoutClickEvent]);
+  [myProfileViewSubController,
+  myRunsViewSubController,
+  analyticsViewSubController,
+  logoutSubController]);
   appState.registeredClickEvents.dropDownList = false;
 }
 
