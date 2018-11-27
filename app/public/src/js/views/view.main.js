@@ -17,6 +17,15 @@ export const renderPostsTitle = () => {
   appendHtmlToMainContent(htmlString);
 }
 
+export const renderMyRunsTitle = () => {
+  const htmlString = 
+  `<div class="content__heading-posts">
+    <h2>My Runs</h2>
+   </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
 export const renderPosts = () => {
   const htmlString = 
   `<div class="content__post">

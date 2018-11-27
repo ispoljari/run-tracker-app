@@ -83,17 +83,12 @@ function logoClickEvent(e) {
 }
 
 function renderHomePage() {
-  if (appState.session.loggedIn === false) {
-    headerView.renderIntroHeading();
-  } else if (appState.session.loggedIn === true) {
-    mainView.renderProfileBanner();
-  }
-
+  headerView.renderIntroHeading();
+  mainView.renderPostsTitle();
   renderMainPosts();
 }
 
 function renderMainPosts() {
-  mainView.renderPostsTitle();
   mainView.renderPosts();
   footerView.renderIconsCredit();
 }
@@ -153,16 +148,17 @@ function navMenuClickEvent(e) {
     } else if (targetElement.dataset.menuType === menuIdentifiers.analytics) {
       analyticsViewSubController();
     }
-    
-    if (targetElement.dataset.menuType !== menuIdentifiers.dropDownList && targetElement.dataset.menuType !== menuIdentifiers.login) {
-      appState.session.currentView = targetElement.dataset.menuType;
-    }
   }
 }
 
 function addNewRunViewSubController() {
   // some code
   console.log('Add new run hello!');
+
+  if (appState.session.currentView !== 'addNewRun') {
+    // some code
+    appState.session.currentView = 'addNewRun';
+  }
 }
 
 /* ---------------------------------------- */
@@ -197,6 +193,7 @@ function registerViewSubController() {
 
     mainView.renderRegistrationForm();
     registerNewUserController(); // Process existing user login and open new session
+    appState.session.currentView = 'register';
   }
 }
 
@@ -301,6 +298,11 @@ function dropDownListController() {
 function myProfileViewSubController() {
   // some code
   console.log('My Profile Hello!');
+
+  if (appState.session.currentView !== 'myProfile') {
+    // some code
+    appState.session.currentView = 'myProfile';
+  }
 }
 
 function myRunsViewSubController() {
@@ -310,7 +312,9 @@ function myRunsViewSubController() {
   if (appState.session.currentView !== 'myRuns') {
     clearCurrentPage();
     mainView.renderProfileBanner();
+    mainView.renderMyRunsTitle();
     renderMainPosts(); // TODO: Render only logged users posts
+    appState.session.currentView = 'myRuns';
   }
   closeDropDownList();
 }
@@ -318,6 +322,11 @@ function myRunsViewSubController() {
 function analyticsViewSubController() {
   // some code
   console.log('Analytics Hello!');
+
+  if (appState.session.currentView !== 'analytics') {
+    // some code
+    appState.session.currentView = 'analytics';
+  }
 }
 
 function logoutSubController() {
