@@ -433,20 +433,23 @@ a {
 
 .registration__container {
   /* Layout */
-  max-width: 270px;
   margin: 0 auto;
-
+  
   /* Styles */
+  width: 100%;
+  max-width: 420px;
   background-color: #e5e5e5;
-  padding: 10px 10px;
+  padding: 20px 10px;
   border-radius: 5px;
 }
 
 .registration legend {
   /* Layout */
   display: block;
+  margin: 0 auto;
 
   /* Styles */
+  max-width: 250px;
   font-size: 18px;
   font-weight: bold;
 }
@@ -465,7 +468,7 @@ a {
   margin-top: 4px;
 
   /* Styles */
-  padding: 3px;
+  padding: 5px;
   min-width: 250px;
   border: 1px solid #cccccc;
   border-radius: 5px;
@@ -492,7 +495,11 @@ a {
 
 .registration__submit {
   /* Layout */
-  margin-top: 15px;
+  display: block;
+  margin: 15px auto 0 auto;
+
+  /* Layout */
+  max-width: 250px;
 }
 
 .btn-style {
@@ -590,6 +597,17 @@ footer {
   .header__logo-img {
     /* Styles */
     width: 65px;
+  }
+
+  .registration legend {
+    font-size: 22px;
+  }
+
+  .registration label,
+  .registration input,
+  .registration__submit
+  {
+    font-size: 18px;
   }
 }
 
