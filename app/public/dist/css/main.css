@@ -162,7 +162,7 @@ a {
   /* Layout */
   display: none;
   position: absolute;
-  top: 61px;
+  top: 46px;
   right: 0;
 
   /* Style */
@@ -575,6 +575,11 @@ footer {
     /* Styles */
     width: 60px;
   }
+
+  .dropdown-list,
+  .login-menu {
+    top: 56px;
+  }
 }
 
 
@@ -608,6 +613,11 @@ footer {
   .registration__submit
   {
     font-size: 18px;
+  }
+
+  .dropdown-list,
+  .login-menu {
+    top: 61px;
   }
 }
 
