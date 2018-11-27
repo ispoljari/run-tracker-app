@@ -73,3 +73,12 @@ export const DOMelements = {
     }
   }
 }
+
+export const apiData = {
+  user: {
+    url: '/api/users/'
+  },
+  posts: {
+    url: '/api/posts'
+  }
+}
