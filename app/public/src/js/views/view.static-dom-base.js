@@ -72,6 +72,6 @@ export const apiData = {
     url: '/api/users/'
   },
   posts: {
-    url: '/api/posts'
+    url: '/api/posts/'
   }
 }

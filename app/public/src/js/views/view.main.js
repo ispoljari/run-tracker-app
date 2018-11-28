@@ -116,15 +116,22 @@ export const renderRegistrationForm = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const getRegistrationFormData = () => {
-  console.log(DOMelements.inputFields.register.firstName);
-  return {
-    firstName: DOMelements.inputFields.register.firstName.value,
-    lastName: DOMelements.inputFields.register.lastName.value,
-    username: DOMelements.inputFields.register.username.value,
-    password: DOMelements.inputFields.register.password.value,
-    repeatPassword: DOMelements.inputFields.register.repeatPassword.value
-  };
+export const getRegistrationFormData = () => {  
+  return dynamicImportRegisterFormDomElements()
+    .then(res => {
+      return {
+        firstName: res.registerForm.inputFields.firstName.value,
+        lastName: res.registerForm.inputFields.lastName.value,
+        username: res.registerForm.inputFields.username.value,
+        password: res.registerForm.inputFields.password.value,
+        repeatPassword: res.registerForm.inputFields.repeatPassword.value
+      }
+    });
+}
+
+async function dynamicImportRegisterFormDomElements() {
+  return await import('./view.dynamic-dom-register-form');
+;
 }
 
 // My Runs page
