@@ -213,27 +213,30 @@ async function registerSubmitEvent(e) {
 
   const newUser = await mainView.getRegistrationFormData();
 
+  // newUser.name = `${newUser.firstName} ${newUser.lastName}`
+  // newUser.displayName = 
+
   // VALIDATE INPUT DATA
   // 1) Check if password and repeat password are the same
 
-  if (newUser) {
+  // if (newUser) {
 
-    if (newUser.password !== newUser.repeatPassword) {
-      return console.log('The passwords are not matching.'); // TODO: Display warning message to the user
-    }
+  //   if (newUser.password !== newUser.repeatPassword) {
+  //     return console.log('The passwords are not matching.'); // TODO: Display warning message to the user
+  //   }
   
-    // 1) Create a new user instance
-    appState.register.user = new User(newUser);
+  //   // 1) Create a new user instance
+  //   appState.register.user = new User(newUser);
 
-    // 2) POST new user to server
-    try {
-      await appState.register.user.createNew();
-    } catch(error) {
-      console.log(error); //TODO:
-    }
+  //   // 2) POST new user to server
+  //   try {
+  //     await appState.register.user.createNew();
+  //   } catch(error) {
+  //     console.log(error); //TODO:
+  //   }
 
-    console.log(appState.register.user.result);
-  }
+  //   console.log(appState.register.user.result);
+  // }
 
 
   // TODO: CLEAR INPUT FIELDS
