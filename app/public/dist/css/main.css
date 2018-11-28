@@ -349,7 +349,8 @@ a {
   max-width: 420px;
 }
 
-.content__heading-posts {
+.content__heading-posts,
+.content__user-info {
   max-width: 420px;
   margin: 40px auto 0 auto;
 }

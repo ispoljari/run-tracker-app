@@ -26,6 +26,15 @@ export const renderMyRunsTitle = () => {
   appendHtmlToMainContent(htmlString);
 }
 
+export const renderMessage = (message) => {
+  const htmlString = 
+  `<div class="content__user-info">
+    <h2>${message}</h2>
+   </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
 export const renderPosts = () => {
   const htmlString = 
   `<div class="content__post">

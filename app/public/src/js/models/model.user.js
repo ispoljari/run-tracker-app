@@ -25,7 +25,7 @@ export default class User {
       });
       this.result = res;
     } catch (error) {
-      console.clear();
+      // console.clear();
       this.error = error.response.data;
     }
   }

@@ -85,13 +85,13 @@ function logoClickEvent(e) {
     clearCurrentPage();
     renderHomePage();
   }
-  appState.session.currentView = 'home';
 }
 
 function renderHomePage() {
   headerView.renderIntroHeading();
   mainView.renderPostsTitle();
   renderMainPosts();
+  appState.session.currentView = 'home';
 }
 
 function renderMainPosts() {
@@ -213,7 +213,7 @@ function registerNewUserController() {
 
 async function registerSubmitEvent(e) {
   e.preventDefault();
-
+  
   // Load data entered into the registration form
   const newUser = await mainView.getRegistrationFormData();
 
@@ -238,22 +238,45 @@ async function registerSubmitEvent(e) {
     // POST new user to server
     try {
       await appState.register.user.createNew();
-    } catch(error) {
-      console.log(`A register submit event error occured! Message: ${error}`);; //TODO:
+    } catch (error) {
+      failedRegistration(); //TODO:
     }
 
     if (appState.register.user.result) {
-      console.log(`Registration was successful! The response object is ${appState.register.user.result}`);
+      appState.register.user.result.status === 201 ? successfulRegistration() : failedRegistration(); //TODO:
     } else if (appState.register.user.error) {
-      console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+      failedRegistration(true); //TODO:
+    } else {
+      failedRegistration(); //TODO:
     }
 
     // Delete all data from appState.register.user
     deleteAllObjectProperties(appState.register.user);
   }
 
-
   // TODO: CLEAR INPUT FIELDS
+  // TODO: ENABLE USER TO DELETE ACCOUNT
+  // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
+}
+
+function successfulRegistration() { //TODO: Route HOME page through a transition message for the user
+  clearCurrentPage();
+  transitionMessageForUser('Registration was successful!');
+}
+
+function transitionMessageForUser(message) {
+  mainView.renderMessage(message);
+  setTimeout(()=> {
+    clearCurrentPage();
+    renderHomePage();
+  }, 2000);
+}
+
+function failedRegistration(validationError = false) { //TODO: Inform user by generating an error above the reg form
+  if (validationError) {
+    return console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+  }
+  console.log('Something went wrong. Please refresh the page and try again.');
 }
 
 /* ---------------------------------------- */
