@@ -76,14 +76,14 @@ export const renderRegistrationForm = () => {
         <div class="registration__first-name">
           <label>
             First Name:
-            <input type="text" placeholder="John" name="first-name" class="registration__input-first-name" required>
+            <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed" placeholder="John" name="first-name" class="registration__input-first-name" required>
           </label>
         </div>
 
         <div class="registration__last-name">
           <label>
             Last Name:
-            <input type="text" placeholder="Smith" name="last-name" class="registration__input-last-name" required>
+            <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed" placeholder="Smith" name="last-name" class="registration__input-last-name" required>
           </label>
         </div>
 

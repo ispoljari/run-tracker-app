@@ -9,6 +9,9 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
+// Import faker
+import faker from 'faker';
+
 // Import DOM classes and dynamic hooks
 import {
   DOMelements, 
@@ -211,31 +214,42 @@ function registerNewUserController() {
 async function registerSubmitEvent(e) {
   e.preventDefault();
 
+  // Load data entered into the registration form
   const newUser = await mainView.getRegistrationFormData();
 
   newUser.name = `${newUser.firstName} ${newUser.lastName}`
-  newUser.displayName = 
-
-  // VALIDATE INPUT DATA
-  // 1) Check if password and repeat password are the same
+  newUser.displayName = faker.name.firstName(); // Assign a random display name during registration
+  newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
   if (newUser) {
-
+    // ADDITIONAL VALIDATION OF INPUT DATA
+    // Check if password and repeat password are the same
+    
     if (newUser.password !== newUser.repeatPassword) {
       return console.log('The passwords are not matching.'); // TODO: Display warning message to the user
     }
-  
-    // 1) Create a new user instance
+
+    // Create a new user instance
     appState.register.user = new User(newUser);
 
-    // 2) POST new user to server
+    // Delete all data from newUser
+    deleteAllObjectProperties(newUser);
+
+    // POST new user to server
     try {
       await appState.register.user.createNew();
     } catch(error) {
-      console.log(error); //TODO:
+      console.log(`A register submit event error occured! Message: ${error}`);; //TODO:
     }
 
-    console.log(appState.register.user.result);
+    if (appState.register.user.result) {
+      console.log(`Registration was successful! The response object is ${appState.register.user.result}`);
+    } else if (appState.register.user.error) {
+      console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+    }
+
+    // Delete all data from appState.register.user
+    deleteAllObjectProperties(appState.register.user);
   }
 
 
@@ -407,4 +421,12 @@ function clearInputFields(...fnArr) {
   fnArr.forEach(fn => {
     fn();
   })
+}
+
+function deleteAllObjectProperties(obj) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      delete obj[key];
+    }
+  }
 }

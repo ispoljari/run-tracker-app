@@ -6,24 +6,27 @@ export default class User {
     this.name = user.name,
     this.displayName = user.displayName,
     this.username = user.username,
-    this.password = user.password
+    this.password = user.password,
+    this.avatar = user.avatar
   }
 
   async createNew() {
     try {
       const res = await axios({
         method: 'post',
-        url: apiData.user.url,
+        url: apiData.users.url,
         data: {
           name: this.name,
           displayName: this.displayName,
           username: this.username,
-          password: this.password
+          password: this.password,
+          avatar: this.avatar
         }
       });
       this.result = res;
     } catch (error) {
-      console.log(`An error occured! Message: ${error}`);
+      console.clear();
+      this.error = error.response.data;
     }
   }
 }

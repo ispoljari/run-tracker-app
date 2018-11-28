@@ -68,7 +68,7 @@ export const DOMelements = {
 }
 
 export const apiData = {
-  user: {
+  users: {
     url: '/api/users/'
   },
   posts: {
