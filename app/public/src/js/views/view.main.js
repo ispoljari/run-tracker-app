@@ -36,6 +36,15 @@ export const renderMessage = (message) => {
   appendHtmlToMainContent(htmlString);
 }
 
+export const renderDotsAnimation = () => {
+  const htmlString = 
+  `<div class="content__info-dots">
+    <span>.</span><span>.</span><span>.</span>
+   </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
 export const renderPosts = () => {
   const htmlString = 
   `<div class="content__post">

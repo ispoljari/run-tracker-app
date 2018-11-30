@@ -266,15 +266,20 @@ async function registerSubmitEvent(e) {
 function successfulRegistration() { //TODO: Route HOME page through a transition message for the user
   mainView.clearRegistrationFormData();
   clearCurrentPage();
-  transitionMessageForUser('Registration was successful');
+  transitionMessageForUser(['Success!', 'Redirecting to main page'], true);
 }
 
-function transitionMessageForUser(message) {
-  mainView.renderMessage(message);
+function transitionMessageForUser(messages, animate = false) {
+  messages.forEach(message => {
+    mainView.renderMessage(message);
+  })
+  if (animate) {
+    mainView.renderDotsAnimation();
+  }
   setTimeout(()=> {
     clearCurrentPage();
     renderHomePage();
-  }, 3000);
+  }, 2000);
 }
 
 function failedRegistration(validationError = false) { //TODO: Inform user by generating an error above the reg form
