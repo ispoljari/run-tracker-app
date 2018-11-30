@@ -1,6 +1,7 @@
 import {
   DOMelements,
-  DOMstrings
+  DOMstrings,
+  controledHooksStrings
 } from './view.static-dom-base';
 
 // Main page
@@ -27,13 +28,20 @@ export const renderMyRunsTitle = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderMessage = (message) => {
+export const renderMessage = (message, position='beforeend') => {
   const htmlString = 
-  `<div class="content__user-info content__user-info--center">
+  `<div class="content__user-info js-content__user-info content__user-info--center">
     <h2>${message}</h2>
    </div>`
 
-  appendHtmlToMainContent(htmlString);
+  appendHtmlToMainContent(htmlString, position);
+}
+
+export const styleWarningMessage = () => {
+  const warningMessage = document.querySelector(`.${DOMstrings.registerForm.warningMessage}`);
+  if (!warningMessage.classList.contains(controledHooksStrings.warningMessage)) {
+    warningMessage.classList.add(controledHooksStrings.warningMessage);
+  }
 }
 
 export const renderDotsAnimation = () => {
@@ -178,6 +186,6 @@ export const renderProfileBanner = () => {
 
 // Help functions
 
-function appendHtmlToMainContent(html) {
-  DOMelements.mainContent.insertAdjacentHTML('beforeend', html);
+function appendHtmlToMainContent(html, position='beforeend') {
+  DOMelements.mainContent.insertAdjacentHTML(position, html);
 }

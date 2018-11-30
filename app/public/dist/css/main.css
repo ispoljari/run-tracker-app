@@ -695,3 +695,11 @@ footer {
   /* Layout */
   display: block;
 }
+
+.content__user-info--warning {
+  /* Layout */
+  margin: 10px auto 10px auto;
+
+  /* Style */
+  color: red;
+}

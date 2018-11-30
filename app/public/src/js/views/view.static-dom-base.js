@@ -22,7 +22,8 @@ export const controledHooksStrings = {
   loginMenuToggleVisibility: 'login--toggle-visibility',
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
-  navMenuItemHide: 'menu__item--hidden'
+  navMenuItemHide: 'menu__item--hidden',
+  warningMessage: 'content__user-info--warning'
 }
 
 export const DOMstrings = {
@@ -35,7 +36,8 @@ export const DOMstrings = {
       username: 'registration__input-username',
       password: 'registration__input-password',
       repeatPassword: 'registration__input-repeatPassword'
-    }
+    },
+    warningMessage: 'js-content__user-info'
   }
 }
 

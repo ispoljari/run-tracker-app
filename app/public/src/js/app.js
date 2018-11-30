@@ -179,14 +179,17 @@ function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
     attachMutationObserver(DOMelements.mainContent)
-    .then(result => {
-      appState.mutationObserver.result = result;
-      registerNewUserController(); 
-    })
-    .then(()=> {
-      appState.mutationObserver.result.observer.disconnect();
-      deleteAllObjectProperties(appState.mutationObserver);
-    });
+      .then(result => {
+        appState.mutationObserver.result = result;
+        registerNewUserController(); 
+      })
+      .then(()=> {
+        appState.mutationObserver.result.observer.disconnect();
+        deleteAllObjectProperties(appState.mutationObserver);
+      })
+      .catch(error => {
+        // TODO: notify user that something went wrong!
+      });
     
     mainView.renderRegistrationForm();
     appState.session.currentView = 'register';   
@@ -258,7 +261,6 @@ async function registerSubmitEvent(e) {
     deleteAllObjectProperties(appState.register.user);
   }
 
-  // TODO: CLEAR INPUT FIELDS
   // TODO: ENABLE USER TO DELETE ACCOUNT
   // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
 }
@@ -266,26 +268,50 @@ async function registerSubmitEvent(e) {
 function successfulRegistration() { //TODO: Route HOME page through a transition message for the user
   mainView.clearRegistrationFormData();
   clearCurrentPage();
-  transitionMessageForUser(['Success!', 'Redirecting to main page'], true);
+  transitionSuccessMessageForUser(['Success!', 'Redirecting to main page'], true);
 }
 
-function transitionMessageForUser(messages, animate = false) {
-  messages.forEach(message => {
-    mainView.renderMessage(message);
-  })
-  if (animate) {
-    mainView.renderDotsAnimation();
-  }
+function transitionSuccessMessageForUser(messages, animate = false, position='') {
+  renderMessages(messages, animate, position);
+
   setTimeout(()=> {
     clearCurrentPage();
     renderHomePage();
   }, 2000);
 }
 
+function transitionFailMessageForUser(messages, animate = false, position='') {
+  renderMessages(messages, animate, position);
+  mainView.styleWarningMessage();
+}
+
+function renderMessages(messages, animate, position) {
+  if (messages.length > 0) {
+    messages.forEach(message => {
+      if (position) {
+        mainView.renderMessage(message, position);
+      } else {
+        mainView.renderMessage(message);
+      }
+    });
+  }
+
+  if (animate) {
+    mainView.renderDotsAnimation();
+  }
+
+}
+
 function failedRegistration(validationError = false) { //TODO: Inform user by generating an error above the reg form
   if (validationError) {
-    return console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+    console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+    transitionFailMessageForUser([
+      `${appState.register.user.error.message}`
+    ], false, 'afterbegin');
+    return;
   }
+  transitionFailMessageForUser([
+    'Something went wrong. Please refresh the page and try again.'],false, 'afterbegin');
   console.log('Something went wrong. Please refresh the page and try again.');
 }
 
