@@ -351,11 +351,20 @@ a {
 
 .content__heading-posts,
 .content__user-info {
-  max-width: 420px;
+  /* Layout */
   margin: 40px auto 0 auto;
+
+  /* Style */
+  max-width: 420px;
+}
+
+.content__user-info--center {
+  /* Layout */
+  text-align: center;
 }
 
 .content__heading-posts h2 {
+  /* Style */
   font-size: 1.8em;
 }
 

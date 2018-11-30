@@ -29,7 +29,7 @@ export const renderMyRunsTitle = () => {
 
 export const renderMessage = (message) => {
   const htmlString = 
-  `<div class="content__user-info">
+  `<div class="content__user-info content__user-info--center">
     <h2>${message}</h2>
    </div>`
 

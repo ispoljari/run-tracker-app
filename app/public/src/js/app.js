@@ -266,7 +266,7 @@ async function registerSubmitEvent(e) {
 function successfulRegistration() { //TODO: Route HOME page through a transition message for the user
   mainView.clearRegistrationFormData();
   clearCurrentPage();
-  transitionMessageForUser('Registration was successful!');
+  transitionMessageForUser('Registration was successful');
 }
 
 function transitionMessageForUser(message) {
@@ -274,7 +274,7 @@ function transitionMessageForUser(message) {
   setTimeout(()=> {
     clearCurrentPage();
     renderHomePage();
-  }, 2000);
+  }, 3000);
 }
 
 function failedRegistration(validationError = false) { //TODO: Inform user by generating an error above the reg form
