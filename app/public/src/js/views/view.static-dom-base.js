@@ -1,11 +1,6 @@
 /* ---------------------------------------- */
 /* ----------- EXPORT DOM CONST's --------- */
 
-export const DOMstrings = {
-  menuDropDownList: 'js-dropdown-list',
-  loginMenu: 'js-login-menu'
-}
-
 export const menuIdentifiers = {
   myRuns: 'myRuns',
   analytics: 'analytics',
@@ -28,6 +23,20 @@ export const controledHooksStrings = {
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
   navMenuItemHide: 'menu__item--hidden'
+}
+
+export const DOMstrings = {
+  menuDropDownList: 'js-dropdown-list',
+  loginMenu: 'js-login-menu',
+  registerForm : {
+    inputFields: {
+      firstName: 'registration__input-first-name',
+      lastName: 'registration__input-last-name',
+      username: 'registration__input-username',
+      password: 'registration__input-password',
+      repeatPassword: 'registration__input-repeatPassword'
+    }
+  }
 }
 
 export const DOMelements = {

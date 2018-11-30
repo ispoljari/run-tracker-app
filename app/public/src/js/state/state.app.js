@@ -16,5 +16,6 @@ export const appState = {
     dropDownList: false
   },
   register: {},
-  login: {}
+  login: {},
+  mutationObserver: {}
 }

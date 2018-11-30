@@ -1,5 +1,6 @@
 import {
-  DOMelements
+  DOMelements,
+  DOMstrings
 } from './view.static-dom-base';
 
 // Main page
@@ -126,21 +127,21 @@ export const renderRegistrationForm = () => {
 }
 
 export const getRegistrationFormData = () => {  
-  return dynamicImportRegisterFormDomElements()
-    .then(res => {
-      return {
-        firstName: res.registerForm.inputFields.firstName.value,
-        lastName: res.registerForm.inputFields.lastName.value,
-        username: res.registerForm.inputFields.username.value,
-        password: res.registerForm.inputFields.password.value,
-        repeatPassword: res.registerForm.inputFields.repeatPassword.value
-      }
-    });
+  return {
+    firstName: document.querySelector(`.${DOMstrings.registerForm.inputFields.firstName}`).value,
+    lastName: document.querySelector(`.${DOMstrings.registerForm.inputFields.lastName}`).value,
+    username: document.querySelector(`.${DOMstrings.registerForm.inputFields.username}`).value,
+    password: document.querySelector(`.${DOMstrings.registerForm.inputFields.password}`).value,
+    repeatPassword: document.querySelector(`.${DOMstrings.registerForm.inputFields.repeatPassword}`).value
+  }
 }
 
-async function dynamicImportRegisterFormDomElements() {
-  return await import('./view.dynamic-dom-register-form');
-;
+export const clearRegistrationFormData = () => {
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.firstName}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.lastName}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.username}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.password}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.repeatPassword}`).value = ''
 }
 
 // My Runs page

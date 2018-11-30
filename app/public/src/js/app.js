@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'dev') {
 // Import faker
 import faker from 'faker';
 
-// Import DOM classes and dynamic hooks
+// Import DOM elements and dynamic hooks
 import {
   DOMelements, 
   DOMstrings, 
@@ -32,7 +32,7 @@ import * as footerView from './views/view.footer';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
-/* ------------ APP CONTROLLER ------------ */
+/* ---------- APP SUPERCONTROLLER --------- */
 /* ---------------------------------------- */
 /* ---------------------------------------- */
 
@@ -52,7 +52,7 @@ function initializeAppControllers() {
 /* ---------------------------------------- */
 
 function documentLevelController() {
-  attachEventListener([DOMelements.body], 'click', [bodyClickEvent])
+  attachEventListener([DOMelements.body], 'click', [bodyClickEvent]);
 }
 
 function bodyClickEvent(e) {
@@ -90,13 +90,9 @@ function logoClickEvent(e) {
 function renderHomePage() {
   headerView.renderIntroHeading();
   mainView.renderPostsTitle();
-  renderMainPosts();
-  appState.session.currentView = 'home';
-}
-
-function renderMainPosts() {
   mainView.renderPosts();
   footerView.renderIconsCredit();
+  appState.session.currentView = 'home';
 }
 
 function clearCurrentPage() {
@@ -161,7 +157,7 @@ function dropDownListSubController() {
   if (!appState.registeredClickEvents.dropDownList) {
     dropDownListController(); // Process existing user login and open new session
   } else {
-    detachEventListener(    [DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+    detachEventListener([DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
       DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
       DOMelements.navMenuItems.logedIn.dropDownList.analytics,
       DOMelements.navMenuItems.logedIn.dropDownList.logout],
@@ -169,7 +165,8 @@ function dropDownListSubController() {
       [myProfileViewSubController,
       myRunsViewSubController,
       analyticsViewSubController,
-      logoutSubController]);
+      logoutSubController]
+      );
   }
   // toggle event state
   appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
@@ -181,10 +178,18 @@ function dropDownListSubController() {
 function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
-
+    attachMutationObserver(DOMelements.mainContent)
+    .then(result => {
+      appState.mutationObserver.result = result;
+      registerNewUserController(); 
+    })
+    .then(()=> {
+      appState.mutationObserver.result.observer.disconnect();
+      deleteAllObjectProperties(appState.mutationObserver);
+    });
+    
     mainView.renderRegistrationForm();
-    registerNewUserController(); // Process existing user login and open new session
-    appState.session.currentView = 'register';
+    appState.session.currentView = 'register';   
   }
 }
 
@@ -213,9 +218,8 @@ function registerNewUserController() {
 
 async function registerSubmitEvent(e) {
   e.preventDefault();
-  
-  // Load data entered into the registration form
-  const newUser = await mainView.getRegistrationFormData();
+
+  const newUser = mainView.getRegistrationFormData();
 
   newUser.name = `${newUser.firstName} ${newUser.lastName}`
   newUser.displayName = faker.name.firstName(); // Assign a random display name during registration
@@ -260,6 +264,7 @@ async function registerSubmitEvent(e) {
 }
 
 function successfulRegistration() { //TODO: Route HOME page through a transition message for the user
+  mainView.clearRegistrationFormData();
   clearCurrentPage();
   transitionMessageForUser('Registration was successful!');
 }
@@ -363,7 +368,8 @@ function myRunsViewSubController() {
     clearCurrentPage();
     mainView.renderProfileBanner();
     mainView.renderMyRunsTitle();
-    renderMainPosts(); // TODO: Render only logged users posts
+    mainView.renderPosts();  // TODO: Render only logged users posts
+    footerView.renderIconsCredit();
     appState.session.currentView = 'myRuns';
   }
   closeDropDownList();
@@ -452,4 +458,25 @@ function deleteAllObjectProperties(obj) {
       delete obj[key];
     }
   }
+}
+
+function attachMutationObserver(observedElement) {
+  const config = {childList: true}
+  
+  return new Promise((resolve, reject) => {
+    const observer = new MutationObserver(callback);
+    function callback(mutationRecord) {
+      mutationRecord.forEach(record => {
+        if (record.addedNodes.length > 0) {
+          resolve({
+            observer,
+            mutationRecord
+          });
+        }
+      });
+      reject();
+    }
+
+    observer.observe(observedElement, config);
+  });
 }
