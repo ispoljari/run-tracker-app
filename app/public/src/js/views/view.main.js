@@ -37,10 +37,22 @@ export const renderMessage = (message, position='beforeend') => {
   appendHtmlToMainContent(htmlString, position);
 }
 
+export const removeMessage = () => {
+  DOMelements.mainContent.removeChild(document.querySelector(`.${DOMstrings.infoMessage}`));
+}
+
 export const styleWarningMessage = () => {
-  const warningMessage = document.querySelector(`.${DOMstrings.registerForm.warningMessage}`);
-  if (!warningMessage.classList.contains(controledHooksStrings.warningMessage)) {
-    warningMessage.classList.add(controledHooksStrings.warningMessage);
+  const warningMessage = document.querySelector(`.${DOMstrings.infoMessage}`);
+  if (!warningMessage.classList.contains(controledHooksStrings.warningMessageStyle)) {
+    warningMessage.classList.add(controledHooksStrings.warningMessageStyle);
+  }
+}
+
+export const warningMessageExists = () => {
+  if (document.querySelector(`.${DOMstrings.infoMessage}`)) {
+    return document.querySelector(`.${DOMstrings.infoMessage}`).classList.contains(controledHooksStrings.warningMessageStyle);
+  } else {
+    return false;
   }
 }
 

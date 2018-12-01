@@ -242,6 +242,11 @@ async function registerSubmitEvent(e) {
     // Delete all data from newUser
     deleteAllObjectProperties(newUser);
 
+    // Remove existing warning messages
+    if (mainView.warningMessageExists()) {
+      mainView.removeMessage();
+    }
+
     // POST new user to server
     try {
       await appState.register.user.createNew();
@@ -302,17 +307,21 @@ function renderMessages(messages, animate, position) {
 
 }
 
-function failedRegistration(validationError = false) { //TODO: Inform user by generating an error above the reg form
-  if (validationError) {
-    console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+function failedRegistration(validationError = false) { 
+  if (!mainView.warningMessageExists()) {
+
+    if (validationError) {
+      console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
+      transitionFailMessageForUser([
+        `${appState.register.user.error.message}!`
+      ], false, 'afterbegin');
+      return;
+    }
+
     transitionFailMessageForUser([
-      `${appState.register.user.error.message}`
-    ], false, 'afterbegin');
-    return;
+      'Something went wrong. Please refresh the page and try again.'], false, 'afterbegin');
+    console.log('Something went wrong. Please refresh the page and try again.');
   }
-  transitionFailMessageForUser([
-    'Something went wrong. Please refresh the page and try again.'],false, 'afterbegin');
-  console.log('Something went wrong. Please refresh the page and try again.');
 }
 
 /* ---------------------------------------- */
