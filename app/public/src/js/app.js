@@ -97,10 +97,12 @@ function renderHomePage() {
 }
 
 function clearCurrentPage() {
-  // Remove current content
-  headerView.removeIntroHeading();
+  if (appState.session.currentView === 'home') {
+    headerView.removeIntroHeading();
+    footerView.removeIconsCredit(); 
+  }
+
   mainView.removeMainContent(); 
-  footerView.removeIconsCredit(); // TODO: IF CURR.VIEW = HOME
 
   // Detach event listeners
   if (appState.registeredClickEvents.registerForm) {
