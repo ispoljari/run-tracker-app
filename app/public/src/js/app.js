@@ -9,9 +9,6 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
-// Import faker
-import faker from 'faker';
-
 // Import DOM elements and dynamic hooks
 import {
   DOMelements, 
@@ -234,7 +231,7 @@ async function registerSubmitEvent(e) {
   const newUser = mainView.getRegistrationFormData();
 
   newUser.name = `${newUser.firstName} ${newUser.lastName}`
-  newUser.displayName = faker.name.firstName(); // Assign a random display name during registration
+  newUser.displayName = newUser.firstName;
   newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
   if (newUser) {
