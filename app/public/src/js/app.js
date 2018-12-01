@@ -16,7 +16,8 @@ import faker from 'faker';
 import {
   DOMelements, 
   DOMstrings, 
-  menuIdentifiers
+  menuIdentifiers,
+  apiData
 } from './views/view.static-dom-base';
 
 // Import app state
@@ -222,6 +223,11 @@ function registerNewUserController() {
 async function registerSubmitEvent(e) {
   e.preventDefault();
 
+  // Remove existing warning messages
+  if (mainView.warningMessageExists()) {
+    mainView.removeMessage();
+  }
+
   const newUser = mainView.getRegistrationFormData();
 
   newUser.name = `${newUser.firstName} ${newUser.lastName}`
@@ -229,11 +235,10 @@ async function registerSubmitEvent(e) {
   newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
   if (newUser) {
-    // ADDITIONAL VALIDATION OF INPUT DATA
-    // Check if password and repeat password are the same
     
+    // Check if password and repeat password are the same
     if (newUser.password !== newUser.repeatPassword) {
-      return console.log('The passwords are not matching.'); // TODO: Display warning message to the user
+      return failedRegistration(apiData.errorMessages.registration.fail.validation.password);
     }
 
     // Create a new user instance
@@ -242,24 +247,21 @@ async function registerSubmitEvent(e) {
     // Delete all data from newUser
     deleteAllObjectProperties(newUser);
 
-    // Remove existing warning messages
-    if (mainView.warningMessageExists()) {
-      mainView.removeMessage();
-    }
-
     // POST new user to server
     try {
       await appState.register.user.createNew();
     } catch (error) {
-      failedRegistration(); //TODO:
+      failedRegistration(apiData.errorMessages.registration.fail.server);
     }
 
     if (appState.register.user.result) {
-      appState.register.user.result.status === 201 ? successfulRegistration() : failedRegistration(); //TODO:
+      appState.register.user.result.status === 201 ? 
+      successfulRegistration(apiData.errorMessages.registration.success.info1, apiData.errorMessages.registration.success.info2) 
+      : failedRegistration(apiData.errorMessages.registration.fail.server);
     } else if (appState.register.user.error) {
-      failedRegistration(true); //TODO:
+      return failedRegistration(`${appState.register.user.error.message}!`);
     } else {
-      failedRegistration(); //TODO:
+      return failedRegistration(apiData.errorMessages.registration.fail.server);
     }
 
     // Delete all data from appState.register.user
@@ -270,14 +272,20 @@ async function registerSubmitEvent(e) {
   // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
 }
 
-function successfulRegistration() { //TODO: Route HOME page through a transition message for the user
+function successfulRegistration(...messages) {
   mainView.clearRegistrationFormData();
   clearCurrentPage();
-  transitionSuccessMessageForUser(['Success!', 'Redirecting to main page'], true);
+  transitionSuccessMessageForUser(messages, true);
 }
 
-function transitionSuccessMessageForUser(messages, animate = false, position='') {
-  renderMessages(messages, animate, position);
+function failedRegistration(...messages) { 
+  if (!mainView.warningMessageExists()) {
+    renderFailMessageForUser(messages, false, 'afterbegin');
+  }
+}
+
+function transitionSuccessMessageForUser(messages, animate = false) {
+  renderMessages(messages, animate);
 
   setTimeout(()=> {
     clearCurrentPage();
@@ -285,12 +293,12 @@ function transitionSuccessMessageForUser(messages, animate = false, position='')
   }, 2000);
 }
 
-function transitionFailMessageForUser(messages, animate = false, position='') {
+function renderFailMessageForUser(messages, animate = false, position) {
   renderMessages(messages, animate, position);
   mainView.styleWarningMessage();
 }
 
-function renderMessages(messages, animate, position) {
+function renderMessages(messages, animate, position='') {
   if (messages.length > 0) {
     messages.forEach(message => {
       if (position) {
@@ -305,23 +313,6 @@ function renderMessages(messages, animate, position) {
     mainView.renderDotsAnimation();
   }
 
-}
-
-function failedRegistration(validationError = false) { 
-  if (!mainView.warningMessageExists()) {
-
-    if (validationError) {
-      console.info(`STATUS ${appState.register.user.error.code}: ${appState.register.user.error.message}`);
-      transitionFailMessageForUser([
-        `${appState.register.user.error.message}!`
-      ], false, 'afterbegin');
-      return;
-    }
-
-    transitionFailMessageForUser([
-      'Something went wrong. Please refresh the page and try again.'], false, 'afterbegin');
-    console.log('Something went wrong. Please refresh the page and try again.');
-  }
 }
 
 /* ---------------------------------------- */

@@ -84,5 +84,19 @@ export const apiData = {
   },
   posts: {
     url: '/api/posts/'
+  },
+  errorMessages: {
+    registration: {
+      fail: {
+        server: 'Something went wrong. Please refresh the page and try again.',
+        validation: {
+          password: 'The passwords are not matching!'
+        },
+      },
+      success: {
+        info1: 'Success!',
+        info2: 'Redirecting to main page'
+      }
+    }
   }
 }
