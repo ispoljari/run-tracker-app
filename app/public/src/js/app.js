@@ -9,12 +9,16 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
-// Import DOM classes and dynamic hooks
+// Import faker
+import faker from 'faker';
+
+// Import DOM elements and dynamic hooks
 import {
   DOMelements, 
   DOMstrings, 
-  menuIdentifiers
-} from './views/view.static-dom-base';
+  menuIdentifiers,
+  apiData
+} from './views/view.dom-base';
 
 // Import app state
 import {appState} from './state/state.app';
@@ -29,7 +33,7 @@ import * as footerView from './views/view.footer';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
-/* ------------ APP CONTROLLER ------------ */
+/* ---------- APP SUPERCONTROLLER --------- */
 /* ---------------------------------------- */
 /* ---------------------------------------- */
 
@@ -49,7 +53,7 @@ function initializeAppControllers() {
 /* ---------------------------------------- */
 
 function documentLevelController() {
-  attachEventListener([DOMelements.body], 'click', [bodyClickEvent])
+  attachEventListener([DOMelements.body], 'click', [bodyClickEvent]);
 }
 
 function bodyClickEvent(e) {
@@ -82,25 +86,23 @@ function logoClickEvent(e) {
     clearCurrentPage();
     renderHomePage();
   }
-  appState.session.currentView = 'home';
 }
 
 function renderHomePage() {
   headerView.renderIntroHeading();
   mainView.renderPostsTitle();
-  renderMainPosts();
-}
-
-function renderMainPosts() {
   mainView.renderPosts();
   footerView.renderIconsCredit();
+  appState.session.currentView = 'home';
 }
 
 function clearCurrentPage() {
-  // Remove current content
-  headerView.removeIntroHeading();
+  if (appState.session.currentView === 'home') {
+    headerView.removeIntroHeading();
+    footerView.removeIconsCredit(); 
+  }
+
   mainView.removeMainContent(); 
-  footerView.removeIconsCredit(); // TODO: IF CURR.VIEW = HOME
 
   // Detach event listeners
   if (appState.registeredClickEvents.registerForm) {
@@ -158,7 +160,7 @@ function dropDownListSubController() {
   if (!appState.registeredClickEvents.dropDownList) {
     dropDownListController(); // Process existing user login and open new session
   } else {
-    detachEventListener(    [DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+    detachEventListener([DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
       DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
       DOMelements.navMenuItems.logedIn.dropDownList.analytics,
       DOMelements.navMenuItems.logedIn.dropDownList.logout],
@@ -166,7 +168,8 @@ function dropDownListSubController() {
       [myProfileViewSubController,
       myRunsViewSubController,
       analyticsViewSubController,
-      logoutSubController]);
+      logoutSubController]
+      );
   }
   // toggle event state
   appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
@@ -178,10 +181,22 @@ function dropDownListSubController() {
 function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
-
+    attachMutationObserver(DOMelements.mainContent)
+      .then(result => {
+        appState.mutationObserver.result = result;
+        registerNewUserController(); 
+      })
+      .then(()=> {
+        appState.mutationObserver.result.observer.disconnect();
+        deleteAllObjectProperties(appState.mutationObserver);
+      })
+      .catch(error => {
+        clearCurrentPage();
+        failedRegistration(apiData.infoMessages.registration.fail.server);
+      });
+    
     mainView.renderRegistrationForm();
-    registerNewUserController(); // Process existing user login and open new session
-    appState.session.currentView = 'register';
+    appState.session.currentView = 'register';   
   }
 }
 
@@ -211,35 +226,97 @@ function registerNewUserController() {
 async function registerSubmitEvent(e) {
   e.preventDefault();
 
-  const newUser = await mainView.getRegistrationFormData();
+  // Remove existing warning messages
+  if (mainView.warningMessageExists()) {
+    mainView.removeMessage();
+  }
 
-  // newUser.name = `${newUser.firstName} ${newUser.lastName}`
-  // newUser.displayName = 
+  const newUser = mainView.getRegistrationFormData();
 
-  // VALIDATE INPUT DATA
-  // 1) Check if password and repeat password are the same
+  newUser.name = `${newUser.firstName} ${newUser.lastName}`
+  newUser.displayName = faker.name.firstName(); // Assign a random display name during registration
+  newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
-  // if (newUser) {
+  if (newUser) {
+    
+    // Check if password and repeat password are the same
+    if (newUser.password !== newUser.repeatPassword) {
+      return failedRegistration(apiData.infoMessages.registration.fail.validation.password);
+    }
 
-  //   if (newUser.password !== newUser.repeatPassword) {
-  //     return console.log('The passwords are not matching.'); // TODO: Display warning message to the user
-  //   }
-  
-  //   // 1) Create a new user instance
-  //   appState.register.user = new User(newUser);
+    // Create a new user instance
+    appState.register.user = new User(newUser);
 
-  //   // 2) POST new user to server
-  //   try {
-  //     await appState.register.user.createNew();
-  //   } catch(error) {
-  //     console.log(error); //TODO:
-  //   }
+    // Delete all data from newUser
+    deleteAllObjectProperties(newUser);
 
-  //   console.log(appState.register.user.result);
-  // }
+    // POST new user to server
+    try {
+      await appState.register.user.createNew();
+    } catch (error) {
+      failedRegistration(apiData.infoMessages.registration.fail.server);
+    }
 
+    if (appState.register.user.result) {
+      appState.register.user.result.status === 201 ? 
+      successfulRegistration(apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
+      : failedRegistration(apiData.infoMessages.registration.fail.server);
+    } else if (appState.register.user.error) {
+      return failedRegistration(`${appState.register.user.error.message}!`);
+    } else {
+      return failedRegistration(apiData.infoMessages.registration.fail.server);
+    }
 
-  // TODO: CLEAR INPUT FIELDS
+    // Delete all data from appState.register.user
+    deleteAllObjectProperties(appState.register.user);
+  }
+
+  // TODO: ENABLE USER TO DELETE ACCOUNT
+  // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
+}
+
+function successfulRegistration(...messages) {
+  mainView.clearRegistrationFormData();
+  clearCurrentPage();
+  transitionSuccessMessageForUser(messages, true);
+}
+
+function failedRegistration(...messages) {
+  console.clear(); 
+  if (!mainView.warningMessageExists()) {
+    renderFailMessageForUser(messages, false, 'afterbegin');
+  }
+}
+
+function transitionSuccessMessageForUser(messages, animate = false) {
+  renderMessages(messages, animate);
+
+  setTimeout(()=> {
+    clearCurrentPage();
+    renderHomePage();
+  }, 2000);
+}
+
+function renderFailMessageForUser(messages, animate = false, position) {
+  renderMessages(messages, animate, position);
+  mainView.styleWarningMessage();
+}
+
+function renderMessages(messages, animate, position='') {
+  if (messages.length > 0) {
+    messages.forEach(message => {
+      if (position) {
+        mainView.renderMessage(message, position);
+      } else {
+        mainView.renderMessage(message);
+      }
+    });
+  }
+
+  if (animate) {
+    mainView.renderDotsAnimation();
+  }
+
 }
 
 /* ---------------------------------------- */
@@ -326,7 +403,8 @@ function myRunsViewSubController() {
     clearCurrentPage();
     mainView.renderProfileBanner();
     mainView.renderMyRunsTitle();
-    renderMainPosts(); // TODO: Render only logged users posts
+    mainView.renderPosts();  // TODO: Render only logged users posts
+    footerView.renderIconsCredit();
     appState.session.currentView = 'myRuns';
   }
   closeDropDownList();
@@ -407,4 +485,33 @@ function clearInputFields(...fnArr) {
   fnArr.forEach(fn => {
     fn();
   })
+}
+
+function deleteAllObjectProperties(obj) {
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      delete obj[key];
+    }
+  }
+}
+
+function attachMutationObserver(observedElement) {
+  const config = {childList: true}
+  
+  return new Promise((resolve, reject) => {
+    const observer = new MutationObserver(callback);
+    function callback(mutationRecord) {
+      mutationRecord.forEach(record => {
+        if (record.addedNodes.length > 0) {
+          resolve({
+            observer,
+            mutationRecord
+          });
+        }
+      });
+      reject();
+    }
+
+    observer.observe(observedElement, config);
+  });
 }

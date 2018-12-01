@@ -47,7 +47,7 @@ const userJoiSchema = Joi.object().keys({
   displayName: Joi.string().min(1).trim().required(),
   username: Joi.string().email().trim().required(),
   password: Joi.string().min(10).max(72).trim().required(),
-  avatar: Joi.number().integer()
+  avatar: Joi.number().integer().required()
 });
 
 const User = mongoose.model('User', userSchema);

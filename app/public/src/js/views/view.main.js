@@ -1,6 +1,8 @@
 import {
-  DOMelements
-} from './view.static-dom-base';
+  DOMelements,
+  DOMstrings,
+  controledHooksStrings
+} from './view.dom-base';
 
 // Main page
 
@@ -21,6 +23,43 @@ export const renderMyRunsTitle = () => {
   const htmlString = 
   `<div class="content__heading-posts">
     <h2>My Runs</h2>
+   </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
+export const renderMessage = (message, position='beforeend') => {
+  const htmlString = 
+  `<div class="content__user-info js-content__user-info content__user-info--center">
+    <h2>${message}</h2>
+   </div>`
+
+  appendHtmlToMainContent(htmlString, position);
+}
+
+export const removeMessage = () => {
+  DOMelements.mainContent.removeChild(document.querySelector(`.${DOMstrings.infoMessage}`));
+}
+
+export const styleWarningMessage = () => {
+  const warningMessage = document.querySelector(`.${DOMstrings.infoMessage}`);
+  if (!warningMessage.classList.contains(controledHooksStrings.warningMessageStyle)) {
+    warningMessage.classList.add(controledHooksStrings.warningMessageStyle);
+  }
+}
+
+export const warningMessageExists = () => {
+  if (document.querySelector(`.${DOMstrings.infoMessage}`)) {
+    return document.querySelector(`.${DOMstrings.infoMessage}`).classList.contains(controledHooksStrings.warningMessageStyle);
+  } else {
+    return false;
+  }
+}
+
+export const renderDotsAnimation = () => {
+  const htmlString = 
+  `<div class="content__info-dots">
+    <span>.</span><span>.</span><span>.</span>
    </div>`
 
   appendHtmlToMainContent(htmlString);
@@ -76,14 +115,14 @@ export const renderRegistrationForm = () => {
         <div class="registration__first-name">
           <label>
             First Name:
-            <input type="text" placeholder="John" name="first-name" class="registration__input-first-name" required>
+            <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed" placeholder="John" name="first-name" class="registration__input-first-name" required>
           </label>
         </div>
 
         <div class="registration__last-name">
           <label>
             Last Name:
-            <input type="text" placeholder="Smith" name="last-name" class="registration__input-last-name" required>
+            <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed" placeholder="Smith" name="last-name" class="registration__input-last-name" required>
           </label>
         </div>
 
@@ -117,21 +156,21 @@ export const renderRegistrationForm = () => {
 }
 
 export const getRegistrationFormData = () => {  
-  return dynamicImportRegisterFormDomElements()
-    .then(res => {
-      return {
-        firstName: res.registerForm.inputFields.firstName.value,
-        lastName: res.registerForm.inputFields.lastName.value,
-        username: res.registerForm.inputFields.username.value,
-        password: res.registerForm.inputFields.password.value,
-        repeatPassword: res.registerForm.inputFields.repeatPassword.value
-      }
-    });
+  return {
+    firstName: document.querySelector(`.${DOMstrings.registerForm.inputFields.firstName}`).value,
+    lastName: document.querySelector(`.${DOMstrings.registerForm.inputFields.lastName}`).value,
+    username: document.querySelector(`.${DOMstrings.registerForm.inputFields.username}`).value,
+    password: document.querySelector(`.${DOMstrings.registerForm.inputFields.password}`).value,
+    repeatPassword: document.querySelector(`.${DOMstrings.registerForm.inputFields.repeatPassword}`).value
+  }
 }
 
-async function dynamicImportRegisterFormDomElements() {
-  return await import('./view.dynamic-dom-register-form');
-;
+export const clearRegistrationFormData = () => {
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.firstName}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.lastName}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.username}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.password}`).value = '',
+  document.querySelector(`.${DOMstrings.registerForm.inputFields.repeatPassword}`).value = ''
 }
 
 // My Runs page
@@ -159,6 +198,6 @@ export const renderProfileBanner = () => {
 
 // Help functions
 
-function appendHtmlToMainContent(html) {
-  DOMelements.mainContent.insertAdjacentHTML('beforeend', html);
+function appendHtmlToMainContent(html, position='beforeend') {
+  DOMelements.mainContent.insertAdjacentHTML(position, html);
 }

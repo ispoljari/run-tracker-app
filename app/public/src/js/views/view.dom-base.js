@@ -1,11 +1,6 @@
 /* ---------------------------------------- */
 /* ----------- EXPORT DOM CONST's --------- */
 
-export const DOMstrings = {
-  menuDropDownList: 'js-dropdown-list',
-  loginMenu: 'js-login-menu'
-}
-
 export const menuIdentifiers = {
   myRuns: 'myRuns',
   analytics: 'analytics',
@@ -27,7 +22,23 @@ export const controledHooksStrings = {
   loginMenuToggleVisibility: 'login--toggle-visibility',
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
-  navMenuItemHide: 'menu__item--hidden'
+  navMenuItemHide: 'menu__item--hidden',
+  warningMessageStyle: 'content__user-info--warning'
+}
+
+export const DOMstrings = {
+  menuDropDownList: 'js-dropdown-list',
+  loginMenu: 'js-login-menu',
+  registerForm : {
+    inputFields: {
+      firstName: 'registration__input-first-name',
+      lastName: 'registration__input-last-name',
+      username: 'registration__input-username',
+      password: 'registration__input-password',
+      repeatPassword: 'registration__input-repeatPassword'
+    },
+  },
+  infoMessage: 'js-content__user-info'
 }
 
 export const DOMelements = {
@@ -68,10 +79,24 @@ export const DOMelements = {
 }
 
 export const apiData = {
-  user: {
+  users: {
     url: '/api/users/'
   },
   posts: {
     url: '/api/posts/'
+  },
+  infoMessages: {
+    registration: {
+      fail: {
+        server: 'Something went wrong. Please refresh the page and try again.',
+        validation: {
+          password: 'The passwords are not matching!'
+        },
+      },
+      success: {
+        info1: 'Success!',
+        info2: 'Redirecting to main page'
+      }
+    }
   }
 }

@@ -1,29 +1,31 @@
 import axios from 'axios';
-import {apiData} from '../views/view.static-dom-base';
+import {apiData} from '../views/view.dom-base';
 
 export default class User {
   constructor (user) {
     this.name = user.name,
     this.displayName = user.displayName,
     this.username = user.username,
-    this.password = user.password
+    this.password = user.password,
+    this.avatar = user.avatar
   }
 
   async createNew() {
     try {
       const res = await axios({
         method: 'post',
-        url: apiData.user.url,
+        url: apiData.users.url,
         data: {
           name: this.name,
           displayName: this.displayName,
           username: this.username,
-          password: this.password
+          password: this.password,
+          avatar: this.avatar
         }
       });
       this.result = res;
     } catch (error) {
-      console.log(`An error occured! Message: ${error}`);
+      this.error = error.response.data;
     }
   }
 }
