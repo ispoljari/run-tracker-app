@@ -1,7 +1,7 @@
 import {
   DOMelements, 
   controledHooksStrings
-} from './view.static-dom-base';
+} from './view.dom-base';
 
 // Navigation menu buttons (show/hide)
 

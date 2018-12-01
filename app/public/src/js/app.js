@@ -18,7 +18,7 @@ import {
   DOMstrings, 
   menuIdentifiers,
   apiData
-} from './views/view.static-dom-base';
+} from './views/view.dom-base';
 
 // Import app state
 import {appState} from './state/state.app';
@@ -189,7 +189,8 @@ function registerViewSubController() {
         deleteAllObjectProperties(appState.mutationObserver);
       })
       .catch(error => {
-        // TODO: notify user that something went wrong!
+        clearCurrentPage();
+        failedRegistration(apiData.infoMessages.registration.fail.server);
       });
     
     mainView.renderRegistrationForm();
@@ -238,7 +239,7 @@ async function registerSubmitEvent(e) {
     
     // Check if password and repeat password are the same
     if (newUser.password !== newUser.repeatPassword) {
-      return failedRegistration(apiData.errorMessages.registration.fail.validation.password);
+      return failedRegistration(apiData.infoMessages.registration.fail.validation.password);
     }
 
     // Create a new user instance
@@ -251,17 +252,17 @@ async function registerSubmitEvent(e) {
     try {
       await appState.register.user.createNew();
     } catch (error) {
-      failedRegistration(apiData.errorMessages.registration.fail.server);
+      failedRegistration(apiData.infoMessages.registration.fail.server);
     }
 
     if (appState.register.user.result) {
       appState.register.user.result.status === 201 ? 
-      successfulRegistration(apiData.errorMessages.registration.success.info1, apiData.errorMessages.registration.success.info2) 
-      : failedRegistration(apiData.errorMessages.registration.fail.server);
+      successfulRegistration(apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
+      : failedRegistration(apiData.infoMessages.registration.fail.server);
     } else if (appState.register.user.error) {
       return failedRegistration(`${appState.register.user.error.message}!`);
     } else {
-      return failedRegistration(apiData.errorMessages.registration.fail.server);
+      return failedRegistration(apiData.infoMessages.registration.fail.server);
     }
 
     // Delete all data from appState.register.user
@@ -278,7 +279,8 @@ function successfulRegistration(...messages) {
   transitionSuccessMessageForUser(messages, true);
 }
 
-function failedRegistration(...messages) { 
+function failedRegistration(...messages) {
+  console.clear(); 
   if (!mainView.warningMessageExists()) {
     renderFailMessageForUser(messages, false, 'afterbegin');
   }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {apiData} from '../views/view.static-dom-base';
+import {apiData} from '../views/view.dom-base';
 
 export default class User {
   constructor (user) {
@@ -25,7 +25,6 @@ export default class User {
       });
       this.result = res;
     } catch (error) {
-      // console.clear();
       this.error = error.response.data;
     }
   }

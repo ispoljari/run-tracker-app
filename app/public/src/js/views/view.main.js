@@ -2,7 +2,7 @@ import {
   DOMelements,
   DOMstrings,
   controledHooksStrings
-} from './view.static-dom-base';
+} from './view.dom-base';
 
 // Main page
 

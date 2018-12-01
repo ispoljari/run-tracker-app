@@ -85,7 +85,7 @@ export const apiData = {
   posts: {
     url: '/api/posts/'
   },
-  errorMessages: {
+  infoMessages: {
     registration: {
       fail: {
         server: 'Something went wrong. Please refresh the page and try again.',
