@@ -37,8 +37,11 @@ export const DOMstrings = {
       password: 'registration__input-password',
       repeatPassword: 'registration__input-repeatPassword'
     },
+    infoMessage: 'js-content__user-info'
   },
-  infoMessage: 'js-content__user-info'
+  loginForm: {
+    infoMessage: 'js-login__info'
+  }
 }
 
 export const DOMelements = {
@@ -107,7 +110,7 @@ export const apiData = {
       fail: {
         server: {
           unknown: serverFail,
-          noUser: 'The provided username was not found. Please register before login.'
+          noUser: 'Username not found! Please register before login.'
         }
       }
     }

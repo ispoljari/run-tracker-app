@@ -32,6 +32,8 @@ export default class User {
           avatar: this.avatar
         }
       });
+      
+      delete this.password;
       this.result = res;
     } catch (error) {
       this.error = error.response.data;
@@ -48,6 +50,8 @@ export default class User {
           password: this.password,
         }
       });
+
+      delete this.password;
       this.result = res;
     } catch (error) {
       this.error = error.response.data

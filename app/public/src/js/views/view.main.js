@@ -49,8 +49,8 @@ export const styleWarningMessage = () => {
 }
 
 export const warningMessageExists = () => {
-  if (document.querySelector(`.${DOMstrings.infoMessage}`)) {
-    return document.querySelector(`.${DOMstrings.infoMessage}`).classList.contains(controledHooksStrings.warningMessageStyle);
+  if (document.querySelector(`.${DOMstrings.registerForm.infoMessage}`)) {
+    return document.querySelector(`.${DOMstrings.registerForm.infoMessage}`).classList.contains(controledHooksStrings.warningMessageStyle);
   } else {
     return false;
   }

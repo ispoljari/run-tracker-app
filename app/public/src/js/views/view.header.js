@@ -1,5 +1,6 @@
 import {
-  DOMelements, 
+  DOMelements,
+  DOMstrings, 
   controledHooksStrings
 } from './view.dom-base';
 
@@ -107,4 +108,22 @@ export const getLoginFormData = () => {
 export const clearLoginFormData = () => {
   DOMelements.inputFields.login.username.value = '';
   DOMelements.inputFields.login.password.value = '';
+}
+
+export const renderLoginFailMessage = (message) => {
+  const htmlString =
+  `
+  <div class="login__info js-login__info">
+    <h2>${message}</h2>
+  </div>`
+
+   DOMelements.loginMenu.insertAdjacentHTML('afterbegin', htmlString);
+}
+
+export const removeLoginFailMessage = () => {
+  DOMelements.loginMenu.removeChild(document.querySelector(`.${DOMstrings.loginForm.infoMessage}`));
+}
+
+export const warningMessageExists = () => {
+  return DOMelements.loginMenu.contains(document.querySelector(`.${DOMstrings.loginForm.infoMessage}`));
 }

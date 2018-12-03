@@ -275,17 +275,17 @@ async function registerSubmitEvent(e) {
 function successfulRegistration(...messages) {
   mainView.clearRegistrationFormData();
   clearCurrentPage();
-  transitionSuccessMessageForUser(messages, true);
+  transitionRegistrationSuccessMessage(messages, true);
 }
 
 function failedRegistration(...messages) {
   console.clear(); 
   if (!mainView.warningMessageExists()) {
-    renderRegistrationFailMessageForUser(messages, false, 'afterbegin');
+    displayRegistrationFailMessage(messages, false, 'afterbegin');
   }
 }
 
-function transitionSuccessMessageForUser(messages, animate = false) {
+function transitionRegistrationSuccessMessage(messages, animate = false) {
   renderMainViewMessages(messages, animate);
 
   setTimeout(()=> {
@@ -294,7 +294,7 @@ function transitionSuccessMessageForUser(messages, animate = false) {
   }, 1200);
 }
 
-function renderRegistrationFailMessageForUser(messages, animate = false, position) {
+function displayRegistrationFailMessage(messages, animate = false, position) {
   renderMainViewMessages(messages, animate, position);
   mainView.styleWarningMessage();
 }
@@ -328,6 +328,11 @@ async function loginSubmitEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 
+  // Remove existing warning messages
+  if (headerView.warningMessageExists()) {
+    headerView.removeLoginFailMessage();
+  }
+
   const existingUser = headerView.getLoginFormData();
 
   if (existingUser) {
@@ -342,40 +347,46 @@ async function loginSubmitEvent(e) {
     try {
       await appState.login.user.login();
     } catch (error) {
-      // failedLogin(apiData.infoMessages.login.fail.server); //TODO:
-      console.log(error);
+      failedLogin(apiData.infoMessages.login.fail.server.unknown);
     }
 
-    console.log(appState.login.user);
 
-    // if (appState.login.user.result) {
-    //   appState.login.user.result.status === 200 
-    //   && appState.login.user.result.data.authToken ? 
-    //   successfullLogin() 
-    //   : failedLogin(apiData.infoMessages.registration.fail.server);
-    // } else if (appState.login.user.error) {
-    //   // return failedLogin(`${appState.register.user.error.message}!`);
-    // } else {
-    //   // return failedLogin(apiData.infoMessages.registration.fail.server);
-    // }
+    if (appState.login.user.result) {
+      appState.login.user.result.status === 200 
+      && appState.login.user.result.data.authToken ? 
+      successfullLogin() 
+      : failedLogin(apiData.infoMessages.login.fail.server.unknown);
+    } else if (appState.login.user.error) {
+      if (appState.login.user.error.toLowerCase() === 'unauthorized') {
+        return failedLogin(`${apiData.infoMessages.login.fail.server.noUser}`);
+      } else {
+        return failedLogin(`${appState.login.user.error}`);
+      }
+    } else {
+      return failedLogin(apiData.infoMessages.login.fail.server.unknown);
+    }
   }
 }
 
 function successfullLogin() {
-  headerView.clearLoginFormData();
   closeLoginMenu();
   enterLoggedInSessionMode();
+  console.log(appState.login.user);
 }
 
-function failedLogin(...messages) {
+function failedLogin(message) {
   console.clear(); 
-  if (!mainView.warningMessageExists()) {
-    renderRegistrationFailMessageForUser(messages, false, 'afterbegin');
+  if (!headerView.warningMessageExists()) {
+    headerView.renderLoginFailMessage(message);
   }
 }
 
 function closeLoginMenu() {
   headerView.closeLoginMenu();
+  headerView.clearLoginFormData();
+  if (headerView.warningMessageExists()) {
+    headerView.removeLoginFailMessage();
+  }
   detachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
   appState.registeredClickEvents.logInMenu = false;
 }
