@@ -78,6 +78,8 @@ export const DOMelements = {
   }
 }
 
+const serverFail = 'Something went wrong. Please refresh the page and try again.';
+
 export const apiData = {
   users: {
     url: '/api/users/'
@@ -91,7 +93,7 @@ export const apiData = {
   infoMessages: {
     registration: {
       fail: {
-        server: 'Something went wrong. Please refresh the page and try again.',
+        server: serverFail,
         validation: {
           password: 'The passwords are not matching!'
         },
@@ -99,6 +101,14 @@ export const apiData = {
       success: {
         info1: 'Success!',
         info2: 'Loading main page.'
+      }
+    },
+    login: {
+      fail: {
+        server: {
+          unknown: serverFail,
+          noUser: 'The provided username was not found. Please register before login.'
+        }
       }
     }
   }

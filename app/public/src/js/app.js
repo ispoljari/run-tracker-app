@@ -281,12 +281,12 @@ function successfulRegistration(...messages) {
 function failedRegistration(...messages) {
   console.clear(); 
   if (!mainView.warningMessageExists()) {
-    renderFailMessageForUser(messages, false, 'afterbegin');
+    renderRegistrationFailMessageForUser(messages, false, 'afterbegin');
   }
 }
 
 function transitionSuccessMessageForUser(messages, animate = false) {
-  renderMessages(messages, animate);
+  renderMainViewMessages(messages, animate);
 
   setTimeout(()=> {
     clearCurrentPage();
@@ -294,12 +294,12 @@ function transitionSuccessMessageForUser(messages, animate = false) {
   }, 1200);
 }
 
-function renderFailMessageForUser(messages, animate = false, position) {
-  renderMessages(messages, animate, position);
+function renderRegistrationFailMessageForUser(messages, animate = false, position) {
+  renderMainViewMessages(messages, animate, position);
   mainView.styleWarningMessage();
 }
 
-function renderMessages(messages, animate, position='') {
+function renderMainViewMessages(messages, animate, position='') {
   if (messages.length > 0) {
     messages.forEach(message => {
       if (position) {
@@ -342,25 +342,36 @@ async function loginSubmitEvent(e) {
     try {
       await appState.login.user.login();
     } catch (error) {
+      // failedLogin(apiData.infoMessages.login.fail.server); //TODO:
       console.log(error);
     }
 
-    // Clear login form 
-    headerView.clearLoginFormData();
-    closeLoginMenu();
+    console.log(appState.login.user);
 
-    // Enter logged in mode
-    enterLoggedInSessionMode();
+    // if (appState.login.user.result) {
+    //   appState.login.user.result.status === 200 
+    //   && appState.login.user.result.data.authToken ? 
+    //   successfullLogin() 
+    //   : failedLogin(apiData.infoMessages.registration.fail.server);
+    // } else if (appState.login.user.error) {
+    //   // return failedLogin(`${appState.register.user.error.message}!`);
+    // } else {
+    //   // return failedLogin(apiData.infoMessages.registration.fail.server);
+    // }
   }
+}
 
-  // if (username === appState.session.logginCredentials.username && password === appState.session.logginCredentials.password) {
-  //   appState.session.loggedIn = true;
-  //   headerView.clearLoginFormData();
-  //   closeLoginMenu();
-  //   enterLoggedInSessionMode();
-  // } else {
-  //   console.log('Your credentials are invalid.') // TODO: Display error message to the user
-  // }
+function successfullLogin() {
+  headerView.clearLoginFormData();
+  closeLoginMenu();
+  enterLoggedInSessionMode();
+}
+
+function failedLogin(...messages) {
+  console.clear(); 
+  if (!mainView.warningMessageExists()) {
+    renderRegistrationFailMessageForUser(messages, false, 'afterbegin');
+  }
 }
 
 function closeLoginMenu() {
