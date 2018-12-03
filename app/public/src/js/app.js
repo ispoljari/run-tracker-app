@@ -230,8 +230,8 @@ async function registerSubmitEvent(e) {
 
   const newUser = mainView.getRegistrationFormData();
 
-  newUser.name = `${newUser.firstName} ${newUser.lastName}`
-  newUser.displayName = newUser.firstName
+  newUser.name = `${newUser.firstName} ${newUser.lastName}`;
+  newUser.displayName = newUser.firstName;
   newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
   if (newUser) {
@@ -324,20 +324,43 @@ function logInUserController() {
   attachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
 } 
 
-function loginSubmitEvent(e) {
+async function loginSubmitEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 
-  const existingUser= headerView.getLoginFormData();
+  const existingUser = headerView.getLoginFormData();
 
-  if (username === appState.session.logginCredentials.username && password === appState.session.logginCredentials.password) {
-    appState.session.loggedIn = true;
-    clearInputFields(headerView.clearLoginUsername, headerView.clearLoginPassword);
+  if (existingUser) {
+
+    // Create a new user instance
+    appState.login.user = new User(existingUser);
+
+    // Delete all data from newUser
+    deleteAllObjectProperties(existingUser);
+
+    // POST new user to server
+    try {
+      await appState.login.user.login();
+    } catch (error) {
+      console.log(error);
+    }
+
+    // Clear login form 
+    headerView.clearLoginFormData();
     closeLoginMenu();
+
+    // Enter logged in mode
     enterLoggedInSessionMode();
-  } else {
-    console.log('Your credentials are invalid.') // TODO: Display error message to the user
   }
+
+  // if (username === appState.session.logginCredentials.username && password === appState.session.logginCredentials.password) {
+  //   appState.session.loggedIn = true;
+  //   headerView.clearLoginFormData();
+  //   closeLoginMenu();
+  //   enterLoggedInSessionMode();
+  // } else {
+  //   console.log('Your credentials are invalid.') // TODO: Display error message to the user
+  // }
 }
 
 function closeLoginMenu() {
@@ -424,7 +447,7 @@ function logoutSubController() {
 
 function closeDropDownList() {
   headerView.closeDropDownList();
-  detachEventListener(    [DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+  detachEventListener([DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
   DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
   DOMelements.navMenuItems.logedIn.dropDownList.analytics,
   DOMelements.navMenuItems.logedIn.dropDownList.logout],
@@ -475,12 +498,6 @@ function attachEventListener(elements, eventType, fns) {
       i++;
     });
   }
-}
-
-function clearInputFields(...fnArr) {
-  fnArr.forEach(fn => {
-    fn();
-  })
 }
 
 function deleteAllObjectProperties(obj) {

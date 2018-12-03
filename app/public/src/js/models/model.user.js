@@ -3,11 +3,20 @@ import {apiData} from '../views/view.dom-base';
 
 export default class User {
   constructor (user) {
-    this.name = user.name,
-    this.displayName = user.displayName,
+    if (user.name) {
+      this.name = user.name
+    } 
+    
+    if (user.displayName) {
+      this.displayName = user.displayName
+    } 
+    
+    if (user.avatar) {
+      this.avatar = user.avatar
+    }
+
     this.username = user.username,
-    this.password = user.password,
-    this.avatar = user.avatar
+    this.password = user.password
   }
 
   async createNew() {
@@ -33,7 +42,7 @@ export default class User {
     try {
       const res = await axios({
         method: 'post',
-        url: apiData.auth.url,
+        url: `${apiData.auth.url}/login`,
         data: {
           username: this.username,
           password: this.password,
