@@ -110,7 +110,7 @@ export const apiData = {
       fail: {
         server: {
           unknown: serverFail,
-          noUser: 'Username not found! Please register before login.'
+          noUser: 'Login failed! Username or password not correct.'
         }
       }
     }
