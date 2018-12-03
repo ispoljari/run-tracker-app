@@ -1,5 +1,6 @@
 import {
-  DOMelements, 
+  DOMelements,
+  DOMstrings, 
   controledHooksStrings
 } from './view.dom-base';
 
@@ -97,18 +98,32 @@ export const closeLoginMenu = () => {
   DOMelements.loginMenu.classList.remove(controledHooksStrings.loginMenuToggleVisibility);
 }
 
-export const getLoginUsername = () => {
-  return DOMelements.inputFields.login.username.value;
+export const getLoginFormData = () => {
+  return {
+    username: DOMelements.inputFields.login.username.value,
+    password: DOMelements.inputFields.login.password.value
+  }
 }
 
-export const getLoginPassword = () => {
-  return DOMelements.inputFields.login.password.value;
-}
-
-export const clearLoginUsername = () => {
+export const clearLoginFormData = () => {
   DOMelements.inputFields.login.username.value = '';
+  DOMelements.inputFields.login.password.value = '';
 }
 
-export const clearLoginPassword = () => {
-  DOMelements.inputFields.login.password.value = '';
+export const renderLoginFailMessage = (message) => {
+  const htmlString =
+  `
+  <div class="login__info js-login__info">
+    <h2>${message}</h2>
+  </div>`
+
+   DOMelements.loginMenu.insertAdjacentHTML('afterbegin', htmlString);
+}
+
+export const removeLoginFailMessage = () => {
+  DOMelements.loginMenu.removeChild(document.querySelector(`.${DOMstrings.loginForm.infoMessage}`));
+}
+
+export const warningMessageExists = () => {
+  return DOMelements.loginMenu.contains(document.querySelector(`.${DOMstrings.loginForm.infoMessage}`));
 }

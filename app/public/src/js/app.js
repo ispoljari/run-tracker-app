@@ -230,7 +230,7 @@ async function registerSubmitEvent(e) {
 
   const newUser = mainView.getRegistrationFormData();
 
-  newUser.name = `${newUser.firstName} ${newUser.lastName}`
+  newUser.name = `${newUser.firstName} ${newUser.lastName}`;
   newUser.displayName = newUser.firstName;
   newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
@@ -275,31 +275,31 @@ async function registerSubmitEvent(e) {
 function successfulRegistration(...messages) {
   mainView.clearRegistrationFormData();
   clearCurrentPage();
-  transitionSuccessMessageForUser(messages, true);
+  transitionRegistrationSuccessMessage(messages, true);
 }
 
 function failedRegistration(...messages) {
   console.clear(); 
   if (!mainView.warningMessageExists()) {
-    renderFailMessageForUser(messages, false, 'afterbegin');
+    displayRegistrationFailMessage(messages, false, 'afterbegin');
   }
 }
 
-function transitionSuccessMessageForUser(messages, animate = false) {
-  renderMessages(messages, animate);
+function transitionRegistrationSuccessMessage(messages, animate = false) {
+  renderMainViewMessages(messages, animate);
 
   setTimeout(()=> {
     clearCurrentPage();
     renderHomePage();
-  }, 2000);
+  }, 1200);
 }
 
-function renderFailMessageForUser(messages, animate = false, position) {
-  renderMessages(messages, animate, position);
+function displayRegistrationFailMessage(messages, animate = false, position) {
+  renderMainViewMessages(messages, animate, position);
   mainView.styleWarningMessage();
 }
 
-function renderMessages(messages, animate, position='') {
+function renderMainViewMessages(messages, animate, position='') {
   if (messages.length > 0) {
     messages.forEach(message => {
       if (position) {
@@ -324,25 +324,70 @@ function logInUserController() {
   attachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
 } 
 
-function loginSubmitEvent(e) {
+async function loginSubmitEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 
-  const username = headerView.getLoginUsername();
-  const password = headerView.getLoginPassword();
+  // Remove existing warning messages
+  if (headerView.warningMessageExists()) {
+    headerView.removeLoginFailMessage();
+  }
 
-  if (username === appState.session.logginCredentials.username && password === appState.session.logginCredentials.password) {
-    appState.session.loggedIn = true;
-    clearInputFields(headerView.clearLoginUsername, headerView.clearLoginPassword);
-    closeLoginMenu();
-    enterLoggedInSessionMode();
-  } else {
-    console.log('Your credentials are invalid.') // TODO: Display error message to the user
+  const existingUser = headerView.getLoginFormData();
+
+  if (existingUser) {
+
+    // Create a new user instance
+    appState.login.user = new User(existingUser);
+
+    // Delete all data from newUser
+    deleteAllObjectProperties(existingUser);
+
+    // POST new user to server
+    try {
+      await appState.login.user.login();
+    } catch (error) {
+      failedLogin(apiData.infoMessages.login.fail.server.unknown);
+    }
+
+
+    if (appState.login.user.result) {
+      appState.login.user.result.status === 200 
+      && appState.login.user.result.data.authToken ? 
+      successfullLogin() 
+      : failedLogin(apiData.infoMessages.login.fail.server.unknown);
+    } else if (appState.login.user.error) {
+      console.log(appState.login.user);
+      if (appState.login.user.error.toLowerCase() === 'unauthorized') {
+        return failedLogin(`${apiData.infoMessages.login.fail.server.noUser}`);
+      } else {
+        return failedLogin(`${appState.login.user.error}`);
+      }
+    } else {
+      return failedLogin(apiData.infoMessages.login.fail.server.unknown);
+    }
+  }
+}
+
+function successfullLogin() {
+  closeLoginMenu();
+  enterLoggedInSessionMode();
+  console.log(appState.login.user);
+}
+
+function failedLogin(message) {
+  console.clear(); 
+  if (!headerView.warningMessageExists()) {
+    headerView.renderLoginFailMessage(message);
   }
 }
 
 function closeLoginMenu() {
   headerView.closeLoginMenu();
+  headerView.clearLoginFormData();
+  if (headerView.warningMessageExists()) {
+    headerView.removeLoginFailMessage();
+  }
   detachEventListener([DOMelements.loginForm], 'submit', [loginSubmitEvent]);
   appState.registeredClickEvents.logInMenu = false;
 }
@@ -425,7 +470,7 @@ function logoutSubController() {
 
 function closeDropDownList() {
   headerView.closeDropDownList();
-  detachEventListener(    [DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
+  detachEventListener([DOMelements.navMenuItems.logedIn.dropDownList.myProfile,
   DOMelements.navMenuItems.logedIn.dropDownList.myRuns,
   DOMelements.navMenuItems.logedIn.dropDownList.analytics,
   DOMelements.navMenuItems.logedIn.dropDownList.logout],
@@ -476,12 +521,6 @@ function attachEventListener(elements, eventType, fns) {
       i++;
     });
   }
-}
-
-function clearInputFields(...fnArr) {
-  fnArr.forEach(fn => {
-    fn();
-  })
 }
 
 function deleteAllObjectProperties(obj) {

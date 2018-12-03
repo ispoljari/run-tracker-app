@@ -37,8 +37,11 @@ export const DOMstrings = {
       password: 'registration__input-password',
       repeatPassword: 'registration__input-repeatPassword'
     },
+    infoMessage: 'js-content__user-info'
   },
-  infoMessage: 'js-content__user-info'
+  loginForm: {
+    infoMessage: 'js-login__info'
+  }
 }
 
 export const DOMelements = {
@@ -78,6 +81,8 @@ export const DOMelements = {
   }
 }
 
+const serverFail = 'Something went wrong. Please refresh the page and try again.';
+
 export const apiData = {
   users: {
     url: '/api/users/'
@@ -85,17 +90,28 @@ export const apiData = {
   posts: {
     url: '/api/posts/'
   },
+  auth: {
+    url: '/api/auth/'
+  },
   infoMessages: {
     registration: {
       fail: {
-        server: 'Something went wrong. Please refresh the page and try again.',
+        server: serverFail,
         validation: {
           password: 'The passwords are not matching!'
         },
       },
       success: {
         info1: 'Success!',
-        info2: 'Redirecting to main page'
+        info2: 'Loading main page.'
+      }
+    },
+    login: {
+      fail: {
+        server: {
+          unknown: serverFail,
+          noUser: 'Login failed! Username or password not correct.'
+        }
       }
     }
   }

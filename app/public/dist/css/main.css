@@ -242,6 +242,17 @@ a {
   min-height: 30px;
 }
 
+.login__info {
+  /* Layout */
+  padding: 10px 10px 0 10px;
+}
+
+.login__info h2 {
+  /* Style */
+  font-size: 18px;
+  color: red;
+}
+
 /* Header Title text */
 
 .heading__title {

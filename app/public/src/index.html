@@ -82,6 +82,7 @@
           </div>
 
           <div class="login-menu js-login-menu login-menu--box-style">
+
             <form action="#" class="login__form js-login__form">
               <label>
                 Email (username):
@@ -89,7 +90,7 @@
               </label>
               <label>
                 Password:
-                <input type="password" name="password" placeholder="demo" class="login__input-password" required>
+                <input type="password" name="password" placeholder="demo123456" pattern=".{10,72}" title="10 characters minimum, 72 characters maximum" class="login__input-password" required>
               </label>
               <button type="form" class="btn-style">Login</button>
             </form>
