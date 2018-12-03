@@ -357,7 +357,6 @@ async function loginSubmitEvent(e) {
       successfullLogin() 
       : failedLogin(apiData.infoMessages.login.fail.server.unknown);
     } else if (appState.login.user.error) {
-      console.log(appState.login.user);
       if (appState.login.user.error.toLowerCase() === 'unauthorized') {
         return failedLogin(`${apiData.infoMessages.login.fail.server.noUser}`);
       } else {
@@ -372,7 +371,6 @@ async function loginSubmitEvent(e) {
 function successfullLogin() {
   closeLoginMenu();
   enterLoggedInSessionMode();
-  console.log(appState.login.user);
 }
 
 function failedLogin(message) {
