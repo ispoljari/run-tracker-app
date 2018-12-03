@@ -6,7 +6,7 @@ export const appState = {
     currentView: 'home',
     logginCredentials: {
       username: 'demo@run-tracker.test',
-      password: 'demo'
+      password: 'demo123456'
     },
     loggedIn: false
   },

@@ -231,7 +231,7 @@ async function registerSubmitEvent(e) {
   const newUser = mainView.getRegistrationFormData();
 
   newUser.name = `${newUser.firstName} ${newUser.lastName}`
-  newUser.displayName = newUser.firstName;
+  newUser.displayName = newUser.firstName
   newUser.avatar = Math.floor(Math.random()*30) + 1; // Assign a random avatar index during registration
 
   if (newUser) {
@@ -291,7 +291,7 @@ function transitionSuccessMessageForUser(messages, animate = false) {
   setTimeout(()=> {
     clearCurrentPage();
     renderHomePage();
-  }, 2000);
+  }, 1200);
 }
 
 function renderFailMessageForUser(messages, animate = false, position) {
@@ -328,8 +328,7 @@ function loginSubmitEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 
-  const username = headerView.getLoginUsername();
-  const password = headerView.getLoginPassword();
+  const existingUser= headerView.getLoginFormData();
 
   if (username === appState.session.logginCredentials.username && password === appState.session.logginCredentials.password) {
     appState.session.loggedIn = true;

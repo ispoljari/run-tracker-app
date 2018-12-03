@@ -85,6 +85,9 @@ export const apiData = {
   posts: {
     url: '/api/posts/'
   },
+  auth: {
+    url: '/api/auth/'
+  },
   infoMessages: {
     registration: {
       fail: {
@@ -95,7 +98,7 @@ export const apiData = {
       },
       success: {
         info1: 'Success!',
-        info2: 'Redirecting to main page'
+        info2: 'Loading main page.'
       }
     }
   }

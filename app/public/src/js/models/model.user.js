@@ -28,4 +28,20 @@ export default class User {
       this.error = error.response.data;
     }
   }
+
+  async login() {
+    try {
+      const res = await axios({
+        method: 'post',
+        url: apiData.auth.url,
+        data: {
+          username: this.username,
+          password: this.password,
+        }
+      });
+      this.result = res;
+    } catch (error) {
+      this.error = error.response.data
+    }
+  }
 }
