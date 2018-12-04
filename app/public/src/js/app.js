@@ -462,6 +462,7 @@ function analyticsViewSubController() {
 
 function logoutSubController() {
   appState.session.loggedIn = false;
+  deleteAllObjectProperties(appState.login);
   closeDropDownList();
   exitLoggedInSessionMode();
 }
