@@ -138,12 +138,24 @@ function navMenuClickEvent(e) {
   }
 }
 
-function addNewRunViewSubController() {
-  // some code
-  console.log('Add new run hello!');
-
+function addNewRunViewSubController() { // TODO:
   if (appState.session.currentView !== 'addNewRun') {
-    // some code
+    clearCurrentPage();
+    attachMutationObserver(DOMelements.mainContent)
+      .then(result => {
+        appState.mutationObserver.result = result;
+        // addNewRunController(); 
+      })
+      .then(()=> {
+        appState.mutationObserver.result.observer.disconnect();
+        deleteAllObjectProperties(appState.mutationObserver);
+      })
+      .catch(error => {
+        clearCurrentPage();
+        // failedRegistration(apiData.infoMessages.registration.fail.server);
+      });
+    
+    mainView.renderNewRunForm();
     appState.session.currentView = 'addNewRun';
   }
 }
@@ -168,6 +180,7 @@ function dropDownListSubController() {
       logoutSubController]
       );
   }
+
   // toggle event state
   appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
 }
@@ -498,6 +511,18 @@ function hideLoggedInMenuItems() {
   headerView.hideAnalyticsButton();
   headerView.hideAddNewRunButton();
   headerView.hideAvatarDropDownListButton();
+}
+
+/* ---------------------------------------- */
+/* -------- ADD NEW RUN CONTROLLER -------- */
+/* ---------------------------------------- */
+
+function addNewRunController() {
+  // attachEventListener([DOMelements.addNewRunForm], 'submit', [submitNewRunEvent]);
+}
+
+function submitNewRunEvent(e) {
+  // some code
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */

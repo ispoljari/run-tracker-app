@@ -196,6 +196,47 @@ export const renderProfileBanner = () => {
   appendHtmlToMainContent(htmlString);
 }
 
+// Add new run page
+
+export const renderNewRunForm = () => {
+
+  const htmlString = 
+  `<form action="#" class="registration js-registration">
+    <div class="registration__container">
+      <fieldset>
+        <div class="registration__legend">
+          <legend>Add New Run:</legend>
+        </div>
+
+        <div class="registration__first-name">
+          <label>
+            Distance(km):
+            <input type="number" name="distance" min="0" step="0.1" value="0" class="registration__input-first-name" required>
+          </label>
+        </div>
+
+        <div class="registration__last-name">
+          <label>
+            Run Time(min):
+            <input type="number" name="run-time" min="0" step="0.1" value="0" name="last-name" class="registration__input-last-name" required>
+          </label>
+        </div>
+
+        <div class="registration__email">
+          <label>
+            Date & Time:
+            <input type="email" name="email" placeholder="john.smith@gmail.com" class="registration__input-username" required>
+          </label>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="registration__submit btn-style">Submit</button>
+    </div>
+  </form>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
 // Help functions
 
 function appendHtmlToMainContent(html, position='beforeend') {

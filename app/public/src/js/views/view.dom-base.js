@@ -84,14 +84,10 @@ export const DOMelements = {
 const serverFail = 'Something went wrong. Please refresh the page and try again.';
 
 export const apiData = {
-  users: {
-    url: '/api/users/'
-  },
-  posts: {
-    url: '/api/posts/'
-  },
-  auth: {
-    url: '/api/auth/'
+  urls: {
+    users: '/api/users/',
+    posts:  '/api/posts/',
+    auth: '/api/auth/'
   },
   infoMessages: {
     registration: {
