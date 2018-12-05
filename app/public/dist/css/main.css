@@ -513,7 +513,7 @@ a {
   /* Styles */
   width: 100%;
   max-width: 420px;
-  background-color: #f6f2f2;
+  background-color: #fdf8f8;
   padding: 30px 10px;
   border-radius: 5px;
 }
@@ -595,7 +595,7 @@ a {
 
 .add-new-run {
   /* Style */
-	padding: 15px;
+	padding: 30px 15px;
 }
 
 .add-new-run h2 {
