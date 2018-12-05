@@ -616,6 +616,10 @@ a {
 	width:	100%;
 }
 
+.distance {
+  position: relative;
+}
+
 .title,
 .distance,
 .duration,
@@ -645,15 +649,17 @@ a {
 .distance__value {
   /* Layout */
 	display: inline-block;
-	width: 54%;
+	width: 53%;
 	max-width: 150px;
-	margin-right: 2%;
+	margin-right: 3px;
 }
 
 .distance__unit {
   /* Layout */
+  position: absolute;
+  bottom: 0;
 	display: inline-block;
-	width: 44%;
+	width: 46%;
 	max-width: 150px;
 }
 
@@ -666,7 +672,7 @@ a {
 }
 .date {
   /* Layout */
-	margin-right: 2%;
+  margin-right: 3px;
 }
 
 .title__container input,
@@ -685,9 +691,30 @@ a {
   width: 100%;
   
   /* Style */
-	padding: 4px;
-	border-radius: 3px;
+  background-color: white;
+  font-size: 18px;
+	border-radius: 5px;
 	border: 1px solid #cccccc;
+}
+
+.title__container input,
+.distance__value input,
+.duration__hours input,
+.duration__minutes input,
+.duration__seconds input,
+.date input,
+.time input {
+  padding: 2px 4px;
+}
+
+.distance__unit select,
+.run-type select,
+.privacy select {
+  padding: 0 2px;
+}
+
+.description textarea {
+  padding: 6px 2px 2px 6px;
 }
 
 .run-type select,
@@ -709,7 +736,7 @@ a {
 	position: relative;
 	width: 32%;
 	display: inline-block;
-	margin-right: 2%;
+	margin-right: 3px;
 }
 
 .duration__seconds {
@@ -839,7 +866,44 @@ footer {
 @media only screen and (min-width: 820px) {
 	.vertical-offset-column {
 		margin-top: 0;
-	}
+  }
+  
+  .add-new-run h2 {
+    /* Style */
+    font-size: 24px;
+  }
+
+  .title legend,
+  .distance legend,
+  .duration legend,
+  .run-type legend,
+  .date-time legend,
+  .description legend,
+  .privacy legend,
+  .title__container input,
+  .distance__value input,
+  .duration__hours input,
+  .duration__minutes input,
+  .duration__seconds input,
+  .distance__unit select,
+  .run-type select,
+  .date input,
+  .time input,
+  .description textarea,
+  .privacy select {
+    /* Style */
+    font-size: 20px;
+  }
+
+  .distance__value {
+    width: 45%;
+  }
+
+  .distance__unit select,
+  .run-type select {
+    padding: 1px 2px;
+  }
+  
 }
 
 /* ------------------------------------------------- */

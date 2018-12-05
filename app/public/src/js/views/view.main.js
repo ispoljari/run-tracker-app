@@ -205,7 +205,7 @@ export const renderNewRunForm = () => {
     <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
-          <h2>Create New Run</h2>
+          <h2>Add New Run</h2>
         </div>
       </div>
     </div>
