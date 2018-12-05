@@ -606,7 +606,7 @@ a {
 .vertical-offset-column,
 .vertical-offset-row {
   /* Layout */
-	margin-top: 15px;
+	margin-top: 25px;
 }
 
 .form-inner-container {
@@ -643,7 +643,7 @@ a {
   font-size: 18px;
   
   /* Layout */
-	margin-bottom: 3px;
+	margin-bottom: 10px;
 }
 
 .distance__value {
@@ -758,6 +758,21 @@ a {
 	color: #ccccd1;
 }
 
+.horizontal-ruler {
+  width: 100%;
+  max-width: 490px;
+  margin: 20px auto 20px auto;
+  border: 1px solid #e3e3e3;
+}
+
+.new-run__submit {
+  /* Layout */
+  display: block;
+
+  /* Layout */
+  max-width: 250px;
+}
+
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
 /* ------------------------------------------------- */
@@ -821,7 +836,11 @@ footer {
 
   .form-inner-container {
 		width: 90%;
-	}
+  }
+  
+  .horizontal-ruler {
+    width: 90%;
+  }
 }
 
 

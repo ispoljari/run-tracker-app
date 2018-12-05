@@ -223,8 +223,14 @@ export const renderNewRunForm = () => {
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-12">
+        <hr class="horizontal-ruler">
+      </div>
+    </div>
     
-    <div class="row vertical-offset-row">
+    <div class="row">
       <div class="form-inner-container">
         <div class="col-6">
           <fieldset class="distance">
@@ -266,7 +272,13 @@ export const renderNewRunForm = () => {
       </div>
     </div>
 
-    <div class="row vertical-offset-row">
+    <div class="row">
+      <div class="col-12">
+        <hr class="horizontal-ruler">
+      </div>
+    </div>
+
+    <div class="row">
       <div class="form-inner-container">
         <div class="col-6">
           <fieldset class="run-type">
@@ -297,7 +309,13 @@ export const renderNewRunForm = () => {
       </div>
     </div>
 
-    <div class="row vertical-offset-row">
+    <div class="row">
+      <div class="col-12">
+        <hr class="horizontal-ruler">
+      </div>
+    </div>
+
+    <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
           <fieldset class="description">
@@ -328,6 +346,21 @@ export const renderNewRunForm = () => {
         </div>
       </div>
     </div> 
+
+    <div class="row">
+      <div class="col-12">
+        <hr class="horizontal-ruler">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-inner-container">
+        <div class="col-12">
+          <button type="submit" class="new-run__submit btn-style">Create</button>
+        </div>
+      </div>
+    </div>
+    
   </form>`
 
   appendHtmlToMainContent(htmlString);
