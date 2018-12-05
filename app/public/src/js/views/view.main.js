@@ -109,40 +109,40 @@ export const renderRegistrationForm = () => {
     <div class="registration__container">
       <fieldset>
         <div class="registration__legend">
-          <legend>Create New Account:</legend>
+          <legend>Create New Account</legend>
         </div>
 
         <div class="registration__first-name">
           <label>
-            First Name:
+            First Name
             <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed" placeholder="John" name="first-name" class="registration__input-first-name" required>
           </label>
         </div>
 
         <div class="registration__last-name">
           <label>
-            Last Name:
+            Last Name
             <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed" placeholder="Smith" name="last-name" class="registration__input-last-name" required>
           </label>
         </div>
 
         <div class="registration__email">
           <label>
-            Email (username):
+            Email (username)
             <input type="email" name="email" placeholder="john.smith@gmail.com" class="registration__input-username" required>
           </label>
         </div>
         
         <div class="registration__password">
           <label>
-            Password:
+            Password
             <input type="password" name="password" placeholder="abcd1234" pattern=".{10,72}" title="10 characters minimum, 72 characters maximum" class="registration__input-password" required>
           </label>
         </div>
 
         <div class="registration__password-confirm">
           <label>
-            Confirm Password:
+            Confirm Password
             <input type="password" placeholder="abcd1234" pattern=".{10,72}" title="10 characters minimum, 72 characters maximum" name="password-confirm" class="registration__input-repeatPassword" required>
           </label>
         </div>
@@ -217,7 +217,7 @@ export const renderNewRunForm = () => {
             <legend>Title</legend>
             <div class="title__container">
               <label for="title__input" class="title__label"></label>
-              <input type="text" placeholder="Relaxing Afternoon Run" name="title" id="title__input"/>
+              <input type="text" placeholder="Relaxing Afternoon Run" name="title" id="title__input" required/>
             </div>
           </fieldset>	
         </div>
@@ -237,7 +237,7 @@ export const renderNewRunForm = () => {
             <legend>Distance</legend>
             <div class="distance__value">
               <label for="distance__value-input" class="distance__value-label"></label>
-              <input type="number" min="0.01" max="9999" placeholder="0" name="distance-value" id="distance__value-input"/>
+              <input type="number" min="0.01" max="9999" placeholder="0" value="0" name="distance-value" id="distance__value-input" required/>
             </div>
             <div class="distance__unit">
               <label for="distance__unit-select" class="distance__unit-label"></label>
@@ -257,15 +257,15 @@ export const renderNewRunForm = () => {
             <legend>Duration</legend>
             <div class="duration__hours">
               <label for="duration__hours-input" class="duration__hours-label">hr</label>
-              <input type="number" min="0" max="9999" placeholder="0" step="1" name="duration-hours"  id="duration__hours-input"/>
+              <input type="number" min="0" max="9999" placeholder="0" value="0" step="1" name="duration-hours"  id="duration__hours-input" required/>
             </div>
             <div class="duration__minutes">
               <label for="duration__minutes-input" class="duration__minutes-label">min</label>
-              <input type="number" min="0" max="59" placeholder="00" step="1"  name="duration-minutes"  id="duration__minutes-input"/>
+              <input type="number" min="0" max="59" placeholder="00" value="00" step="1"  name="duration-minutes"  id="duration__minutes-input" required/>
             </div>
             <div class="duration__seconds">
               <label for="duration__seconds-input" class="duration__seconds-label">s</label>
-              <input type="number" min="0" max="59" placeholder="00" step="1" name="duration-seconds"  id="duration__seconds-input"/>
+              <input type="number" min="0" max="59" placeholder="00" value="00" step="1" name="duration-seconds"  id="duration__seconds-input" required/>
             </div>
           </fieldset>
         </div>
@@ -298,11 +298,11 @@ export const renderNewRunForm = () => {
             <legend>Date & Time</legend>
             <div class="date">
               <label for="date-input" class="date-label"></label>
-              <input type="text" placeholder="18/05/2018" name="date"  id="date-input"/>
+              <input type="text" placeholder="18/05/2018" name="date"  id="date-input" required/>
             </div>
             <div class="time">
               <label for="time-input" class="time-label"></label>
-              <input type="text" placeholder="10:00" name="time"  id="time-input"/>
+              <input type="text" placeholder="10:00" name="time"  id="time-input" required/>
             </div>	
           </fieldset>					
         </div>

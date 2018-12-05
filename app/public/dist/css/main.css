@@ -514,7 +514,7 @@ a {
   width: 100%;
   max-width: 420px;
   background-color: #fdf8f8;
-  padding: 30px 10px;
+  padding: 30px 15px;
   border-radius: 5px;
 }
 
@@ -525,7 +525,7 @@ a {
 
   /* Styles */
   max-width: 250px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
 }
 
@@ -534,16 +534,17 @@ a {
   display: block;
 
   /* Styles */
-  font-weight: bold;
+  font-size: 18px;
 }
 
 .registration input {
   /* Layout */
   display: block;
-  margin-top: 6px;
+  margin-top: 10px;
 
   /* Styles */
-  padding: 5px;
+  font-size: 18px;
+  padding: 4px;
   min-width: 250px;
   border: 1px solid #cccccc;
   border-radius: 5px;
@@ -561,7 +562,7 @@ a {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-top: 12px;
+  margin-top: 25px;
 }
 
 .registration__legend {
