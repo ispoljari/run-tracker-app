@@ -201,37 +201,133 @@ export const renderProfileBanner = () => {
 export const renderNewRunForm = () => {
 
   const htmlString = 
-  `<form action="#" class="registration js-registration">
-    <div class="registration__container">
-      <fieldset>
-        <div class="registration__legend">
-          <legend>Add New Run:</legend>
+  `<form class="add-new-run">
+    <div class="row">
+      <div class="form-inner-container">
+        <div class="col-12">
+          <h2>Create New Run</h2>
         </div>
-
-        <div class="registration__first-name">
-          <label>
-            Distance(km):
-            <input type="number" name="distance" min="0" step="0.1" value="0" class="registration__input-first-name" required>
-          </label>
-        </div>
-
-        <div class="registration__last-name">
-          <label>
-            Run Time(min):
-            <input type="number" name="run-time" min="0" step="0.1" value="0" name="last-name" class="registration__input-last-name" required>
-          </label>
-        </div>
-
-        <div class="registration__email">
-          <label>
-            Date & Time:
-            <input type="email" name="email" placeholder="john.smith@gmail.com" class="registration__input-username" required>
-          </label>
-        </div>
-      </fieldset>
-
-      <button type="submit" class="registration__submit btn-style">Submit</button>
+      </div>
     </div>
+
+    <div class="row vertical-offset-row">
+      <div class="form-inner-container">
+        <div class="col-12">
+          <fieldset class="title">
+            <legend>Title</legend>
+            <div class="title__container">
+              <label for="title__input" class="title__label"></label>
+              <input type="text" placeholder="Relaxing Afternoon Run" name="title" id="title__input"/>
+            </div>
+          </fieldset>	
+        </div>
+      </div>
+    </div>
+    
+    <div class="row vertical-offset-row">
+      <div class="form-inner-container">
+        <div class="col-6">
+          <fieldset class="distance">
+            <legend>Distance</legend>
+            <div class="distance__value">
+              <label for="distance__value-input" class="distance__value-label"></label>
+              <input type="number" min="0.01" max="9999" placeholder="0" name="distance-value" id="distance__value-input"/>
+            </div>
+            <div class="distance__unit">
+              <label for="distance__unit-select" class="distance__unit-label"></label>
+              <select name="distance-unit" id="distance__unit-select" required>
+                <option value="">Select Unit Type</option>
+                <option value="km">kilometers</option>
+                <option value="m" selected>meters</option>
+                <option value="mi">miles</option>
+                <option value="yd">yards</option>
+              </select>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="col-6 vertical-offset-column">
+          <fieldset class="duration">
+            <legend>Duration</legend>
+            <div class="duration__hours">
+              <label for="duration__hours-input" class="duration__hours-label">hr</label>
+              <input type="number" min="0" max="9999" placeholder="0" step="1" name="duration-hours"  id="duration__hours-input"/>
+            </div>
+            <div class="duration__minutes">
+              <label for="duration__minutes-input" class="duration__minutes-label">min</label>
+              <input type="number" min="0" max="59" placeholder="00" step="1"  name="duration-minutes"  id="duration__minutes-input"/>
+            </div>
+            <div class="duration__seconds">
+              <label for="duration__seconds-input" class="duration__seconds-label">s</label>
+              <input type="number" min="0" max="59" placeholder="00" step="1" name="duration-seconds"  id="duration__seconds-input"/>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="row vertical-offset-row">
+      <div class="form-inner-container">
+        <div class="col-6">
+          <fieldset class="run-type">
+            <legend>Run Type</legend>
+            <div class="run-type__container">
+              <label for="run-type__select" class="run-type__label"></label>
+              <select name="run-type" id="run-type__select" required>
+                <option value="">Select Run Type</option>
+                <option value="race">Race</option>
+                <option value="workout" selected>Workout</option>
+              </select>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-6 vertical-offset-column">
+          <fieldset class="date-time">
+            <legend>Date & Time</legend>
+            <div class="date">
+              <label for="date-input" class="date-label"></label>
+              <input type="text" placeholder="18/05/2018" name="date"  id="date-input"/>
+            </div>
+            <div class="time">
+              <label for="time-input" class="time-label"></label>
+              <input type="text" placeholder="10:00" name="time"  id="time-input"/>
+            </div>	
+          </fieldset>					
+        </div>
+      </div>
+    </div>
+
+    <div class="row vertical-offset-row">
+      <div class="form-inner-container">
+        <div class="col-12">
+          <fieldset class="description">
+              <legend>Description</legend>
+              <div class="description__container">
+                <label for="description__input" class="description__label"></label>
+                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input"></textarea>
+              </div>
+          </fieldset>	
+        </div>
+      </div>
+    </div>
+
+    <div class="row vertical-offset-row">
+      <div class="form-inner-container">
+        <div class="col-12">
+          <fieldset class="privacy">
+            <legend>Privacy</legend>
+            <div class="privacy__container">
+              <label for="privacy__select" class="privacy__label"></label>
+              <select name="privacy" id="privacy__select" required>
+                <option value="">Select Privacy Type</option>
+                <option value="you">Only You</option>
+                <option value="everyone" selected>Everyone</option>
+              </select>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div> 
   </form>`
 
   appendHtmlToMainContent(htmlString);

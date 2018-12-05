@@ -4,6 +4,8 @@
 
 body {
   letter-spacing: 0.0525em;
+  color: black;
+
 }
 
 .header {
@@ -511,7 +513,7 @@ a {
   /* Styles */
   width: 100%;
   max-width: 420px;
-  background-color: #e5e5e5;
+  background-color: #f6f2f2;
   padding: 30px 10px;
   border-radius: 5px;
 }
@@ -589,6 +591,146 @@ a {
           box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
 }
 
+/* --------------- ADD NEW RUN FORM --------------- */
+
+.add-new-run {
+  /* Style */
+	padding: 15px;
+}
+
+.add-new-run h2 {
+  /* Style */
+	font-size: 22px;
+}
+
+.vertical-offset-column,
+.vertical-offset-row {
+  /* Layout */
+	margin-top: 15px;
+}
+
+.form-inner-container {
+  /* Layout */
+	margin: 0 auto;
+	max-width: 500px;
+	width:	100%;
+}
+
+.title,
+.distance,
+.duration,
+.run-type,
+.date-time,
+.description,
+.privacy {
+  /* Style */
+	font-size: 0;
+	border: 0;
+}
+
+.title legend,
+.distance legend,
+.duration legend,
+.run-type legend,
+.date-time legend,
+.description legend,
+.privacy legend {
+  /* Style */
+  font-size: 18px;
+  
+  /* Layout */
+	margin-bottom: 3px;
+}
+
+.distance__value {
+  /* Layout */
+	display: inline-block;
+	width: 54%;
+	max-width: 150px;
+	margin-right: 2%;
+}
+
+.distance__unit {
+  /* Layout */
+	display: inline-block;
+	width: 44%;
+	max-width: 150px;
+}
+
+.date,
+.time {
+  /* Layout */
+	max-width: 150px;
+  display: inline-block;
+  width: 49%;
+}
+.date {
+  /* Layout */
+	margin-right: 2%;
+}
+
+.title__container input,
+.distance__value input,
+.duration__hours input,
+.duration__minutes input,
+.duration__seconds input,
+.distance__unit select,
+.run-type select,
+.date input,
+.time input,
+.description textarea,
+.privacy select {
+  /* Layout */
+	min-height: 25px;
+  width: 100%;
+  
+  /* Style */
+	padding: 4px;
+	border-radius: 3px;
+	border: 1px solid #cccccc;
+}
+
+.run-type select,
+.privacy select {
+  /* Layout */
+	max-width: 150px;
+}
+
+.description textarea {
+  /* Style */
+	min-height: 150px;
+}
+
+.duration__hours,
+.duration__minutes,
+.duration__seconds {
+  /* Layout */
+	max-width: 150px;
+	position: relative;
+	width: 32%;
+	display: inline-block;
+	margin-right: 2%;
+}
+
+.duration__seconds {
+  /* Layout */
+	margin-right: 0;
+}
+
+
+.duration__hours label,
+.duration__minutes label,
+.duration__seconds label {
+  /* Layout */
+	position: absolute;
+	top: 5px;
+  right: 10px;
+  
+  /* Style */
+	font-size: 10px;
+	color: #ccccd1;
+}
+
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
 /* ------------------------------------------------- */
@@ -649,6 +791,10 @@ footer {
   .login-menu {
     top: 56px;
   }
+
+  .form-inner-container {
+		width: 90%;
+	}
 }
 
 
@@ -688,6 +834,12 @@ footer {
   .login-menu {
     top: 61px;
   }
+}
+
+@media only screen and (min-width: 820px) {
+	.vertical-offset-column {
+		margin-top: 0;
+	}
 }
 
 /* ------------------------------------------------- */
