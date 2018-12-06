@@ -375,13 +375,13 @@ export const getNewRunFormData = () => {
   return {
     runTitle: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runTitle}`).value,
     distance: {
-      value: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value,
+      value: parseInt(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value, 10),
       unit: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.unit}`).value
     },
     duration: {
-      hours: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.hours}`).value,
-      minutes: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.minutes}`).value,
-      seconds: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.seconds}`).value
+      hours: parseInt(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.hours}`).value, 10),
+      minutes: parseInt(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.minutes}`).value, 10),
+      seconds: parseInt(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.seconds}`).value, 10)
     },
     runType: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runType}`).value,
     date: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.date}`).value,

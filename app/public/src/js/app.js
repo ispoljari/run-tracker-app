@@ -538,16 +538,32 @@ function submitNewRunEvent(e) {
 
   // 2) read values from input fields
   const newPost = mainView.getNewRunFormData();
+  console.log(newPost);
 
-  // 3) create a new instance of Post object
+  if (newPost) {
 
-  // 4) POST to endpoint /api/posts/ using provided JWT token
+    // 2.1) client-side validation of input data
+    console.log(typeof newPost.runTitle);
+    console.log(typeof newPost.distance.value);
+    console.log(typeof newPost.distance.unit);
+    console.log(typeof newPost.duration.hours);
+    console.log(typeof newPost.duration.minutes);
+    console.log(typeof newPost.duration.seconds);
+    console.log(typeof newPost.runType);
+    console.log(typeof newPost.description);
 
-  // 5) read and store the returned data
 
-  // 6) validate errors, if any
+    // 2.2) aggregate required data before sending to the server
+  
+    // 3) create a new instance of Post object
+  
+    // 4) POST to endpoint /api/posts/ using provided JWT token
+  
+    // 5) read and store the returned data
+  
+    // 6) validate server-side errors, if any
 
-
+  }
   console.log('Hello!');
 }
 
