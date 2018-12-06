@@ -538,7 +538,6 @@ function submitNewRunEvent(e) {
 
   // 2) read values from input fields
   const newPost = mainView.getNewRunFormData();
-  console.log(newPost);
 
   // 3) create a new instance of Post object
 

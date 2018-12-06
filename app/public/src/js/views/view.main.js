@@ -237,7 +237,7 @@ export const renderNewRunForm = () => {
             <legend>Distance</legend>
             <div class="distance__value">
               <label for="distance__value-input" class="distance__value-label"></label>
-              <input type="number" min="0.01" max="9999" placeholder="0" value="0" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
+              <input type="number" min="0.01" max="9999" step="0.01" placeholder="0" value="0" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
             </div>
             <div class="distance__unit">
               <label for="distance__unit-select" class="distance__unit-label"></label>
