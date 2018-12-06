@@ -298,11 +298,11 @@ export const renderNewRunForm = () => {
             <legend>Date & Time</legend>
             <div class="date">
               <label for="date-input" class="date-label"></label>
-              <input type="text" placeholder="18/05/2018" name="date"  id="date-input" required/>
+              <input type="date" value="2018-12-08" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} name="date"  id="date-input" required/>
             </div>
             <div class="time">
               <label for="time-input" class="time-label"></label>
-              <input type="text" placeholder="10:00" name="time"  id="time-input" required/>
+              <input type="time" value="10:00" name="time"  id="time-input" required/>
             </div>	
           </fieldset>					
         </div>
