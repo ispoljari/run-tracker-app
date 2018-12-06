@@ -364,6 +364,11 @@ export const renderNewRunForm = () => {
   </form>`
 
   appendHtmlToMainContent(htmlString);
+  DOMelements.mainContent.classList.add(controledHooksStrings.addNewRunBackground);
+}
+
+export const removeNewRunFormBackground = () => {
+  DOMelements.mainContent.classList.remove(controledHooksStrings.addNewRunBackground);
 }
 
 // Help functions

@@ -97,6 +97,8 @@ function clearCurrentPage() {
   if (appState.session.currentView === 'home') {
     headerView.removeIntroHeading();
     footerView.removeIconsCredit(); 
+  } else if (appState.session.currentView === 'addNewRun') {
+    mainView.removeNewRunFormBackground();
   }
 
   mainView.removeMainContent(); 

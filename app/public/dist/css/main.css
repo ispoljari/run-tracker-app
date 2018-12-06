@@ -950,3 +950,9 @@ footer {
   /* Style */
   color: red;
 }
+
+.add-new-run__form--background {
+  /* Style */
+  background-color: #fdf8f8;
+  border-radius: 5px;
+}

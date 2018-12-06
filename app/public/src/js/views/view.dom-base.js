@@ -23,7 +23,8 @@ export const controledHooksStrings = {
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
   navMenuItemHide: 'menu__item--hidden',
-  warningMessageStyle: 'content__user-info--warning'
+  warningMessageStyle: 'content__user-info--warning',
+  addNewRunBackground: 'add-new-run__form--background'
 }
 
 export const DOMstrings = {
