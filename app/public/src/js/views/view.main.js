@@ -217,7 +217,7 @@ export const renderNewRunForm = () => {
             <legend>Title</legend>
             <div class="title__container">
               <label for="title__input" class="title__label"></label>
-              <input type="text" placeholder="Relaxing Afternoon Run" name="title" id="title__input" required/>
+              <input type="text" placeholder="Relaxing Afternoon Run" name="title" id="title__input" class="js-add-new-run__title" required/>
             </div>
           </fieldset>	
         </div>
@@ -237,11 +237,11 @@ export const renderNewRunForm = () => {
             <legend>Distance</legend>
             <div class="distance__value">
               <label for="distance__value-input" class="distance__value-label"></label>
-              <input type="number" min="0.01" max="9999" placeholder="0" value="0" name="distance-value" id="distance__value-input" required/>
+              <input type="number" min="0.01" max="9999" placeholder="0" value="0" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
             </div>
             <div class="distance__unit">
               <label for="distance__unit-select" class="distance__unit-label"></label>
-              <select name="distance-unit" id="distance__unit-select" required>
+              <select name="distance-unit" id="distance__unit-select" class="js-add-new-run__distance-unit" required>
                 <option value="">Select Unit Type</option>
                 <option value="km">kilometers</option>
                 <option value="m" selected>meters</option>
@@ -257,15 +257,15 @@ export const renderNewRunForm = () => {
             <legend>Duration</legend>
             <div class="duration__hours">
               <label for="duration__hours-input" class="duration__hours-label">hr</label>
-              <input type="number" min="0" max="9999" placeholder="0" value="0" step="1" name="duration-hours"  id="duration__hours-input" required/>
+              <input type="number" min="0" max="9999" placeholder="0" value="0" step="1" name="duration-hours"  id="duration__hours-input" class="js-add-new-run__duration-hours" required/>
             </div>
             <div class="duration__minutes">
               <label for="duration__minutes-input" class="duration__minutes-label">min</label>
-              <input type="number" min="0" max="59" placeholder="00" value="00" step="1"  name="duration-minutes"  id="duration__minutes-input" required/>
+              <input type="number" min="0" max="59" placeholder="00" value="00" step="1"  name="duration-minutes"  id="duration__minutes-input" class="js-add-new-run__duration-minutes" required/>
             </div>
             <div class="duration__seconds">
               <label for="duration__seconds-input" class="duration__seconds-label">s</label>
-              <input type="number" min="0" max="59" placeholder="00" value="00" step="1" name="duration-seconds"  id="duration__seconds-input" required/>
+              <input type="number" min="0" max="59" placeholder="00" value="00" step="1" name="duration-seconds"  id="duration__seconds-input" class="js-add-new-run__duration-seconds" required/>
             </div>
           </fieldset>
         </div>
@@ -285,7 +285,7 @@ export const renderNewRunForm = () => {
             <legend>Run Type</legend>
             <div class="run-type__container">
               <label for="run-type__select" class="run-type__label"></label>
-              <select name="run-type" id="run-type__select" required>
+              <select name="run-type" id="run-type__select" class="js-add-new-run__run-type" required>
                 <option value="">Select Run Type</option>
                 <option value="race">Race</option>
                 <option value="workout" selected>Workout</option>
@@ -298,11 +298,11 @@ export const renderNewRunForm = () => {
             <legend>Date & Time</legend>
             <div class="date">
               <label for="date-input" class="date-label"></label>
-              <input type="date" value="2018-12-08" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} name="date"  id="date-input" required/>
+              <input type="date" value="2018-12-08" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} name="date"  id="date-input" class="js-add-new-run__date" required/>
             </div>
             <div class="time">
               <label for="time-input" class="time-label"></label>
-              <input type="time" value="10:00" name="time"  id="time-input" required/>
+              <input type="time" value="10:00" name="time"  id="time-input" class="js-add-new-run__time" required/>
             </div>	
           </fieldset>					
         </div>
@@ -322,7 +322,7 @@ export const renderNewRunForm = () => {
               <legend>Description</legend>
               <div class="description__container">
                 <label for="description__input" class="description__label"></label>
-                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input"></textarea>
+                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description"></textarea>
               </div>
           </fieldset>	
         </div>
@@ -336,7 +336,7 @@ export const renderNewRunForm = () => {
             <legend>Privacy</legend>
             <div class="privacy__container">
               <label for="privacy__select" class="privacy__label"></label>
-              <select name="privacy" id="privacy__select" required>
+              <select name="privacy" id="privacy__select" class="js-add-new-run__privacy" required>
                 <option value="">Select Privacy Type</option>
                 <option value="you">Only You</option>
                 <option value="everyone" selected>Everyone</option>
@@ -370,6 +370,34 @@ export const renderNewRunForm = () => {
 export const removeNewRunFormBackground = () => {
   DOMelements.mainContent.classList.remove(controledHooksStrings.addNewRunBackground);
 }
+
+export const getNewRunFormData = () => {  
+  return {
+    runTitle: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runTitle}`).value,
+    distance: {
+      value: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value,
+      unit: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.unit}`).value
+    },
+    duration: {
+      hours: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.hours}`).value,
+      minutes: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.minutes}`).value,
+      seconds: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.seconds}`).value
+    },
+    runType: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runType}`).value,
+    date: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.date}`).value,
+    time: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.time}`).value,
+    description:  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.description}`).value,
+    privacy:  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.privacy}`).value
+  }
+}
+
+// export const clearNewRunFormData = () => {
+//   document.querySelector(`.${DOMstrings.registerForm.inputFields.firstName}`).value = '',
+//   document.querySelector(`.${DOMstrings.registerForm.inputFields.lastName}`).value = '',
+//   document.querySelector(`.${DOMstrings.registerForm.inputFields.username}`).value = '',
+//   document.querySelector(`.${DOMstrings.registerForm.inputFields.password}`).value = '',
+//   document.querySelector(`.${DOMstrings.registerForm.inputFields.repeatPassword}`).value = ''
+// }
 
 // Help functions
 

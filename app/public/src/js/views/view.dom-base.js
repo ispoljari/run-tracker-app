@@ -42,6 +42,25 @@ export const DOMstrings = {
   },
   loginForm: {
     infoMessage: 'js-login__info'
+  },
+  addNewRunForm: {
+    inputFields: {
+      runTitle: 'js-add-new-run__title',
+      distance: {
+        value: 'js-add-new-run__distance-value',
+        unit: 'js-add-new-run__distance-unit'
+      },
+      duration: {
+        hours: 'js-add-new-run__duration-hours',
+        minutes: 'js-add-new-run__duration-minutes',
+        seconds: 'js-add-new-run__duration-seconds'
+      },
+      runType: 'js-add-new-run__run-type',
+      date: 'js-add-new-run__date',
+      time: 'js-add-new-run__time',
+      description: 'js-add-new-run__description',
+      privacy: 'js-add-new-run__privacy'
+    }
   }
 }
 

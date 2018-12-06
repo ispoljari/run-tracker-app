@@ -107,7 +107,12 @@ function clearCurrentPage() {
   if (appState.registeredClickEvents.registerForm) {
     detachEventListener([DOMelements.mainContent], 'submit', [registerSubmitEvent]);
     appState.registeredClickEvents.registerForm = false;
+  } else if (appState.registeredClickEvents.addNewRunForm) {
+    detachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+    appState.registeredClickEvents.addNewRunForm = false;
   }
+
+
 }
 
 /* ---------------------------------------- */
@@ -146,7 +151,7 @@ function addNewRunViewSubController() { // TODO:
     attachMutationObserver(DOMelements.mainContent)
       .then(result => {
         appState.mutationObserver.result = result;
-        // addNewRunController(); 
+        addNewRunController(); 
       })
       .then(()=> {
         appState.mutationObserver.result.observer.disconnect();
@@ -520,11 +525,31 @@ function hideLoggedInMenuItems() {
 /* ---------------------------------------- */
 
 function addNewRunController() {
-  // attachEventListener([DOMelements.addNewRunForm], 'submit', [submitNewRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+  appState.registeredClickEvents.addNewRunForm = true;
 }
 
 function submitNewRunEvent(e) {
   // some code
+  e.stopPropagation();
+  e.preventDefault();
+
+  // 1) check if warning errors exist
+
+  // 2) read values from input fields
+  const newPost = mainView.getNewRunFormData();
+  console.log(newPost);
+
+  // 3) create a new instance of Post object
+
+  // 4) POST to endpoint /api/posts/ using provided JWT token
+
+  // 5) read and store the returned data
+
+  // 6) validate errors, if any
+
+
+  console.log('Hello!');
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
