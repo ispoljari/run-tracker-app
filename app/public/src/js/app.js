@@ -539,7 +539,6 @@ async function submitNewRunEvent(e) {
 
   // 2) read values from input fields
   const newPost = mainView.getNewRunFormData();
-  console.log(newPost);
 
   if (newPost) {
 
@@ -550,16 +549,32 @@ async function submitNewRunEvent(e) {
     // 3) create a new instance of Post object
     appState.login.post = new Post(newPost);
 
+    // 4) POST to endpoint /api/posts/ using provided JWT token
     await appState.login.post.createNew();
     console.log(appState.login.post);
-    // 4) POST to endpoint /api/posts/ using provided JWT token
   
     // 5) read and store the returned data
+    // if (appState.login.post.result) {
+    //   appState.login.post.result.status === 201 
+    //   && allDataFieldsStoredToDB() ? 
+    //   successfullLogin() 
+    //   : 'Login fail!';
+    // }
+    console.log(allDataFieldsStoredToDB());
   
     // 6) validate server-side errors, if any
 
   }
   console.log('Hello!');
+}
+
+function allDataFieldsStoredToDB() {
+  return Object.keys(appState.login.post).forEach(sentField => {
+    if ((sentField in appState.login.post.result.data) && sentField !== 'result') {
+      return false;
+    }
+    return true;
+  });
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
