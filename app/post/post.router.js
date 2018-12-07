@@ -153,7 +153,7 @@ router.put('/:id', jwtAuth, (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['distance', 'runTime', 'dateTime'];
+  const updateableFields = ['title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy']; // TODO: add upvotes
   
   updateableFields.forEach(field => {
     if (field in req.body) {

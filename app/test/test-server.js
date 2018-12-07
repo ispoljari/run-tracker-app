@@ -496,7 +496,7 @@ describe('///////////// API RESOURCES //////////', function() {
               res.body.forEach(function(post) {
                 expect(post).to.be.a('object');
                 expect(post).to.include.keys(
-                  'distance', 'runTime', 'dateTime', 'user'
+                  'title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy', 'upvotes', 'id', 'user'
                 );
               });
 
@@ -504,9 +504,18 @@ describe('///////////// API RESOURCES //////////', function() {
             })
             .then(function(post) {
               expect(res.body[0].id).to.equal(post.id);
-              expect(res.body[0].distance).to.equal(post.distance);
-              expect(res.body[0].runTime).to.equal(post.runTime);
-              expect(res.body[0].dateTime).to.equal(post.dateTime);
+              expect(res.body[0].title).to.equal(post.title);
+              expect(res.body[0].distanceValue).to.equal(post.distanceValue);
+              expect(res.body[0].distanceUnit).to.equal(post.distanceUnit);
+              expect(res.body[0].durationHours).to.equal(post.durationHours);
+              expect(res.body[0].durationMinutes).to.equal(post.durationMinutes);
+              expect(res.body[0].durationSeconds).to.equal(post.durationSeconds);
+              expect(res.body[0].runType).to.equal(post.runType);
+              expect(res.body[0].date).to.equal(post.date);
+              expect(res.body[0].time).to.equal(post.time);
+              expect(res.body[0].description).to.equal(post.description);
+              expect(res.body[0].privacy).to.equal(post.privacy);
+              expect(res.body[0].user.id).to.equal(post.user.toString());
 
               return Post.countDocuments();
             })
@@ -530,16 +539,25 @@ describe('///////////// API RESOURCES //////////', function() {
                   expect(res).to.have.status(HTTP_STATUS_CODES.OK);
                   expect(res.body).to.be.a('object');
                   expect(res.body).to.include.keys(
-                    'distance', 'runTime', 'dateTime', 'user'
+                    'title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy', 'upvotes', 'id', 'user'
                   );
 
                   return Post.findById(res.body.id)
                 })
                 .then(function(post) {
                   expect(res.body.id).to.equal(post.id);
-                  expect(res.body.distance).to.equal(post.distance);
-                  expect(res.body.runTime).to.equal(post.runTime);
-                  expect(res.body.dateTime).to.equal(post.dateTime);
+                  expect(res.body.title).to.equal(post.title);
+                  expect(res.body.distanceValue).to.equal(post.distanceValue);
+                  expect(res.body.distanceUnit).to.equal(post.distanceUnit);
+                  expect(res.body.durationHours).to.equal(post.durationHours);
+                  expect(res.body.durationMinutes).to.equal(post.durationMinutes);
+                  expect(res.body.durationSeconds).to.equal(post.durationSeconds);
+                  expect(res.body.runType).to.equal(post.runType);
+                  expect(res.body.date).to.equal(post.date);
+                  expect(res.body.time).to.equal(post.time);
+                  expect(res.body.description).to.equal(post.description);
+                  expect(res.body.privacy).to.equal(post.privacy);
+                  expect(res.body.user.id).to.equal(post.user.toString());
                 });
             });
         });
@@ -550,7 +568,6 @@ describe('///////////// API RESOURCES //////////', function() {
         // Test the normal case
         it('Should update the data fields of a post with a specific ID', function() {
           const updateData = generatePostData();
-          delete updateData.user;
           delete updateData.upvotes[0];
 
           return Post.findOne()
@@ -568,9 +585,17 @@ describe('///////////// API RESOURCES //////////', function() {
               return Post.findById(updateData.id);
             })
             .then(function(post){
-              expect(post.distance).to.equal(updateData.distance);
-              expect(post.runTime).to.equal(updateData.runTime);
-              expect(post.dateTime).to.equal(updateData.dateTime);
+              expect(updateData.title).to.equal(post.title);
+              expect(updateData.distanceValue).to.equal(post.distanceValue);
+              expect(updateData.distanceUnit).to.equal(post.distanceUnit);
+              expect(updateData.durationHours).to.equal(post.durationHours);
+              expect(updateData.durationMinutes).to.equal(post.durationMinutes);
+              expect(updateData.durationSeconds).to.equal(post.durationSeconds);
+              expect(updateData.runType).to.equal(post.runType);
+              expect(updateData.date).to.equal(post.date);
+              expect(updateData.time).to.equal(post.time);
+              expect(updateData.description).to.equal(post.description);
+              expect(updateData.privacy).to.equal(post.privacy);
             });
         });
       });
