@@ -530,7 +530,7 @@ function addNewRunController() {
   appState.registeredClickEvents.addNewRunForm = true;
 }
 
-function submitNewRunEvent(e) {
+async function submitNewRunEvent(e) {
   // some code
   e.stopPropagation();
   e.preventDefault();
@@ -544,22 +544,14 @@ function submitNewRunEvent(e) {
   if (newPost) {
 
     // 2.1) client-side validation of input data
-    // console.log(typeof newPost.runTitle);
-    // console.log(typeof newPost.distance.value);
-    // console.log(typeof newPost.distance.unit);
-    // console.log(typeof newPost.duration.hours);
-    // console.log(typeof newPost.duration.minutes);
-    // console.log(typeof newPost.duration.seconds);
-    // console.log(typeof newPost.runType);
-    // console.log(typeof newPost.description);
-
-
+  
     // 2.2) aggregate required data before sending to the server
   
     // 3) create a new instance of Post object
-    // appState.login.post = new Post(newPost);
+    appState.login.post = new Post(newPost);
 
-    // appState.login.post.createNew();
+    await appState.login.post.createNew();
+    console.log(appState.login.post);
     // 4) POST to endpoint /api/posts/ using provided JWT token
   
     // 5) read and store the returned data
