@@ -69,7 +69,6 @@ router.post('/', jwtAuth, (req, res) => {
 
   User.findById(req.user.id)
     .then(user => {
-      console.log(user);
       if (user) {
         Post.create({
           title,
