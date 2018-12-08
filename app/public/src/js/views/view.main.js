@@ -83,6 +83,9 @@ export const renderPosts = () => {
         </div>
       </div>
       <div class="post-data">
+        <div class="post-data__title">
+          <p>Evening Run</p>
+        </div>
         <div class="post-data__distance post-data__distance--style-results">
           <p>Distance</p>
           <p>4.1 km</p>

@@ -560,7 +560,7 @@ async function submitNewRunEvent(e) {
     //   successfullLogin() 
     //   : 'Login fail!';
     // }
-    console.log(allDataFieldsStoredToDB());
+    console.log(allSentDataStoredToDB(newPost));
   
     // 6) validate server-side errors, if any
 
@@ -568,14 +568,14 @@ async function submitNewRunEvent(e) {
   console.log('Hello!');
 }
 
-function allDataFieldsStoredToDB() {
-  return Object.keys(appState.login.post).forEach(sentField => {
-    if ((sentField in appState.login.post.result.data) && sentField !== 'result') {
-      return false;
-    }
-    return true;
-  });
-}
+// function allSentDataStoredToDB(sentData) {
+//   sentData.forEach(field => {
+//     if ((field in appState.login.post.result.data)) {
+//       return false;
+//     }
+//     return true;
+//   });
+// }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
 
