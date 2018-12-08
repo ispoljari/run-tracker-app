@@ -42,8 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initializeAppControllers() {
   documentLevelController(); // Register global event listeners
-  logoController(); // Open home page
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
+  logoController(); 
+  homeViewController(); 
 }
 
 /* ---------------------------------------- */
@@ -72,8 +73,27 @@ function isTargetElementInsideOf(event, parent) {
 }
 
 /* ---------------------------------------- */
-/* ------------ LOGO CONTROLLER ----------- */
+/* ---- HOMEPAGE & LOGO CONTROLLER ------- */
 /* ---------------------------------------- */
+
+function homeViewController() {
+  attachMutationObserver(DOMelements.mainContent)
+    .then(result => {
+      appState.mutationObserver.result = result;
+      postsController(); 
+    })
+    .then(()=> {
+      appState.mutationObserver.result.observer.disconnect();
+      deleteAllObjectProperties(appState.mutationObserver);
+    })
+    .catch(error => {
+      console.log('Home Page Error!'); // TODO:
+      // clearCurrentPage();
+      // failedRegistration(apiData.infoMessages.registration.fail.server);
+    });
+
+  renderHomePage();
+}
 
 function logoController() {
   attachEventListener([DOMelements.headerLogo], 'click', [logoClickEvent]);
@@ -82,7 +102,7 @@ function logoController() {
 function logoClickEvent(e) {
   if (appState.session.currentView !== 'home') {
     clearCurrentPage();
-    renderHomePage();
+    homeViewController();
   }
 }
 
@@ -111,9 +131,25 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.addNewRunForm) {
     detachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
     appState.registeredClickEvents.addNewRunForm = false;
+  } else if (appState.registeredClickEvents.posts) {
+    detachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
+    appState.registeredClickEvents.posts = false;
   }
+}
 
+/* ---------------------------------------- */
+/* ------------ POSTS CONTROLLER ---------- */
+/* ---------------------------------------- */
 
+function postsController() {
+  attachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
+  appState.registeredClickEvents.posts = true;
+}
+
+function postClickEvent(e) {
+  e.stopPropagation();
+
+  console.log(e.target);
 }
 
 /* ---------------------------------------- */
@@ -159,7 +195,8 @@ function addNewRunViewSubController() { // TODO:
         deleteAllObjectProperties(appState.mutationObserver);
       })
       .catch(error => {
-        clearCurrentPage();
+        console.log('Add New Run error!'); // TODO:
+        // clearCurrentPage();
         // failedRegistration(apiData.infoMessages.registration.fail.server);
       });
     
@@ -311,7 +348,7 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
 
   setTimeout(()=> {
     clearCurrentPage();
-    renderHomePage();
+    homeViewController();
   }, 1200);
 }
 
@@ -415,7 +452,7 @@ function enterLoggedInSessionMode() {
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
-  renderHomePage();
+  homeViewController();
 }
 
 function hideLoggedOutMenuItems() {
@@ -506,7 +543,7 @@ function exitLoggedInSessionMode() {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
   clearCurrentPage();
-  renderHomePage();
+  homeViewController();
 }
 
 function showLoggedOutMenuItems() {

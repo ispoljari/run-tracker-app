@@ -14,7 +14,8 @@ export const appState = {
     logInMenu: false,
     registerForm: false,
     addNewRunForm: false,
-    dropDownList: false
+    dropDownList: false,
+    posts: false
   },
   register: {},
   login: {},

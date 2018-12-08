@@ -68,6 +68,11 @@ export const renderDotsAnimation = () => {
 export const renderPosts = () => {
   const htmlString = 
   `<div class="content__post">
+    <div class="post-collapsible">
+      <a href="#">
+        <span>&#10133;</span>
+      </a>
+    </div>
     <div class="post-avatar">
       <img src="svg/monsters/monster-15.svg" alt="An image of a random monster">
     </div>
@@ -96,6 +101,11 @@ export const renderPosts = () => {
         </div>
         <div class="post-data__average-speed post-data__distance--style-results">
           <p>Average speed</p> <p>6:49/km</p>
+        </div>
+      </div>
+      <div class="post-additional js-post-additional">
+        <div class="post-additional__description">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </div>
       </div>
     </div>

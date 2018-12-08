@@ -28,6 +28,10 @@ body {
 }
 
 .header__logo-img {
+  /* Layout */
+  position: relative;
+  top: 3px;
+  
   /* Styles */
   width: 50px;
 }
@@ -362,6 +366,7 @@ a {
           align-items: flex-start;
   margin: 25px auto 0 auto;
   padding: 10px;
+  position: relative;
 
   /* Style */
   border: 2px solid black;
@@ -470,7 +475,24 @@ a {
 }
 
 .post-additional {
+  /* Layout */
   display: none;
+}
+
+.post-collapsible {
+  cursor: pointer;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.post-collapsible span {
+  top: 5px;
+  position: relative;
+}
+
+.content__post--active {
+  background-color: #e6fdf3;
 }
 
 .post-data__distance--style-results p:first-of-type {
