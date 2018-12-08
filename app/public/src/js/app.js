@@ -108,7 +108,7 @@ function logoClickEvent(e) {
 
 function renderHomePage() {
   headerView.renderIntroHeading();
-  mainView.renderPostsTitle();
+  mainView.renderTitle('Recent Posts');
   mainView.renderPosts();
   footerView.renderIconsCredit();
   appState.session.currentView = 'home';
@@ -500,7 +500,7 @@ function myRunsViewSubController() {
   if (appState.session.currentView !== 'myRuns') {
     clearCurrentPage();
     mainView.renderProfileBanner();
-    mainView.renderMyRunsTitle();
+    mainView.renderTitle('My Runs');
     mainView.renderPosts();  // TODO: Render only logged users posts
     footerView.renderIconsCredit();
     appState.session.currentView = 'myRuns';

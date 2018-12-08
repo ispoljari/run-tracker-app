@@ -10,19 +10,10 @@ export const removeMainContent = () => {
   DOMelements.mainContent.innerHTML = '';
 }
 
-export const renderPostsTitle = () => {
+export const renderTitle = (message) => {
   const htmlString = 
   `<div class="content__heading-posts">
-    <h2>Recent Posts</h2>
-   </div>`
-
-  appendHtmlToMainContent(htmlString);
-}
-
-export const renderMyRunsTitle = () => {
-  const htmlString = 
-  `<div class="content__heading-posts">
-    <h2>My Runs</h2>
+    <h2>${message}</h2>
    </div>`
 
   appendHtmlToMainContent(htmlString);
