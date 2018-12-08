@@ -463,9 +463,14 @@ a {
   margin-left: 20px;
 }
 
-.post-data {
+.post-data,
+.post-additional {
   /* Layout */
   margin-top: 12px;
+}
+
+.post-additional {
+  display: none;
 }
 
 .post-data__distance--style-results p:first-of-type {
@@ -833,6 +838,9 @@ footer {
 .credit__text {
   /* Layout */
   text-align: center;
+
+  /* Style */
+  font-size: 12px;
 }
 
 
