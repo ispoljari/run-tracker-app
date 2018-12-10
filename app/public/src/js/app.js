@@ -44,7 +44,7 @@ function initializeAppControllers() {
   documentLevelController(); // Register global event listeners
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
-  homeViewController(); 
+  homeViewController('home', 'Recent Posts'); 
 }
 
 /* ---------------------------------------- */
@@ -76,9 +76,9 @@ function isTargetElementInsideOf(event, parent) {
 /* ---- HOMEPAGE & LOGO CONTROLLER ------- */
 /* ---------------------------------------- */
 
-function homeViewController() {
+function homeViewController(view, message) {
   postsController(); 
-  renderHomePage();
+  renderPostsPage(view, message);
 }
 
 function logoController() {
@@ -88,16 +88,20 @@ function logoController() {
 function logoClickEvent(e) {
   if (appState.session.currentView !== 'home') {
     clearCurrentPage();
-    homeViewController();
+    homeViewController('home', 'Recent Posts');
   }
 }
 
-function renderHomePage() {
-  headerView.renderIntroHeading();
-  mainView.renderTitle('Recent Posts');
+function renderPostsPage(view,  message) {
+  if (view === 'home') {
+    headerView.renderIntroHeading();
+  } else if (view === 'myRuns') {
+    mainView.renderProfileBanner();
+  }
+  mainView.renderTitle(message);
   mainView.renderPosts();
   footerView.renderIconsCredit();
-  appState.session.currentView = 'home';
+  appState.session.currentView = view;
 }
 
 function clearCurrentPage() {
@@ -334,7 +338,7 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
 
   setTimeout(()=> {
     clearCurrentPage();
-    homeViewController();
+    homeViewController('home', 'Recent Posts');
   }, 1200);
 }
 
@@ -438,7 +442,7 @@ function enterLoggedInSessionMode() {
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController();
+  homeViewController('home', 'Recent Posts');
 }
 
 function hideLoggedOutMenuItems() {
@@ -480,16 +484,9 @@ function myProfileViewSubController() {
 }
 
 function myRunsViewSubController() {
-  // some code
-  console.log('My Runs Hello!');
-
   if (appState.session.currentView !== 'myRuns') {
     clearCurrentPage();
-    mainView.renderProfileBanner();
-    mainView.renderTitle('My Runs');
-    mainView.renderPosts();  // TODO: Render only logged users posts
-    footerView.renderIconsCredit();
-    appState.session.currentView = 'myRuns';
+    homeViewController('myRuns', 'My Runs'); // TODO: Render only logged users posts
   }
   closeDropDownList();
 }
@@ -529,7 +526,7 @@ function exitLoggedInSessionMode() {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController();
+  homeViewController('home', 'Recent Posts');
 }
 
 function showLoggedOutMenuItems() {
