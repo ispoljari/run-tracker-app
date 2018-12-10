@@ -4,17 +4,19 @@ import {appState} from '../state/state.app';
 
 export default class Post {
   constructor(post) {
-    this.title = post.runTitle,
-    this.distanceValue = post.distance.value, 
-    this.distanceUnit = post.distance.unit,
-    this.durationHours = post.duration.hours,
-    this.durationMinutes = post.duration.minutes,
-    this.durationSeconds = post.duration.seconds,
-    this.runType = post.runType,
-    this.date = post.date,
-    this.time = post.time,
-    this.description = post.description,
-    this.privacy = post.privacy
+    if (post) {
+      this.title = post.runTitle,
+      this.distanceValue = post.distance.value, 
+      this.distanceUnit = post.distance.unit,
+      this.durationHours = post.duration.hours,
+      this.durationMinutes = post.duration.minutes,
+      this.durationSeconds = post.duration.seconds,
+      this.runType = post.runType,
+      this.date = post.date,
+      this.time = post.time,
+      this.description = post.description
+      // this.privacy = post.privacy
+    }
   }
 
   async createNew() {
@@ -32,8 +34,8 @@ export default class Post {
           runType: this.runType,
           date: this.date,
           time: this.time,
-          description: this.description,
-          privacy: this.privacy
+          description: this.description
+          // privacy: this.privacy
         },
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +50,15 @@ export default class Post {
   }
 
   async retrieveAll() {
-    // some code
+    try {
+      const res = await axios({
+        method: 'get',
+        url: apiData.urls.posts
+      });
+      this.result = res; 
+    } catch (error) {
+      this.error = error.response.data;      
+    }
   }
 
   async retrieveSingleByID() {

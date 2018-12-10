@@ -99,9 +99,19 @@ function renderPostsPage(view,  message) {
     mainView.renderProfileBanner();
   }
   mainView.renderTitle(message);
+  retrievePostsFromAPI();
   mainView.renderPosts();
   footerView.renderIconsCredit();
   appState.session.currentView = view;
+}
+
+async function retrievePostsFromAPI() {
+  // mainView.renderPosts();
+  appState.posts.retrieved = new Post();
+
+  await appState.posts.retrieved.retrieveAll();
+
+  console.log(appState.posts.retrieved);
 }
 
 function clearCurrentPage() {
@@ -573,15 +583,15 @@ async function submitNewRunEvent(e) {
     // 2.2) aggregate required data before sending to the server
   
     // 3) create a new instance of Post object
-    appState.login.post = new Post(newPost);
+    appState.posts.created = new Post(newPost);
 
     // 4) POST to endpoint /api/posts/ using provided JWT token
-    await appState.login.post.createNew();
-    console.log(appState.login.post);
+    await appState.posts.created.createNew();
+    console.log(appState.posts.created);
   
     // 5) read and store the returned data
-    // if (appState.login.post.result) {
-    //   appState.login.post.result.status === 201 
+    // if (appState.posts.created.result) {
+    //   appState.posts.created.result.status === 201 
     //   && allDataFieldsStoredToDB() ? 
     //   successfullLogin() 
     //   : 'Login fail!';
@@ -596,7 +606,7 @@ async function submitNewRunEvent(e) {
 
 // function allSentDataStoredToDB(sentData) {
 //   sentData.forEach(field => {
-//     if ((field in appState.login.post.result.data)) {
+//     if ((field in appState.posts.created.result.data)) {
 //       return false;
 //     }
 //     return true;
