@@ -481,12 +481,6 @@ div.content__post:nth-child(n+3) {
 .post-additional {
   /* Layout */
   display: none;
-  margin-left: -5px;
-
-  /* Style */
-  border: 1px solid #b0b0b0;
-  border-radius: 5px;
-  padding: 5px;
 }
 
 
