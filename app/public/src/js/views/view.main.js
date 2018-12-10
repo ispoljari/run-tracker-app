@@ -62,6 +62,10 @@ export const renderPosts = (post) => {
   const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
   const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
 
+  const runHours = post.durationHours ? `${post.durationHours}hrs` : '';
+  const runMinutes = post.durationMinutes ? `${post.durationMinutes}min` : '';
+  const runSeconds = post.durationSeconds ? `${post.durationSeconds}s` : '';
+
   const htmlString = 
   `<div class="content__post js-content__post">
     <div class="post-collapsible js-post-collapsible">
@@ -93,7 +97,7 @@ export const renderPosts = (post) => {
         </div>
         <div class="post-data__time post-data__distance--style-results">
           <p>Run Time</p>
-          <p>${post.durationMinutes} TODO</p>
+          <p>${runHours}${runMinutes}${runSeconds}</p>
         </div>
         <div class="post-data__average-speed post-data__distance--style-results">
           <p>Average speed</p> <p>6:49/km TODO</p>
