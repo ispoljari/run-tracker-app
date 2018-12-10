@@ -66,9 +66,21 @@ export const renderPosts = (post) => {
   const runMinutes = post.durationMinutes ? `${post.durationMinutes}min` : '';
   const runSeconds = post.durationSeconds ? `${post.durationSeconds}s` : '';
 
+  let displayDistanceUnit;
+  let totalDistance;
+
+  if (post.distanceUnit === 'km' || post.distanceUnit === 'm') {
+    displayDistanceUnit = 'km';
+    totalDistance = post.distanceUnit === 'km' ? post.distanceValue : post.distanceValue/1000;
+  } else if (post.distanceUnit === 'mi' || post.distanceUnit === 'yd') {
+    displayDistanceUnit = 'mi';
+    totalDistance = post.distanceUnit === 'mi' ? post.distanceValue : post.distanceValue/1760;
+  }
+
+
   let avrSpeedRaw;
   if (post.distanceValue) {
-    avrSpeedRaw = Math.round(((post.durationHours*60 + post.durationMinutes + post.durationSeconds/60) / post.distanceValue) * 100) / 100;
+    avrSpeedRaw = Math.round(((post.durationHours*60 + post.durationMinutes + post.durationSeconds/60) / totalDistance) * 100) / 100;
   } else {
     avrSpeedRaw = 0;
   }
@@ -120,7 +132,7 @@ export const renderPosts = (post) => {
           <p>${runHours}${runMinutes}${runSeconds}</p>
         </div>
         <div class="post-data__average-speed post-data__distance--style-results">
-          <p>Pace</p><p>${displayAvrMinSpeed}${displayAvrSecSpeed}/km</p>
+          <p>Pace</p><p>${displayAvrMinSpeed}${displayAvrSecSpeed}/${displayDistanceUnit}</p>
         </div>
       </div>
       <div class="post-additional js-post-additional">

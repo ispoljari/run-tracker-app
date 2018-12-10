@@ -584,7 +584,8 @@ async function submitNewRunEvent(e) {
   if (newPost) {
 
     // 2.1) client-side validation of input data
-  
+    // TODO: user moment.js to validate the time and date input fields
+
     // 2.2) aggregate required data before sending to the server
   
     // 3) create a new instance of Post object
