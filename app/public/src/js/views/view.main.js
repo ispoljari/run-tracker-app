@@ -66,6 +66,26 @@ export const renderPosts = (post) => {
   const runMinutes = post.durationMinutes ? `${post.durationMinutes}min` : '';
   const runSeconds = post.durationSeconds ? `${post.durationSeconds}s` : '';
 
+  let avrSpeedRaw;
+  if (post.distanceValue) {
+    avrSpeedRaw = Math.round(((post.durationHours*60 + post.durationMinutes + post.durationSeconds/60) / post.distanceValue) * 100) / 100;
+  } else {
+    avrSpeedRaw = 0;
+  }
+  
+  let minPartAvrSpeed = Math.floor(avrSpeedRaw);
+  let secPartAvrSpeed = Math.round((avrSpeedRaw - Math.floor(avrSpeedRaw))*60);
+
+  const displayAvrMinSpeed = minPartAvrSpeed > 0 ? `${minPartAvrSpeed}:` : '';
+
+  let displayAvrSecSpeed;
+  if (secPartAvrSpeed < 10) {
+    displayAvrSecSpeed = secPartAvrSpeed > 0 ? `0${secPartAvrSpeed}` : '';
+  } else {
+    displayAvrSecSpeed = secPartAvrSpeed > 0 ? `${secPartAvrSpeed}` : '';
+  }
+
+
   const htmlString = 
   `<div class="content__post js-content__post">
     <div class="post-collapsible js-post-collapsible">
@@ -100,7 +120,7 @@ export const renderPosts = (post) => {
           <p>${runHours}${runMinutes}${runSeconds}</p>
         </div>
         <div class="post-data__average-speed post-data__distance--style-results">
-          <p>Average speed</p> <p>6:49/km TODO</p>
+          <p>Pace</p><p>${displayAvrMinSpeed}${displayAvrSecSpeed}/km</p>
         </div>
       </div>
       <div class="post-additional js-post-additional">
