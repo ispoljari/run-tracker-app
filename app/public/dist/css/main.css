@@ -894,17 +894,6 @@ footer {
     display: none;
   }
 
-  .post-data__average-speed {
-    /* Layout */
-    display: inline-block;
-    margin-top: 0;
-  }
-
-  .post-data__average-speed {
-    /* Layout */
-    margin-left: 10px;
-  }
-
   .header__logo-img {
     /* Styles */
     width: 60px;
@@ -929,6 +918,17 @@ footer {
     /* Layout */
     margin: 0 70px 20px 70px;
   }
+
+  .post-data__average-speed {
+    /* Layout */
+    display: inline-block;
+    margin-top: 0;
+  }
+
+  .post-data__average-speed {
+    /* Layout */
+    margin-left: 10px;
+  }
 }
 
 
@@ -952,6 +952,11 @@ footer {
   .header__logo-img {
     /* Styles */
     width: 65px;
+  }
+
+  .login__form label,
+  .login__form button {
+    font-size: 18px;
   }
 
   .registration legend {
@@ -991,6 +996,11 @@ footer {
 
   .post-data__distance--style-results p:last-of-type {
     font-size: 22px;
+  }
+
+  .header__nav-container li,
+  .dropdown-list li {
+    font-size: 18px;
   }
   
 }
@@ -1049,6 +1059,29 @@ footer {
     max-width: 170px;
     width: 45%;
   } 
+
+  .content__heading-posts h2,
+  .content__user-info h2 {
+    /* Style */
+    font-size: 26px;
+  }
+
+  .post-header__user h3,
+  .post-data__title h4,
+  .post-additional__description h4 {
+    /* Style */
+    font-size: 22px;
+  }
+
+  .post-additional__description p,
+  .post-header__datetime p,
+  .post-data__distance--style-results p:first-of-type {
+    font-size: 18px;
+  }
+
+  .post-data__distance--style-results p:last-of-type {
+    font-size: 24px;
+  }
 }
 
 @media only screen and (min-width: 820px) {
