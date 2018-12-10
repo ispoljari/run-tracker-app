@@ -80,7 +80,7 @@ export const renderPosts = () => {
       </div>
       <div class="post-data">
         <div class="post-data__title">
-          <p>Evening Run</p>
+          <h4>Evening Run</h4>
         </div>
         <div class="post-data__distance post-data__distance--style-results">
           <p>Distance</p>
@@ -96,6 +96,7 @@ export const renderPosts = () => {
       </div>
       <div class="post-additional js-post-additional">
         <div class="post-additional__description">
+          <h4>Description</h4>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </div>
       </div>
@@ -108,7 +109,6 @@ export const renderPosts = () => {
 export const toggleCollapsiblePost = (element) => {
   const postsMainContainer = element.closest(`.${DOMstrings.posts.mainContainer}`);
   const postsCollapsibleSymbol = element.closest(`.${DOMstrings.posts.collapsibleContainer}`).querySelector(`.${DOMstrings.posts.collapsibleSymbol}`);
-  console.log('Hello'); 
   const postsAdditionalInfo = postsMainContainer.querySelector(`.${DOMstrings.posts.additional}`);
   
   postsMainContainer.classList.toggle(controledHooksStrings.postsCollapsibleToggleVisibility);

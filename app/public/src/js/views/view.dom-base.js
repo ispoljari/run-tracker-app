@@ -67,7 +67,7 @@ export const DOMstrings = {
     mainContainer: 'js-content__post',
     collapsibleContainer: 'js-post-collapsible',
     collapsibleSymbol: 'js-post-collapsible__symbol',
-    additional: 'js-post-additional',
+    additional: 'js-post-additional'
   }
 }
 
