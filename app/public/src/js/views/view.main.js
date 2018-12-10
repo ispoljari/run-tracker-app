@@ -58,10 +58,10 @@ export const renderDotsAnimation = () => {
 
 export const renderPosts = () => {
   const htmlString = 
-  `<div class="content__post">
-    <div class="post-collapsible">
+  `<div class="content__post js-content__post">
+    <div class="post-collapsible js-post-collapsible">
       <a href="#">
-        <span>&#10133;</span>
+        <span class="js-post-collapsible__symbol">&#10133;</span>
       </a>
     </div>
     <div class="post-avatar">
@@ -103,6 +103,23 @@ export const renderPosts = () => {
   </div>`
 
   appendHtmlToMainContent(htmlString);
+}
+
+export const toggleCollapsiblePost = (element) => {
+  const postsMainContainer = element.closest(`.${DOMstrings.posts.mainContainer}`);
+  const postsCollapsibleSymbol = element.closest(`.${DOMstrings.posts.collapsibleContainer}`).querySelector(`.${DOMstrings.posts.collapsibleSymbol}`);
+  console.log('Hello'); 
+  const postsAdditionalInfo = postsMainContainer.querySelector(`.${DOMstrings.posts.additional}`);
+  
+  postsMainContainer.classList.toggle(controledHooksStrings.postsCollapsibleToggleVisibility);
+  
+  if (postsAdditionalInfo.style.display === 'block') {
+    postsAdditionalInfo.style.display = 'none';
+    postsCollapsibleSymbol.innerHTML = '&#10133;';
+  } else {
+    postsAdditionalInfo.style.display = 'block';
+    postsCollapsibleSymbol.innerHTML = '&#10134;';
+  }
 }
 
 // Register page

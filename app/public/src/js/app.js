@@ -138,9 +138,14 @@ function postsController() {
 
 function postClickEvent(e) {
   e.stopPropagation();
+  e.preventDefault();
 
-  console.log(e.target);
+  if (e.target.closest(`.${DOMstrings.posts.collapsible}`)) {
+    mainView.toggleCollapsiblePost(e.target);
+  }
 }
+
+
 
 /* ---------------------------------------- */
 /* ------- NAVIGATION MENU CONTROLLER ----- */

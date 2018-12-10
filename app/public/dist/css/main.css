@@ -31,7 +31,7 @@ body {
   /* Layout */
   position: relative;
   top: 3px;
-  
+
   /* Styles */
   width: 50px;
 }
@@ -489,10 +489,6 @@ a {
 .post-collapsible span {
   top: 5px;
   position: relative;
-}
-
-.content__post--active {
-  background-color: #e6fdf3;
 }
 
 .post-data__distance--style-results p:first-of-type {
@@ -1066,4 +1062,8 @@ footer {
   /* Style */
   background-color: #fdf8f8;
   border-radius: 5px;
+}
+
+.content__post--active {
+  background-color: #f8fffc;
 }

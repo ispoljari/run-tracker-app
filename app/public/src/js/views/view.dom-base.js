@@ -24,7 +24,8 @@ export const controledHooksStrings = {
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
   navMenuItemHide: 'menu__item--hidden',
   warningMessageStyle: 'content__user-info--warning',
-  addNewRunBackground: 'add-new-run__form--background'
+  addNewRunBackground: 'add-new-run__form--background',
+  postsCollapsibleToggleVisibility: 'content__post--active'
 }
 
 export const DOMstrings = {
@@ -61,6 +62,12 @@ export const DOMstrings = {
       description: 'js-add-new-run__description',
       privacy: 'js-add-new-run__privacy'
     }
+  },
+  posts: {
+    mainContainer: 'js-content__post',
+    collapsibleContainer: 'js-post-collapsible',
+    collapsibleSymbol: 'js-post-collapsible__symbol',
+    additional: 'js-post-additional',
   }
 }
 
