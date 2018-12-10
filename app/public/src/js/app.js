@@ -77,21 +77,7 @@ function isTargetElementInsideOf(event, parent) {
 /* ---------------------------------------- */
 
 function homeViewController() {
-  attachMutationObserver(DOMelements.mainContent)
-    .then(result => {
-      appState.mutationObserver.result = result;
-      postsController(); 
-    })
-    .then(()=> {
-      appState.mutationObserver.result.observer.disconnect();
-      deleteAllObjectProperties(appState.mutationObserver);
-    })
-    .catch(error => {
-      console.log('Home Page Error!'); // TODO:
-      // clearCurrentPage();
-      // failedRegistration(apiData.infoMessages.registration.fail.server);
-    });
-
+  postsController(); 
   renderHomePage();
 }
 
