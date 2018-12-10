@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 import {
   DOMelements,
   DOMstrings,
@@ -57,6 +59,9 @@ export const renderDotsAnimation = () => {
 }
 
 export const renderPosts = (post) => {
+  const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
+  const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
+
   const htmlString = 
   `<div class="content__post js-content__post">
     <div class="post-collapsible js-post-collapsible">
@@ -75,7 +80,7 @@ export const renderPosts = (post) => {
           </a>
         </div>
         <div class="post-header__datetime">
-          <p>${post.date} at ${post.time}</p>
+          <p>${formatedDate} at ${formatedTime}</p>
         </div>
       </div>
       <div class="post-data">
