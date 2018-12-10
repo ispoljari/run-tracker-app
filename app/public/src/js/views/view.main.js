@@ -350,7 +350,7 @@ export const renderNewRunForm = () => {
       </div>
     </div>
 
-    <div class="row vertical-offset-row">
+    <div class="row vertical-offset-row future-development--hiden">
       <div class="form-inner-container">
         <div class="col-12">
           <fieldset class="privacy">

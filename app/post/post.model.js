@@ -73,7 +73,7 @@ const postJoiSchema = Joi.object().keys({
   date: Joi.string().required(),
   time: Joi.string().required(),
   description: Joi.string().required(),
-  privacy: Joi.string().required(),
+  privacy: Joi.string().optional(),
   user: Joi.string().required(),
   upvotes: Joi.array().items(
     Joi.object().keys({
