@@ -1010,6 +1010,17 @@ footer {
 	.vertical-offset-column {
 		margin-top: 0;
   }
+
+  .registration legend {
+    font-size: 24px;
+  }
+
+  .registration label,
+  .registration input,
+  .registration__submit
+  {
+    font-size: 20px;
+  }
   
   .add-new-run h2 {
     /* Style */
