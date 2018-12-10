@@ -100,18 +100,23 @@ function renderPostsPage(view,  message) {
   }
   mainView.renderTitle(message);
   retrievePostsFromAPI();
-  mainView.renderPosts();
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
 
 async function retrievePostsFromAPI() {
-  // mainView.renderPosts();
+  // create new Post instance
   appState.posts.retrieved = new Post();
 
+  // retrieve all posts from server
   await appState.posts.retrieved.retrieveAll();
 
-  console.log(appState.posts.retrieved);
+  // render retrieved posts
+  appState.posts.retrieved.result.data.forEach(post => {
+    mainView.renderPosts(post);
+  });
+
+  // TODO: ERROR HANDLING
 }
 
 function clearCurrentPage() {

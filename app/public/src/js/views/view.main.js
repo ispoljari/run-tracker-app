@@ -56,7 +56,7 @@ export const renderDotsAnimation = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderPosts = () => {
+export const renderPosts = (post) => {
   const htmlString = 
   `<div class="content__post js-content__post">
     <div class="post-collapsible js-post-collapsible">
@@ -65,39 +65,39 @@ export const renderPosts = () => {
       </a>
     </div>
     <div class="post-avatar">
-      <img src="svg/monsters/monster-15.svg" alt="An image of a random monster">
+      <img src="svg/monsters/monster-${post.user.avatar}.svg" alt="An image of a random monster">
     </div>
     <div class="post-info">
       <div class="post-header">
         <div class="post-header__user">
           <a href="#">
-            <h3>John Smith</h3>
+            <h3>@${post.user.displayName}</h3>
           </a>
         </div>
         <div class="post-header__datetime">
-          <p>20th October 2018. at 19:45</p>
+          <p>${post.date} at ${post.time}</p>
         </div>
       </div>
       <div class="post-data">
         <div class="post-data__title">
-          <h4>Evening Run</h4>
+          <h4>${post.title}</h4>
         </div>
         <div class="post-data__distance post-data__distance--style-results">
           <p>Distance</p>
-          <p>4.1 km</p>
+          <p>${post.distanceValue}${post.distanceUnit}</p>
         </div>
         <div class="post-data__time post-data__distance--style-results">
           <p>Run Time</p>
-          <p>28m</p>
+          <p>${post.durationMinutes} TODO</p>
         </div>
         <div class="post-data__average-speed post-data__distance--style-results">
-          <p>Average speed</p> <p>6:49/km</p>
+          <p>Average speed</p> <p>6:49/km TODO</p>
         </div>
       </div>
       <div class="post-additional js-post-additional">
         <div class="post-additional__description">
           <h4>Description</h4>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>${post.description}</p>
         </div>
       </div>
     </div>
