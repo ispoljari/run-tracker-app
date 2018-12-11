@@ -127,12 +127,12 @@ export const renderPosts = (post) => {
           <p>Distance</p>
           <p>${post.distanceValue}${post.distanceUnit}</p>
         </div>
+        <div class="post-data__average-speed post-data__distance--style-results">
+          <p>Pace</p><p>${displayAvrMinSpeed}${displayAvrSecSpeed}/${displayDistanceUnit}</p>
+        </div>
         <div class="post-data__time post-data__distance--style-results">
           <p>Run Time</p>
           <p>${runHours}${runMinutes}${runSeconds}</p>
-        </div>
-        <div class="post-data__average-speed post-data__distance--style-results">
-          <p>Pace</p><p>${displayAvrMinSpeed}${displayAvrSecSpeed}/${displayDistanceUnit}</p>
         </div>
       </div>
       <div class="post-additional js-post-additional">
