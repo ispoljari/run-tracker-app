@@ -58,7 +58,7 @@ export const renderDotsAnimation = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderPosts = (post) => {
+export const renderPosts = (post, visible) => {
   const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
   const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
 
@@ -99,7 +99,7 @@ export const renderPosts = (post) => {
 
 
   const htmlString = 
-  `<div class="content__post js-content__post">
+  `<div class="content__post js-content__post ${visible ? '' : controledHooksStrings.runPostsHide}">
     <div class="post-collapsible js-post-collapsible">
       <a href="#">
         <span class="js-post-collapsible__symbol">&#10133;</span>
@@ -132,7 +132,7 @@ export const renderPosts = (post) => {
         </div>
         <div class="post-data__time post-data__distance--style-results">
           <p>Run Time</p>
-          <p>${runHours} ${runMinutes} ${runSeconds}</p>
+          <p>${runHours}${runMinutes}${runSeconds}</p>
         </div>
       </div>
       <div class="post-additional js-post-additional">
@@ -145,6 +145,23 @@ export const renderPosts = (post) => {
   </div>`
 
   appendHtmlToMainContent(htmlString);
+}
+
+export const renderPostLoaderBtn = (visible) => {
+  const htmlString = 
+  `<div class="main-content__loader js-main-content__loader ${visible ? '' : controledHooksStrings.postsLoaderHide}">
+    <button type="button" class="content-loader-btn btn-style">Load More Posts</button>
+   </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
+export const showHiddenPostElement = (element) => {
+  element.classList.remove(controledHooksStrings.runPostsHide);
+}
+
+export const showHiddenLoaderElement = () => {
+  // DOMelements.navMenuItems.logedOut.register.classList.remove(controledHooksStrings.navMenuItemHide);
 }
 
 export const toggleCollapsiblePost = (element) => {

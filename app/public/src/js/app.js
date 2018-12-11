@@ -123,9 +123,17 @@ async function retrievePostsFromAPI() {
 
   appState.posts.retrieved.result.data.sort(sortByDateDesc);
  
-  // render ordered posts
+  // render ordered posts (initialy only 10 posts)
+  let numPosts = 0;
   appState.posts.retrieved.result.data.forEach(post => {
-    mainView.renderPosts(post);
+    numPosts++;
+    if (numPosts > 10) {
+      numPosts % 10 === 1 && numPosts < 20 ? mainView.renderPostLoaderBtn(true) : '';
+      numPosts % 10 === 1 && numPosts > 20 ? mainView.renderPostLoaderBtn(false) : '';    
+      mainView.renderPosts(post, false);  
+    } else {
+      mainView.renderPosts(post, true);
+    }
   });
  
 
@@ -171,6 +179,22 @@ function postClickEvent(e) {
   
   if (e.target.closest(`.${DOMstrings.posts.collapsibleContainer}`)) {
     mainView.toggleCollapsiblePost(e.target);
+  }
+
+  if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
+    let currentElement = e.target.closest(`.${DOMstrings.posts.loadMore}`).nextElementSibling;
+    
+    for (let i = 1; i<=10; i++) {
+      if (currentElement) {
+        mainView.showHiddenPostElement(currentElement);
+        
+        if (i===10) {
+          mainView.showHiddenLoaderElement(currentElement);
+        }
+        currentElement.nextElementSibling;
+      }
+      console.log('Hello!');
+    }
   }
 }
 

@@ -382,7 +382,8 @@ div.content__post:nth-child(n+3) {
 }
 
 .content__heading-posts,
-.content__user-info {
+.content__user-info,
+.main-content__loader {
   /* Layout */
   margin: 40px auto 0 auto;
 
@@ -963,7 +964,8 @@ footer {
 
   .registration label,
   .registration input,
-  .registration__submit
+  .registration__submit,
+  .content-loader-btn
   {
     font-size: 18px;
   }
@@ -1015,7 +1017,8 @@ footer {
 
   .registration label,
   .registration input,
-  .registration__submit
+  .registration__submit,
+  .content-loader-btn
   {
     font-size: 20px;
   }
@@ -1117,7 +1120,9 @@ footer {
 
 .menu__item--hidden,
 .header__heading--toggle-visibility,
-.credit--toggle-visibility {
+.credit--toggle-visibility,
+.content__post--hidden,
+.main-content__loader--hidden {
   /* Layout */
   display: none;
 }

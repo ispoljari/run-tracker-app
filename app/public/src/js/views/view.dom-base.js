@@ -25,7 +25,9 @@ export const controledHooksStrings = {
   navMenuItemHide: 'menu__item--hidden',
   warningMessageStyle: 'content__user-info--warning',
   addNewRunBackground: 'add-new-run__form--background',
-  postsCollapsibleToggleVisibility: 'content__post--active'
+  postsCollapsibleToggleVisibility: 'content__post--active',
+  runPostsHide: 'content__post--hidden',
+  postsLoaderHide: 'main-content__loader--hidden'
 }
 
 export const DOMstrings = {
@@ -67,7 +69,8 @@ export const DOMstrings = {
     mainContainer: 'js-content__post',
     collapsibleContainer: 'js-post-collapsible',
     collapsibleSymbol: 'js-post-collapsible__symbol',
-    additional: 'js-post-additional'
+    additional: 'js-post-additional',
+    loadMore: 'js-main-content__loader'
   }
 }
 
