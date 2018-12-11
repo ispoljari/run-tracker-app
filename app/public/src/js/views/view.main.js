@@ -132,7 +132,7 @@ export const renderPosts = (post) => {
         </div>
         <div class="post-data__time post-data__distance--style-results">
           <p>Run Time</p>
-          <p>${runHours}${runMinutes}${runSeconds}</p>
+          <p>${runHours} ${runMinutes} ${runSeconds}</p>
         </div>
       </div>
       <div class="post-additional js-post-additional">
