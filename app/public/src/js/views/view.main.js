@@ -147,6 +147,10 @@ export const renderPosts = (post, visible) => {
   appendHtmlToMainContent(htmlString);
 }
 
+export const adjustFirstPostVerticalOffset = () => {
+   DOMelements.mainContent.querySelectorAll(`.${DOMstrings.posts.mainContainer}`)[0].style.marginTop = '25px';
+}
+
 export const renderPostLoaderBtn = (visible) => {
   const htmlString = 
   `<div class="main-content__loader js-main-content__loader ${visible ? '' : controledHooksStrings.postsLoaderHide}">

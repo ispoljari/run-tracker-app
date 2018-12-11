@@ -96,13 +96,31 @@ function logoClickEvent(e) {
 }
 
 function renderPostsPage(view,  message) {
-  if (view === 'home') {
+  if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if (view === 'myRuns') {
+  } else if ((view === 'home' || view === 'myRuns') && appState.session.loggedIn) {
     mainView.renderProfileBanner();
   }
   mainView.renderTitle(message);
   retrievePostsFromAPI();
+
+  if (appState.session.loggedIn) {
+    attachMutationObserver(DOMelements.mainContent)
+      .then(result => {
+        appState.mutationObserver.result = result;
+        mainView.adjustFirstPostVerticalOffset();
+      })
+      .then(()=> {
+        appState.mutationObserver.result.observer.disconnect();
+        deleteAllObjectProperties(appState.mutationObserver);
+      })
+      .catch(error => {
+        // TODO:
+        // clearCurrentPage();
+        // Error message
+      });
+  }
+  
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
@@ -135,7 +153,6 @@ async function retrievePostsFromAPI() {
       mainView.renderPosts(post, true);
     }
   });
- 
 
   // TODO: ERROR HANDLING
 }
@@ -390,7 +407,6 @@ function successfulRegistration(...messages) {
 }
 
 function failedRegistration(...messages) {
-  console.clear(); 
   if (!mainView.warningMessageExists()) {
     displayRegistrationFailMessage(messages, false, 'afterbegin');
   }
@@ -485,7 +501,6 @@ function successfullLogin() {
 }
 
 function failedLogin(message) {
-  console.clear(); 
   if (!headerView.warningMessageExists()) {
     headerView.renderLoginFailMessage(message);
   }
@@ -502,6 +517,7 @@ function closeLoginMenu() {
 }
 
 function enterLoggedInSessionMode() {
+  appState.session.loggedIn = true;
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
@@ -555,9 +571,6 @@ function myRunsViewSubController() {
 }
 
 function analyticsViewSubController() {
-  // some code
-  console.log('Analytics Hello!');
-
   if (appState.session.currentView !== 'analytics') {
     // some code
     appState.session.currentView = 'analytics';
