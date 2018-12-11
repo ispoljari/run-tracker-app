@@ -9,6 +9,9 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
+// Import 3rd party modules
+import * as moment from 'moment';
+
 // Import DOM elements and dynamic hooks
 import {
   DOMelements, 
@@ -111,10 +114,20 @@ async function retrievePostsFromAPI() {
   // retrieve all posts from server
   await appState.posts.retrieved.retrieveAll();
 
-  // render retrieved posts
+  // sort retrieved posts by date in descending order
+  const sortByDateDesc = function (lhs, rhs) {
+    lhs = moment(lhs.date, 'YYYY-MM-DD');
+    rhs = moment(rhs.date, 'YYYY-MM-DD');
+    return lhs < rhs ? 1 : lhs > rhs ? -1 : 0;
+  }
+
+  appState.posts.retrieved.result.data.sort(sortByDateDesc);
+ 
+  // render ordered posts
   appState.posts.retrieved.result.data.forEach(post => {
     mainView.renderPosts(post);
   });
+ 
 
   // TODO: ERROR HANDLING
 }
