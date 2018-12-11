@@ -182,16 +182,21 @@ function postClickEvent(e) {
   }
 
   if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
-    let currentElement = e.target.closest(`.${DOMstrings.posts.loadMore}`).nextElementSibling;
+    let currentLoaderElement = e.target.closest(`.${DOMstrings.posts.loadMore}`);
+    let currentPostElement = currentLoaderElement.nextElementSibling;
     
+    mainView.hideLoaderElement(currentLoaderElement);
+  
     for (let i = 1; i<=10; i++) {
-      if (currentElement) {
-        mainView.showHiddenPostElement(currentElement);
+      if (currentPostElement) {
+        mainView.showPostElement(currentPostElement);
         
         if (i===10) {
-          mainView.showHiddenLoaderElement(currentElement);
+          currentLoaderElement = currentPostElement.nextElementSibling;
+          mainView.showLoaderElement(currentLoaderElement);
         }
-        currentElement.nextElementSibling;
+
+        currentPostElement = currentPostElement.nextElementSibling;
       }
       console.log('Hello!');
     }

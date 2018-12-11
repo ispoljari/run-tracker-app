@@ -156,12 +156,16 @@ export const renderPostLoaderBtn = (visible) => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const showHiddenPostElement = (element) => {
+export const showPostElement = (element) => {
   element.classList.remove(controledHooksStrings.runPostsHide);
 }
 
-export const showHiddenLoaderElement = () => {
-  // DOMelements.navMenuItems.logedOut.register.classList.remove(controledHooksStrings.navMenuItemHide);
+export const hideLoaderElement = (element) => {
+  element.classList.add(controledHooksStrings.postsLoaderHide);
+}
+
+export const showLoaderElement = (element) => {
+  element.classList.remove(controledHooksStrings.postsLoaderHide);
 }
 
 export const toggleCollapsiblePost = (element) => {
