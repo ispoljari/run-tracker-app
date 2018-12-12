@@ -133,28 +133,53 @@ async function retrievePostsFromAPI() {
   await appState.posts.retrieved.retrieveAll();
 
   // sort retrieved posts by date in descending order
+  sortPosts('desc');
+ 
+  // render ordered posts (initialy only first page with 10 posts)
+  renderPosts(appState.session.postsPage);
+
+  // TODO: ERROR HANDLING
+}
+
+function sortPosts(method) {
+
   const sortByDateDesc = function (lhs, rhs) {
     lhs = moment(lhs.date, 'YYYY-MM-DD');
     rhs = moment(rhs.date, 'YYYY-MM-DD');
     return lhs < rhs ? 1 : lhs > rhs ? -1 : 0;
   }
 
-  appState.posts.retrieved.result.data.sort(sortByDateDesc);
- 
-  // render ordered posts (initialy only 10 posts)
-  let numPosts = 0;
-  appState.posts.retrieved.result.data.forEach(post => {
-    numPosts++;
-    if (numPosts > 10) {
-      numPosts % 10 === 1 && numPosts < 20 ? mainView.renderPostLoaderBtn(true) : '';
-      numPosts % 10 === 1 && numPosts > 20 ? mainView.renderPostLoaderBtn(false) : '';    
-      mainView.renderPosts(post, false);  
-    } else {
-      mainView.renderPosts(post, true);
-    }
-  });
+  const sortByDateAsc = function (lhs, rhs) {
+    lhs = moment(lhs.date, 'YYYY-MM-DD');
+    rhs = moment(rhs.date, 'YYYY-MM-DD');
+    return lhs > rhs ? 1 : lhs < rhs ? -1 : 0;
+  }
 
-  // TODO: ERROR HANDLING
+  if (method === 'desc') {
+    appState.posts.retrieved.result.data.sort(sortByDateDesc);
+  } else if (method === 'asc') {
+    appState.posts.retrieved.result.data.sort(sortByDateAsc);
+  }
+  
+}
+
+function renderPosts(page) {
+  const remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
+  let loopLimit;
+
+  if (remainingPosts <= 10) {
+    loopLimit = remainingPosts;
+  } else {
+    loopLimit = 10;
+  }
+
+  for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
+    mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
+  }
+
+  if (remainingPosts > 10) {
+    mainView.renderPostLoaderBtn();
+  }
 }
 
 function clearCurrentPage() {
@@ -165,6 +190,7 @@ function clearCurrentPage() {
     mainView.removeNewRunFormBackground();
   }
 
+  appState.session.postsPage = 1; // reset posts current page
   mainView.removeMainContent(); 
 
   // Detach event listeners
@@ -196,32 +222,22 @@ function postClickEvent(e) {
   
   if (e.target.closest(`.${DOMstrings.posts.collapsibleContainer}`)) {
     mainView.toggleCollapsiblePost(e.target);
-  }
-
-  if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
-    let currentLoaderElement = e.target.closest(`.${DOMstrings.posts.loadMore}`);
-    let currentPostElement = currentLoaderElement.nextElementSibling;
-    
-    mainView.hideLoaderElement(currentLoaderElement);
-  
-    for (let i = 1; i<=10; i++) {
-      if (currentPostElement) {
-        mainView.showPostElement(currentPostElement);
-        
-        if (i===10) {
-          currentLoaderElement = currentPostElement.nextElementSibling;
-          
-          if (currentLoaderElement) {
-            mainView.showLoaderElement(currentLoaderElement);
-          }
-        }
-
-        currentPostElement = currentPostElement.nextElementSibling;
-      }
-    }
+  } else if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
+    loadMorePostsSubController(e);
   }
 }
 
+/* ------------------------------------------- */
+/* ------- LOAD MORE POSTS SUBCONTROLLER ----- */
+
+function loadMorePostsSubController(e) {
+  let currentLoaderElement = e.target.closest(`.${DOMstrings.posts.loadMore}`);
+  
+  mainView.hideLoaderElement(currentLoaderElement);
+
+  appState.session.postsPage++;
+  renderPosts(appState.session.postsPage);
+}
 
 
 /* ---------------------------------------- */

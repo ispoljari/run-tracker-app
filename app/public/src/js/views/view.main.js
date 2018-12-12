@@ -58,7 +58,7 @@ export const renderDotsAnimation = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderPosts = (post, visible) => {
+export const renderPosts = (post) => {
   const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
   const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
 
@@ -99,7 +99,7 @@ export const renderPosts = (post, visible) => {
 
 
   const htmlString = 
-  `<div class="content__post js-content__post ${visible ? '' : controledHooksStrings.runPostsHide}">
+  `<div class="content__post js-content__post">
     <div class="post-collapsible js-post-collapsible">
       <a href="#">
         <span class="js-post-collapsible__symbol">&#10133;</span>
@@ -151,25 +151,17 @@ export const adjustFirstPostVerticalOffset = () => {
    DOMelements.mainContent.querySelectorAll(`.${DOMstrings.posts.mainContainer}`)[0].style.marginTop = '25px';
 }
 
-export const renderPostLoaderBtn = (visible) => {
+export const renderPostLoaderBtn = () => {
   const htmlString = 
-  `<div class="main-content__loader js-main-content__loader ${visible ? '' : controledHooksStrings.postsLoaderHide}">
+  `<div class="main-content__loader js-main-content__loader">
     <button type="button" class="content-loader-btn btn-style">Show More Posts</button>
    </div>`
 
   appendHtmlToMainContent(htmlString);
 }
 
-export const showPostElement = (element) => {
-  element.classList.remove(controledHooksStrings.runPostsHide);
-}
-
 export const hideLoaderElement = (element) => {
-  element.classList.add(controledHooksStrings.postsLoaderHide);
-}
-
-export const showLoaderElement = (element) => {
-  element.classList.remove(controledHooksStrings.postsLoaderHide);
+  element.parentNode.removeChild(element);
 }
 
 export const toggleCollapsiblePost = (element) => {

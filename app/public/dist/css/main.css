@@ -1120,9 +1120,7 @@ footer {
 
 .menu__item--hidden,
 .header__heading--toggle-visibility,
-.credit--toggle-visibility,
-.content__post--hidden,
-.main-content__loader--hidden {
+.credit--toggle-visibility {
   /* Layout */
   display: none;
 }

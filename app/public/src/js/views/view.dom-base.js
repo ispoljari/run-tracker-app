@@ -25,9 +25,7 @@ export const controledHooksStrings = {
   navMenuItemHide: 'menu__item--hidden',
   warningMessageStyle: 'content__user-info--warning',
   addNewRunBackground: 'add-new-run__form--background',
-  postsCollapsibleToggleVisibility: 'content__post--active',
-  runPostsHide: 'content__post--hidden',
-  postsLoaderHide: 'main-content__loader--hidden'
+  postsCollapsibleToggleVisibility: 'content__post--active'
 }
 
 export const DOMstrings = {
