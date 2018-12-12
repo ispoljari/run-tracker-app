@@ -31,6 +31,7 @@ export const controledHooksStrings = {
 export const DOMstrings = {
   menuDropDownList: 'js-dropdown-list',
   loginMenu: 'js-login-menu',
+  mainViewWarningMessage: 'js-content__user-info',
   registerForm : {
     inputFields: {
       firstName: 'registration__input-first-name',
@@ -39,7 +40,6 @@ export const DOMstrings = {
       password: 'registration__input-password',
       repeatPassword: 'registration__input-repeatPassword'
     },
-    infoMessage: 'js-content__user-info'
   },
   loginForm: {
     infoMessage: 'js-login__info'
@@ -118,9 +118,9 @@ export const apiData = {
     auth: '/api/auth/'
   },
   infoMessages: {
+    unknown: serverFail, 
     registration: {
       fail: {
-        server: serverFail,
         validation: {
           password: 'The passwords are not matching!'
         },
@@ -133,7 +133,6 @@ export const apiData = {
     login: {
       fail: {
         server: {
-          unknown: serverFail,
           noUser: 'Login failed! Username or password not correct.'
         }
       }

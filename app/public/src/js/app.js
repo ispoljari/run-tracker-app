@@ -100,7 +100,7 @@ function renderPostsPage(view,  message) {
   retrievePostsFromAPI();
 
   if (appState.session.loggedIn) {
-    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset);
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
   }
   
   footerView.renderIconsCredit();
@@ -255,7 +255,7 @@ function navMenuClickEvent(e) {
 function addNewRunViewSubController() { // TODO:
   if (appState.session.currentView !== 'addNewRun') {
     clearCurrentPage();
-    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController);    
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController, apiData.infoMessages.login.fail.server.unknown);    
     mainView.renderNewRunForm();
     appState.session.currentView = 'addNewRun';
   }
@@ -292,7 +292,7 @@ function dropDownListSubController() {
 function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
-    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, registerNewUserController, apiData.infoMessages.registration.fail.server);
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, registerNewUserController, apiData.infoMessages.unknown);
     
     mainView.renderRegistrationForm();
     appState.session.currentView = 'register';   
@@ -340,7 +340,7 @@ async function registerSubmitEvent(e) {
     
     // Check if password and repeat password are the same
     if (newUser.password !== newUser.repeatPassword) {
-      return failedRegistration(apiData.infoMessages.registration.fail.validation.password);
+      return displayFailMessage(apiData.infoMessages.registration.fail.validation.password);
     }
 
     // Create a new user instance
@@ -353,17 +353,17 @@ async function registerSubmitEvent(e) {
     try {
       await appState.register.user.createNew();
     } catch (error) {
-      failedRegistration(apiData.infoMessages.registration.fail.server);
+      displayFailMessage(apiData.infoMessages.unknown);
     }
 
     if (appState.register.user.result) {
       appState.register.user.result.status === 201 ? 
       successfulRegistration(apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
-      : failedRegistration(apiData.infoMessages.registration.fail.server);
+      : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.register.user.error) {
-      return failedRegistration(`${appState.register.user.error.message}!`);
+      return displayFailMessage(`${appState.register.user.error.message}!`);
     } else {
-      return failedRegistration(apiData.infoMessages.registration.fail.server);
+      return displayFailMessage(apiData.infoMessages.unknown);
     }
 
     // Delete all data from appState.register.user
@@ -380,12 +380,6 @@ function successfulRegistration(...messages) {
   transitionRegistrationSuccessMessage(messages, true);
 }
 
-function failedRegistration(...messages) {
-  if (!mainView.warningMessageExists()) {
-    displayRegistrationFailMessage(messages, false, 'afterbegin');
-  }
-}
-
 function transitionRegistrationSuccessMessage(messages, animate = false) {
   renderMainViewMessages(messages, animate);
 
@@ -395,9 +389,11 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
   }, 1200);
 }
 
-function displayRegistrationFailMessage(messages, animate = false, position) {
-  renderMainViewMessages(messages, animate, position);
-  mainView.styleWarningMessage();
+function displayFailMessage(...messages) {
+  if (!mainView.warningMessageExists()) {
+    renderMainViewMessages(messages, false, 'afterbegin');
+    mainView.styleWarningMessage();
+  }
 }
 
 function renderMainViewMessages(messages, animate, position='') {
@@ -456,7 +452,7 @@ async function loginSubmitEvent(e) {
       appState.login.user.result.status === 200 
       && appState.login.user.result.data.authToken ? 
       successfullLogin() 
-      : failedLogin(apiData.infoMessages.login.fail.server.unknown);
+      : failedLogin(apiData.infoMessages.unknown);
     } else if (appState.login.user.error) {
       if (appState.login.user.error.toLowerCase() === 'unauthorized') {
         return failedLogin(`${apiData.infoMessages.login.fail.server.noUser}`);
@@ -464,7 +460,7 @@ async function loginSubmitEvent(e) {
         return failedLogin(`${appState.login.user.error}`);
       }
     } else {
-      return failedLogin(apiData.infoMessages.login.fail.server.unknown);
+      return failedLogin(apiData.infoMessages.unknown);
     }
   }
 }
@@ -689,7 +685,7 @@ function executeFunctionAfterDOMContentLoaded(element, func, msg='Something went
       })
       .catch(error => {
         clearCurrentPage();
-        failedRegistration(msg); //TODO: this function must become general purpose!
+        displayFailMessage(msg);
       });
 }
 

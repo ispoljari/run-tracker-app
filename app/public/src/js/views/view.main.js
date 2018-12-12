@@ -31,19 +31,19 @@ export const renderMessage = (message, position='beforeend') => {
 }
 
 export const removeMessage = () => {
-  DOMelements.mainContent.removeChild(document.querySelector(`.${DOMstrings.infoMessage}`));
+  DOMelements.mainContent.removeChild(document.querySelector(`.${DOMstrings.mainViewWarningMessage}`));
 }
 
 export const styleWarningMessage = () => {
-  const warningMessage = document.querySelector(`.${DOMstrings.infoMessage}`);
+  const warningMessage = document.querySelector(`.${DOMstrings.mainViewWarningMessage}`);
   if (!warningMessage.classList.contains(controledHooksStrings.warningMessageStyle)) {
     warningMessage.classList.add(controledHooksStrings.warningMessageStyle);
   }
 }
 
 export const warningMessageExists = () => {
-  if (document.querySelector(`.${DOMstrings.registerForm.infoMessage}`)) {
-    return document.querySelector(`.${DOMstrings.registerForm.infoMessage}`).classList.contains(controledHooksStrings.warningMessageStyle);
+  if (document.querySelector(`.${DOMstrings.mainViewWarningMessage}`)) {
+    return document.querySelector(`.${DOMstrings.mainViewWarningMessage}`).classList.contains(controledHooksStrings.warningMessageStyle);
   } else {
     return false;
   }
