@@ -98,7 +98,7 @@ function logoClickEvent(e) {
 function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if ((view === 'home' || view === 'myRuns') && appState.session.loggedIn) {
+  } else if (view === 'myRuns' && appState.session.loggedIn) {
     mainView.renderProfileBanner();
   }
   mainView.renderTitle(message);
@@ -210,12 +210,14 @@ function postClickEvent(e) {
         
         if (i===10) {
           currentLoaderElement = currentPostElement.nextElementSibling;
-          mainView.showLoaderElement(currentLoaderElement);
+          
+          if (currentLoaderElement) {
+            mainView.showLoaderElement(currentLoaderElement);
+          }
         }
 
         currentPostElement = currentPostElement.nextElementSibling;
       }
-      console.log('Hello!');
     }
   }
 }
@@ -662,7 +664,6 @@ async function submitNewRunEvent(e) {
     // 6) validate server-side errors, if any
 
   }
-  console.log('Hello!');
 }
 
 // function allSentDataStoredToDB(sentData) {

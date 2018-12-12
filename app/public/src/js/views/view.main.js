@@ -154,7 +154,7 @@ export const adjustFirstPostVerticalOffset = () => {
 export const renderPostLoaderBtn = (visible) => {
   const htmlString = 
   `<div class="main-content__loader js-main-content__loader ${visible ? '' : controledHooksStrings.postsLoaderHide}">
-    <button type="button" class="content-loader-btn btn-style">Load More Posts</button>
+    <button type="button" class="content-loader-btn btn-style">Show More Posts</button>
    </div>`
 
   appendHtmlToMainContent(htmlString);
