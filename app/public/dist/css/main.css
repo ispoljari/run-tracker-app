@@ -8,17 +8,24 @@ body {
   line-height: 1.3;
 }
 
+.header--style {
+  /* Layout */
+  padding: 10px 10px 25px 10px;
+
+  /* Style */
+  background-color: #0ea7b5;
+  border-radius: 5px;
+}
+
 .header {
   /* Layout */
   position: relative;
-  margin-top: 30px;
-  padding: 5px;
 }
 
 .header__logo-container {
   /* Layout */
   position: relative;
-  top: 5px;
+  top: 3px;
   display: inline-block;
   border-radius: 5px;
 }
@@ -41,7 +48,7 @@ body {
   display: inline-block;
   position: absolute;
   right: 5px;
-  bottom: 5px;
+  bottom: -2px;
 }
 
 .menu {
@@ -62,7 +69,7 @@ body {
 
 .menu__item:nth-child(1) {
   /* Styles */
-  background-color: gold;
+  background-color: #ffd54f;
 }
 
 .menu__item:nth-child(2) {
@@ -72,7 +79,7 @@ body {
 
 .menu__item:nth-child(3) {
   /* Styles */
-  background-color: aqua;
+  background-color: wheat;
 }
 
 .menu__item:nth-child(4) {
@@ -109,7 +116,11 @@ body {
           box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.75);
 }
 
-.menu__item--avatar-hover:hover {
+.menu__item--avatar {
+  background-color: white;
+}
+
+.menu__item--avatar:hover {
   /* Styles */
   background-color: #dcd6d6;
 }
@@ -138,6 +149,8 @@ a {
 }
 
 .menu__avatar {
+  /* Layout */
+  margin-left: 5px;
   /* Styles */
   width: 35px;
 }
@@ -148,7 +161,7 @@ a {
   margin-top: 10px;
 
   /* Styles */
-  background-color: bisque;
+  background-color: white;
   border-radius: 5px;
 }
 
@@ -277,7 +290,8 @@ a {
 }
 
 .heading__subtitle span {
-  color: crimson;
+  /* Style */
+  color: #e8702a; 
 }
 
 /* ------------------------------------------------- */
@@ -285,6 +299,12 @@ a {
 /* ------------------------------------------------- */
 
 /* ------------------------ POSTS ------------------ */
+
+.main--style {
+  /* Layout */
+  padding: 0 10px 25px 10px;
+  border-radius: 5px;
+}
 
 .content {
   /* Layout */
@@ -308,7 +328,7 @@ a {
   height: 150px;
   width: 100%;
   padding: 15px;
-  background-color: maroon;
+  background-color: 	#0c457d;
   border-radius: 5px;
 }
 
@@ -382,7 +402,14 @@ div.content__post:nth-child(n+3) {
 }
 
 .content__heading-posts,
-.content__user-info,
+.content__user-info {
+  /* Layout */
+  margin: 25px auto 0 auto;
+
+  /* Style */
+  max-width: 450px;
+}
+
 .main-content__loader {
   /* Layout */
   margin: 50px auto 0 auto;
@@ -862,13 +889,19 @@ div.content__post:nth-child(n+3) {
 /* ------------------------FOOTER------------------- */
 /* ------------------------------------------------- */
 
+.footer--style {
+  /* Style   */
+  background-color: #e8702a;
+  border-radius: 5px;
+}
+
 footer {
   margin-bottom: 10px;
 }
 
 .credit {
   /* Layout */
-  margin-top: 30px;
+  margin-top: 15px;
 }
 
 .credit__text {
