@@ -34,21 +34,16 @@ import * as footerView from './views/view.footer';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
-/* ---------- APP SUPERCONTROLLER --------- */
+/* ---------------- APP START ------------- */
 /* ---------------------------------------- */
 /* ---------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initializeAppControllers();
-}, false);
-
-
-function initializeAppControllers() {
   documentLevelController(); // Register global event listeners
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
   homeViewController('home', 'Recent Posts'); 
-}
+}, false);
 
 /* ---------------------------------------- */
 /* ------ DOCUMENT-LEVEL CONTROLLER ------- */
@@ -105,20 +100,7 @@ function renderPostsPage(view,  message) {
   retrievePostsFromAPI();
 
   if (appState.session.loggedIn) {
-    attachMutationObserver(DOMelements.mainContent)
-      .then(result => {
-        appState.mutationObserver.result = result;
-        mainView.adjustFirstPostVerticalOffset();
-      })
-      .then(()=> {
-        appState.mutationObserver.result.observer.disconnect();
-        deleteAllObjectProperties(appState.mutationObserver);
-      })
-      .catch(error => {
-        // TODO:
-        // clearCurrentPage();
-        // Error message
-      });
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset);
   }
   
   footerView.renderIconsCredit();
@@ -273,21 +255,7 @@ function navMenuClickEvent(e) {
 function addNewRunViewSubController() { // TODO:
   if (appState.session.currentView !== 'addNewRun') {
     clearCurrentPage();
-    attachMutationObserver(DOMelements.mainContent)
-      .then(result => {
-        appState.mutationObserver.result = result;
-        addNewRunController(); 
-      })
-      .then(()=> {
-        appState.mutationObserver.result.observer.disconnect();
-        deleteAllObjectProperties(appState.mutationObserver);
-      })
-      .catch(error => {
-        console.log('Add New Run error!'); // TODO:
-        // clearCurrentPage();
-        // failedRegistration(apiData.infoMessages.registration.fail.server);
-      });
-    
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController);    
     mainView.renderNewRunForm();
     appState.session.currentView = 'addNewRun';
   }
@@ -324,19 +292,7 @@ function dropDownListSubController() {
 function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
-    attachMutationObserver(DOMelements.mainContent)
-      .then(result => {
-        appState.mutationObserver.result = result;
-        registerNewUserController(); 
-      })
-      .then(()=> {
-        appState.mutationObserver.result.observer.disconnect();
-        deleteAllObjectProperties(appState.mutationObserver);
-      })
-      .catch(error => {
-        clearCurrentPage();
-        failedRegistration(apiData.infoMessages.registration.fail.server);
-      });
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, registerNewUserController, apiData.infoMessages.registration.fail.server);
     
     mainView.renderRegistrationForm();
     appState.session.currentView = 'register';   
@@ -720,6 +676,23 @@ function deleteAllObjectProperties(obj) {
     }
   }
 }
+
+function executeFunctionAfterDOMContentLoaded(element, func, msg='Something went wrong!') {
+  attachMutationObserver(element)
+      .then(result => {
+        appState.mutationObserver.result = result;
+        func();
+      })
+      .then(()=> {
+        appState.mutationObserver.result.observer.disconnect();
+        deleteAllObjectProperties(appState.mutationObserver);
+      })
+      .catch(error => {
+        clearCurrentPage();
+        failedRegistration(msg); //TODO: this function must become general purpose!
+      });
+}
+
 
 function attachMutationObserver(observedElement) {
   const config = {childList: true}
