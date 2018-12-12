@@ -98,7 +98,7 @@ function logoClickEvent(e) {
 function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if (view === 'myRuns' && appState.session.loggedIn) {
+  } else if ((view === 'home' || view === 'myRuns') && appState.session.loggedIn) {
     mainView.renderProfileBanner();
   }
   mainView.renderTitle(message);
