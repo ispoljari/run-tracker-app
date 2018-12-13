@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   documentLevelController(); // Register global event listeners
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
-  homeViewController('home', 'Recent Posts'); 
+  homeViewController('home', 'Recent Posts');
 }, false);
 
 /* ---------------------------------------- */
@@ -597,27 +597,50 @@ function addNewRunController() {
 }
 
 async function submitNewRunEvent(e) {
-  // some code
   e.stopPropagation();
   e.preventDefault();
 
-  // 1) check if warning errors exist
+  // Remove existing warning messages
+  if (mainView.warningMessageExists()) {
+    mainView.removeMessage();
+  }
 
   // 2) read values from input fields
   const newPost = mainView.getNewRunFormData();
 
   if (newPost) {
 
-    // 2.1) client-side validation of input data
-    // TODO: user moment.js to validate the time and date input fields
+    // 2.1) validate input data
+    const durationValidator = validateTotalDurationTime(newPost.duration);
+    if (durationValidator) {
+      return displayFailMessage(durationValidator);
+    }
 
-    // 2.2) aggregate required data before sending to the server
+    const dateValidator = validateDateFormat(newPost.date);
+    if (dateValidator) {
+      return displayFailMessage(dateValidator);
+    }
+
+    const timeValidator = validateTimeFormat(newPost.time);
+    if (timeValidator) {
+      return displayFailMessage(timeValidator);
+    }
+
+    const descriptionValidator = validateDescription(newPost.description);
+    if (descriptionValidator) {
+      return displayFailMessage(descriptionValidator);
+    }
   
     // 3) create a new instance of Post object
     appState.posts.created = new Post(newPost);
 
-    // 4) POST to endpoint /api/posts/ using provided JWT token
-    await appState.posts.created.createNew();
+    // 4) create new post using provided JWT token
+    try {
+      await appState.posts.created.createNew();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);
+    }
+    
     console.log(appState.posts.created);
   
     // 5) read and store the returned data
@@ -627,11 +650,27 @@ async function submitNewRunEvent(e) {
     //   successfullLogin() 
     //   : 'Login fail!';
     // }
-    console.log(allSentDataStoredToDB(newPost));
+    // console.log(allSentDataStoredToDB(newPost));
   
     // 6) validate server-side errors, if any
 
   }
+}
+
+function validateTotalDurationTime(duration) {
+  return (duration.hours + duration.minutes + duration.seconds) === 0 ? apiData.infoMessages.addNewRun.fail.validation.duration : false;
+}
+
+function validateDateFormat(date) {
+  return !moment(date, 'YYYY-MM-DD').isValid() ? apiData.infoMessages.addNewRun.fail.validation.date : false;
+}
+
+function validateTimeFormat(time) {
+  return !moment(time, 'hh:mm', true).isValid() ? apiData.infoMessages.addNewRun.fail.validation.time : false;
+}
+
+function validateDescription(description) {
+  return description.length < 10 ? apiData.infoMessages.addNewRun.fail.validation.description : false;
 }
 
 // function allSentDataStoredToDB(sentData) {

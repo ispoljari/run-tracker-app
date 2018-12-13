@@ -296,7 +296,7 @@ export const renderNewRunForm = () => {
             <legend>Title</legend>
             <div class="title__container">
               <label for="title__input" class="title__label"></label>
-              <input type="text" placeholder="Relaxing Afternoon Run" name="title" id="title__input" class="js-add-new-run__title" required/>
+              <input type="text" placeholder="Relaxing Afternoon Run" name="title" pattern=".{5,}" title="5 characters minimum" id="title__input" class="js-add-new-run__title" required/>
             </div>
           </fieldset>	
         </div>
@@ -377,7 +377,7 @@ export const renderNewRunForm = () => {
             <legend>Date & Time</legend>
             <div class="date">
               <label for="date-input" class="date-label"></label>
-              <input type="date" value="2018-12-08" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2} name="date"  id="date-input" class="js-add-new-run__date" required/>
+              <input type="date" value="2018-11-18" name="date" id="date-input" class="js-add-new-run__date" required/>
             </div>
             <div class="time">
               <label for="time-input" class="time-label"></label>
@@ -401,7 +401,7 @@ export const renderNewRunForm = () => {
               <legend>Description</legend>
               <div class="description__container">
                 <label for="description__input" class="description__label"></label>
-                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description"></textarea>
+                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description" required></textarea>
               </div>
           </fieldset>	
         </div>

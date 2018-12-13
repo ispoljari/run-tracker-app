@@ -57,7 +57,7 @@ export default class Post {
       });
       this.result = res; 
     } catch (error) {
-      this.error = error.response.data;    // TODO: ERROR HANDLING  
+      this.error = error.response.data;  
     }
   }
 

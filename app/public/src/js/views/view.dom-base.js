@@ -136,6 +136,16 @@ export const apiData = {
           noUser: 'Login failed! Username or password not correct.'
         }
       }
+    },
+    addNewRun: {
+      fail: {
+        validation: {
+          duration: 'Total duration time must be greater than 0s.',
+          date: 'Required date format is YYYY-MM-DD.',
+          time: 'Required time format is HH:SS.',
+          description: 'Description should have 10 characters minimum.'
+        }
+      }
     }
   }
 }
