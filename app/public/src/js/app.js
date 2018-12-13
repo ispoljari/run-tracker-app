@@ -93,7 +93,7 @@ function logoClickEvent(e) {
 function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if ((view === 'home' || view === 'myRuns') && appState.session.loggedIn) {
+  } else if (view === 'myRuns' && appState.session.loggedIn) {
     mainView.renderProfileBanner();
   }
   mainView.renderTitle(message);
@@ -505,7 +505,7 @@ function enterLoggedInSessionMode() {
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('home', 'Main Feed');
+  homeViewController('myRuns', 'My Runs');
 }
 
 function hideLoggedOutMenuItems() {
@@ -537,11 +537,7 @@ function dropDownListController() {
 }
 
 function myProfileViewSubController() {
-  // some code
-  console.log('My Profile Hello!');
-
   if (appState.session.currentView !== 'myProfile') {
-    // some code
     appState.session.currentView = 'myProfile';
   }
 }
@@ -629,7 +625,7 @@ async function submitNewRunEvent(e) {
     if (durationValidator) {
       return displayFailMessage(durationValidator);
     }
-
+    
     const dateValidator = validateDateFormat(newPost.date);
     if (dateValidator) {
       return displayFailMessage(dateValidator);
