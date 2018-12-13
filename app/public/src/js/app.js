@@ -209,7 +209,6 @@ function postsController() {
 
 
 function postClickEvent(e) {
-  e.stopPropagation();
   e.preventDefault();
   
   if (e.target.closest(`.${DOMstrings.posts.collapsibleContainer}`)) {
