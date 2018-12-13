@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   documentLevelController(); // Register global event listeners
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
-  homeViewController('home', 'Recent Posts');
+  homeViewController('home', 'Main Feed');
 }, false);
 
 /* ---------------------------------------- */
@@ -86,7 +86,7 @@ function logoController() {
 function logoClickEvent(e) {
   if (appState.session.currentView !== 'home') {
     clearCurrentPage();
-    homeViewController('home', 'Recent Posts');
+    homeViewController('home', 'Main Feed');
   }
 }
 
@@ -125,7 +125,6 @@ async function retrievePostsFromAPI(sort) {
   } else {
     return displayFailMessage(apiData.infoMessages.unknown);
   }
-
 }
 
 function displayPosts(sort) {
@@ -400,7 +399,7 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
 
   setTimeout(()=> {
     clearCurrentPage();
-    homeViewController('home', 'Recent Posts');
+    homeViewController('home', 'Main Feed');
   }, 1000);
 }
 
@@ -506,7 +505,7 @@ function enterLoggedInSessionMode() {
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('home', 'Recent Posts');
+  homeViewController('home', 'Main Feed');
 }
 
 function hideLoggedOutMenuItems() {
@@ -587,7 +586,7 @@ function exitLoggedInSessionMode() {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('home', 'Recent Posts');
+  homeViewController('home', 'Main Feed');
 }
 
 function showLoggedOutMenuItems() {
@@ -648,6 +647,9 @@ async function submitNewRunEvent(e) {
   
     // 3) create a new instance of Post object
     appState.posts.created = new Post(newPost);
+
+    // 3.1) Delete newPost object
+    deleteAllObjectProperties(newPost);
 
     // 4) create new post using provided JWT token
     try {
