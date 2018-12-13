@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   documentLevelController(); // Register global event listeners
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
-  homeViewController('home', 'Recent Posts');
+  homeViewController('home', 'Main Feed');
 }, false);
 
 /* ---------------------------------------- */
@@ -86,41 +86,51 @@ function logoController() {
 function logoClickEvent(e) {
   if (appState.session.currentView !== 'home') {
     clearCurrentPage();
-    homeViewController('home', 'Recent Posts');
+    homeViewController('home', 'Main Feed');
   }
 }
 
 function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if ((view === 'home' || view === 'myRuns') && appState.session.loggedIn) {
+  } else if (view === 'myRuns' && appState.session.loggedIn) {
     mainView.renderProfileBanner();
   }
   mainView.renderTitle(message);
-  retrievePostsFromAPI();
+  retrievePostsFromAPI('desc');
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
 
-async function retrievePostsFromAPI() {
+async function retrievePostsFromAPI(sort) {
   // create new Post instance
   appState.posts.retrieved = new Post();
 
   // retrieve all posts from server
-  await appState.posts.retrieved.retrieveAll();
-
-  // if logged in and there is min 1 retrieved post, adjust offset of first post
-  if (appState.session.loggedIn && appState.posts.retrieved) {
-    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
+  try {
+    await appState.posts.retrieved.retrieveAll();
+  } catch (error) {
+    displayFailMessage(apiData.infoMessages.unknown);    
   }
 
-  // sort retrieved posts by date in descending order
-  sortPosts('desc');
- 
+  if (appState.posts.retrieved.result) {
+    if (appState.posts.retrieved.result.status === 200 && appState.posts.retrieved.result.data.length > 0 ) {
+      if (appState.session.loggedIn) {
+        executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
+      } 
+      displayPosts(sort);
+    }
+  } else if (appState.posts.retrieved.error) {
+    return displayFailMessage(`${appState.posts.retrieved.error.message}`);
+  } else {
+    return displayFailMessage(apiData.infoMessages.unknown);
+  }
+}
+
+function displayPosts(sort) {
+  sortPosts(sort);
   // render ordered posts (initialy only first page with 10 posts)
   renderPosts(appState.session.postsPage);
-
-  // TODO: ERROR HANDLING
 }
 
 function sortPosts(method) {
@@ -252,7 +262,7 @@ function navMenuClickEvent(e) {
   }
 }
 
-function addNewRunViewSubController() { // TODO:
+function addNewRunViewSubController() {
   if (appState.session.currentView !== 'addNewRun') {
     clearCurrentPage();
     executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController, apiData.infoMessages.login.fail.server.unknown);    
@@ -371,7 +381,6 @@ async function registerSubmitEvent(e) {
   }
 
   // TODO: ENABLE USER TO DELETE ACCOUNT
-  // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
 }
 
 function formSubmitSuccessfullyExecuted(type, ...messages) {
@@ -390,7 +399,7 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
 
   setTimeout(()=> {
     clearCurrentPage();
-    homeViewController('home', 'Recent Posts');
+    homeViewController('home', 'Main Feed');
   }, 1000);
 }
 
@@ -496,7 +505,7 @@ function enterLoggedInSessionMode() {
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('home', 'Recent Posts');
+  homeViewController('myRuns', 'My Runs');
 }
 
 function hideLoggedOutMenuItems() {
@@ -528,11 +537,7 @@ function dropDownListController() {
 }
 
 function myProfileViewSubController() {
-  // some code
-  console.log('My Profile Hello!');
-
   if (appState.session.currentView !== 'myProfile') {
-    // some code
     appState.session.currentView = 'myProfile';
   }
 }
@@ -577,7 +582,7 @@ function exitLoggedInSessionMode() {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('home', 'Recent Posts');
+  homeViewController('home', 'Main Feed');
 }
 
 function showLoggedOutMenuItems() {
@@ -620,7 +625,7 @@ async function submitNewRunEvent(e) {
     if (durationValidator) {
       return displayFailMessage(durationValidator);
     }
-
+    
     const dateValidator = validateDateFormat(newPost.date);
     if (dateValidator) {
       return displayFailMessage(dateValidator);
@@ -639,12 +644,14 @@ async function submitNewRunEvent(e) {
     // 3) create a new instance of Post object
     appState.posts.created = new Post(newPost);
 
+    // 3.1) Delete newPost object
+    deleteAllObjectProperties(newPost);
+
     // 4) create new post using provided JWT token
     try {
       await appState.posts.created.createNew();
     } catch (error) {
       displayFailMessage(apiData.infoMessages.unknown);
-      console.log(error);
     }
   
     // 5) read and store the returned data
@@ -657,6 +664,8 @@ async function submitNewRunEvent(e) {
     } else {
       return displayFailMessage(apiData.infoMessages.unknown);
     }
+
+    deleteAllObjectProperties(appState.posts.created);
   }
 }
 
