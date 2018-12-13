@@ -18,14 +18,22 @@ const {jwtAuth} = require('../auth');
 // Create a New Note (JWT protected)
 router.post('/', jwtAuth, (req, res) => {
   // Extract the received data from req.body
-  let {distance, runTime, dateTime, user, upvotes} = req.body;
+  let {title, distanceValue, distanceUnit, durationHours, durationMinutes, durationSeconds, runType, date, time, description, privacy, upvotes} = req.body;
 
   // Add post data validation
   const validate = Joi.validate({
-    distance,
-    runTime,
-    dateTime,
-    user,
+    title,
+    distanceValue,
+    distanceUnit,
+    durationHours,
+    durationMinutes,
+    durationSeconds,
+    runType,
+    date,
+    time,
+    description,
+    privacy,
+    user: req.user.id, // read directly from JWT payload
     upvotes
   }, postJoiSchema, {convert: false});
 
@@ -39,7 +47,7 @@ router.post('/', jwtAuth, (req, res) => {
   // Additional validation: Check if user ID's are in a valid ObjectID format
 
   // Check the 'user' property
-  if (!(mongoose.Types.ObjectId.isValid(user))) {
+  if (!(mongoose.Types.ObjectId.isValid(req.user.id))) {
     const message = 'The value of \'user\' is not in a valid ObjectId format.'
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
@@ -59,13 +67,21 @@ router.post('/', jwtAuth, (req, res) => {
     }
   }
 
-  User.findById(req.body.user)
+  User.findById(req.user.id)
     .then(user => {
       if (user) {
         Post.create({
-          distance,
-          runTime,
-          dateTime,
+          title,
+          distanceValue,
+          distanceUnit,
+          durationHours,
+          durationMinutes,
+          durationSeconds,
+          runType,
+          date,
+          time,
+          description,
+          privacy,
           user,
           upvotes
         })
@@ -137,7 +153,7 @@ router.put('/:id', jwtAuth, (req, res) => {
   }
 
   const updated = {};
-  const updateableFields = ['distance', 'runTime', 'dateTime'];
+  const updateableFields = ['title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy']; // TODO: add upvotes
   
   updateableFields.forEach(field => {
     if (field in req.body) {

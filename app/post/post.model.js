@@ -17,9 +17,17 @@ const upvoteSchema = Schema({
 });
 
 const postSchema = Schema({
-  distance: Number,
-  runTime: Number,
-  dateTime: String,
+  title: String,
+  distanceValue: Number,
+  distanceUnit: String,
+  durationHours: Number,
+  durationMinutes: Number,
+  durationSeconds: Number,
+  runType: String,
+  date: String,
+  time: String,
+  description: String,
+  privacy: String,
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   upvotes: [upvoteSchema]
 });
@@ -37,9 +45,17 @@ postSchema.methods.serialize = function() {
 
   return {
     id: this._id,
-    distance: this.distance,
-    runTime: this.runTime,
-    dateTime: this.dateTime,
+    title: this.title,
+    distanceValue: this.distanceValue,
+    distanceUnit: this.distanceUnit,
+    durationHours: this.durationHours,
+    durationMinutes: this.durationMinutes,
+    durationSeconds: this.durationSeconds,
+    runType: this.runType,
+    date: this.date,
+    time: this.time,
+    description: this.description,
+    privacy: this.privacy,
     upvotes: this.upvotes,
     user: user
   };
@@ -47,9 +63,17 @@ postSchema.methods.serialize = function() {
 
 // Create a Joi schema for post data validation
 const postJoiSchema = Joi.object().keys({
-  distance: Joi.number().required(),
-  runTime: Joi.number().required(),
-  dateTime: Joi.string().optional(),
+  title: Joi.string().required(),
+  distanceValue: Joi.number().required(),
+  distanceUnit: Joi.string().required(),
+  durationHours: Joi.number().required(),
+  durationMinutes: Joi.number().required(),
+  durationSeconds: Joi.number().required(),
+  runType: Joi.string().required(),
+  date: Joi.string().required(),
+  time: Joi.string().required(),
+  description: Joi.string().required(),
+  privacy: Joi.string().optional(),
   user: Joi.string().required(),
   upvotes: Joi.array().items(
     Joi.object().keys({

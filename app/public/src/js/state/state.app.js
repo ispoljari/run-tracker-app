@@ -4,18 +4,18 @@
 export const appState = {
   session: {
     currentView: 'home',
-    logginCredentials: {
-      username: 'demo@run-tracker.test',
-      password: 'demo123456'
-    },
-    loggedIn: false
+    loggedIn: false,
+    postsPage: 1
   },
   registeredClickEvents: {
     logInMenu: false,
     registerForm: false,
-    dropDownList: false
+    addNewRunForm: false,
+    dropDownList: false,
+    posts: false
   },
   register: {},
   login: {},
+  posts: {},
   mutationObserver: {}
 }

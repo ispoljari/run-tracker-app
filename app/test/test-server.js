@@ -1,11 +1,6 @@
 'use strict';
 const result = require('dotenv').config();
 
-if (result.error) {
-  console.log(result.parsed);
-  throw result.error
-}
-
 // Import 3rd party frameworks, libraries or project modules
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -82,10 +77,18 @@ function generateDummyObjectID() {
 function generatePostData() {
 
   return {
-    distance: faker.random.number(),
-    runTime: faker.random.number(),
-    dateTime: faker.lorem.word(),
-    user: generateDummyObjectID(),
+    title: faker.lorem.sentence(),
+    distanceValue: faker.random.number(),
+    distanceUnit: faker.lorem.word(),
+    durationHours: faker.random.number(),
+    durationMinutes: faker.random.number(),
+    durationSeconds: faker.random.number(),
+    runType: faker.lorem.word(),
+    date: faker.lorem.word(),
+    time: faker.lorem.word(),
+    description: faker.lorem.word(),
+    privacy: faker.lorem.word(),
+    // user: generateDummyObjectID(),
     upvotes : [{
       userId: generateDummyObjectID()
     }]
@@ -314,9 +317,24 @@ describe('///////////// API RESOURCES //////////', function() {
     });
  
     describe('----- /api/posts/ endpoint -----', function() {
-      
+
       beforeEach(function() {
-        return seedData();
+        return seedData()
+          .then(function() {
+            return userData.userSeedData;
+          })
+          .then(function(user) {
+            // Obtain a valid JWT token
+            return chai.request(app)
+            .post('/api/auth/login')
+            .send({
+              username: user.username,
+              password: user.password
+            })
+            .then(function(res) {
+              userData.jwtToken = res.body.authToken;
+            })
+          });
       });
     
       afterEach(function() {
@@ -329,61 +347,100 @@ describe('///////////// API RESOURCES //////////', function() {
         it('Should add a new post to the DB', function() {
           const newPost = generatePostData();
 
-          return User.findOne()
-            .then(function(userDB) {
-              newPost.user = userDB._id;
-            })  
-            .then(function() {
-              return chai.request(app)
-              .post('/api/posts/')
-              .set('Authorization', `Bearer ${userData.jwtToken}`)
-              .send(newPost)
-              .then(function(res) {
-                expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
-                expect(res).to.be.json;
-                expect(res.body).to.be.a('object');
-                expect(res.body).to.include.keys(
-                  'distance', 'runTime', 'dateTime', 'user', 'upvotes', 'id'
-                );
-                expect(res.body.upvotes).to.be.a('array');
-                expect(res.body.upvotes[0]).to.be.a('object');
-                expect(res.body.upvotes[0]).to.include.keys(
-                  'userId'
-                );
+          return chai.request(app)
+            .post('/api/posts/')
+            .set('Authorization', `Bearer ${userData.jwtToken}`)
+            .send(newPost)
+            .then(function(res) {
+              expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
+              expect(res).to.be.json;
+              expect(res.body).to.be.a('object');
+              expect(res.body).to.include.keys(
+                'title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy', 'upvotes', 'id'
+              );
+              expect(res.body.upvotes).to.be.a('array');
+              expect(res.body.upvotes[0]).to.be.a('object');
+              expect(res.body.upvotes[0]).to.include.keys(
+                'userId'
+              );
 
-                // compare the API response with the sent data
-                expect(res.body.distance).to.equal(newPost.distance);
-                expect(res.body.distance).to.be.a('number');
-      
-                expect(res.body.runTime).to.equal(newPost.runTime);
-                expect(res.body.runTime).to.be.a('number');
+              // compare the API response with the sent data
+              expect(res.body.title).to.equal(newPost.title);
+              expect(res.body.title).to.be.a('string');
 
-                expect(res.body.dateTime).to.equal(newPost.dateTime);
-                expect(res.body.dateTime).to.be.a('string');
-                expect(res.body.user).to.not.be.null;
-                expect(res.body.id).to.not.be.null;
-                expect(res.body.upvotes).to.have.lengthOf.at.least(1);
-                expect(res.body.upvotes[0]).to.not.be.null;
-                expect(res.body.upvotes[1]).to.not.be.null;
-      
-                return Post.findById(res.body.id);
-              })
-              .then(function(post) { //inspect the DB, and compare it's state to the API response
-                expect(post.distance).to.equal(newPost.distance);
-                expect(post.runTime).to.equal(newPost.runTime);
-                expect(post.dateTime).to.equal(newPost.dateTime);
-                expect(post.user).to.not.be.null;
-                expect(post.id).to.not.be.null;
-                expect(post.upvotes).to.have.lengthOf.at.least(1);
-                expect(post.upvotes[0]).to.not.be.null;
-              })
+              expect(res.body.distanceValue).to.equal(newPost.distanceValue);
+              expect(res.body.distanceValue).to.be.a('number');
+
+              expect(res.body.distanceUnit).to.equal(newPost.distanceUnit);
+              expect(res.body.distanceUnit).to.be.a('string');
+    
+              expect(res.body.durationHours).to.equal(newPost.durationHours);
+              expect(res.body.durationHours).to.be.a('number');
+
+              expect(res.body.durationMinutes).to.equal(newPost.durationMinutes);
+              expect(res.body.durationMinutes).to.be.a('number');
+
+              expect(res.body.durationSeconds).to.equal(newPost.durationSeconds);
+              expect(res.body.durationSeconds).to.be.a('number');
+
+              expect(res.body.runType).to.equal(newPost.runType);
+              expect(res.body.runType).to.be.a('string');
+
+              expect(res.body.date).to.equal(newPost.date);
+              expect(res.body.date).to.be.a('string');
+
+              expect(res.body.time).to.equal(newPost.time);
+              expect(res.body.time).to.be.a('string');
+
+              expect(res.body.description).to.equal(newPost.description);
+              expect(res.body.description).to.be.a('string');
+
+              expect(res.body.privacy).to.equal(newPost.privacy);
+              expect(res.body.privacy).to.be.a('string');
+
+              expect(res.body.user).to.not.be.null;
+              expect(res.body.id).to.not.be.null;
+              expect(res.body.upvotes).to.have.lengthOf.at.least(1);
+              expect(res.body.upvotes[0]).to.not.be.null;
+              expect(res.body.upvotes[1]).to.not.be.null;
+    
+              return Post.findById(res.body.id);
+            })
+            .then(function(post) { //inspect the DB, and compare it's state to the API response
+
+              expect(post.title).to.equal(newPost.title);
+
+              expect(post.distanceValue).to.equal(newPost.distanceValue);
+
+              expect(post.distanceUnit).to.equal(newPost.distanceUnit);
+
+              expect(post.durationHours).to.equal(newPost.durationHours);
+
+              expect(post.durationMinutes).to.equal(newPost.durationMinutes);
+
+              expect(post.durationSeconds).to.equal(newPost.durationSeconds);
+
+              expect(post.runType).to.equal(newPost.runType);
+
+              expect(post.date).to.equal(newPost.date);
+
+              expect(post.time).to.equal(newPost.time);
+
+              expect(post.description).to.equal(newPost.description);
+
+              expect(post.privacy).to.equal(newPost.privacy);
+
+              expect(post.user).to.not.be.null;
+              expect(post.id).to.not.be.null;
+              expect(post.upvotes).to.have.lengthOf.at.least(1);
+              expect(post.upvotes[0]).to.not.be.null;
             });
         });
 
         // Fail Cases
         it('Should NOT add a new post to the DB (wrong data type sent)', function() {
           const nonValidPost = generatePostData();
-          nonValidPost.distance = faker.random.word(); // wrong data type
+          nonValidPost.distanceValue = faker.random.word(); // wrong data type
 
           return chai.request(app)
             .post('/api/posts/')
@@ -396,7 +453,7 @@ describe('///////////// API RESOURCES //////////', function() {
 
         it('Should NOT add a new post to the DB (required key missing)', function() {
           const nonValidPost = generatePostData();
-          delete nonValidPost.user; // remove 'user'
+          delete nonValidPost.title; // remove title
 
           return chai.request(app)
             .post('/api/posts/')
@@ -409,14 +466,14 @@ describe('///////////// API RESOURCES //////////', function() {
 
         it('Should NOT add a new post to the DB if the user doesn\'t exist', function() {
           const nonValidPost = generatePostData();
-          nonValidPost.user = '5bd3375a437fb9831fb25479' // non-existent user, but the ID is in a valid MongoDB UserID format
+          userData.jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.Y65Kf4fgjGTUI6lU38lUjV9jySDM2RsMkb4GPgHa6dc' // false JWT token
 
           return chai.request(app)
             .post('/api/posts/')
             .set('Authorization', `Bearer ${userData.jwtToken}`)
             .send(nonValidPost)
             .then(function(res) {
-              expect(res).to.have.status(HTTP_STATUS_CODES.BAD_REQUEST);
+              expect(res).to.have.status(HTTP_STATUS_CODES.UNAUTHORIZED);
             });
         });
       });
@@ -439,7 +496,7 @@ describe('///////////// API RESOURCES //////////', function() {
               res.body.forEach(function(post) {
                 expect(post).to.be.a('object');
                 expect(post).to.include.keys(
-                  'distance', 'runTime', 'dateTime', 'user'
+                  'title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy', 'upvotes', 'id', 'user'
                 );
               });
 
@@ -447,9 +504,18 @@ describe('///////////// API RESOURCES //////////', function() {
             })
             .then(function(post) {
               expect(res.body[0].id).to.equal(post.id);
-              expect(res.body[0].distance).to.equal(post.distance);
-              expect(res.body[0].runTime).to.equal(post.runTime);
-              expect(res.body[0].dateTime).to.equal(post.dateTime);
+              expect(res.body[0].title).to.equal(post.title);
+              expect(res.body[0].distanceValue).to.equal(post.distanceValue);
+              expect(res.body[0].distanceUnit).to.equal(post.distanceUnit);
+              expect(res.body[0].durationHours).to.equal(post.durationHours);
+              expect(res.body[0].durationMinutes).to.equal(post.durationMinutes);
+              expect(res.body[0].durationSeconds).to.equal(post.durationSeconds);
+              expect(res.body[0].runType).to.equal(post.runType);
+              expect(res.body[0].date).to.equal(post.date);
+              expect(res.body[0].time).to.equal(post.time);
+              expect(res.body[0].description).to.equal(post.description);
+              expect(res.body[0].privacy).to.equal(post.privacy);
+              expect(res.body[0].user.id).to.equal(post.user.toString());
 
               return Post.countDocuments();
             })
@@ -473,16 +539,25 @@ describe('///////////// API RESOURCES //////////', function() {
                   expect(res).to.have.status(HTTP_STATUS_CODES.OK);
                   expect(res.body).to.be.a('object');
                   expect(res.body).to.include.keys(
-                    'distance', 'runTime', 'dateTime', 'user'
+                    'title', 'distanceValue', 'distanceUnit', 'durationHours', 'durationMinutes', 'durationSeconds', 'runType', 'date', 'time', 'description', 'privacy', 'upvotes', 'id', 'user'
                   );
 
                   return Post.findById(res.body.id)
                 })
                 .then(function(post) {
                   expect(res.body.id).to.equal(post.id);
-                  expect(res.body.distance).to.equal(post.distance);
-                  expect(res.body.runTime).to.equal(post.runTime);
-                  expect(res.body.dateTime).to.equal(post.dateTime);
+                  expect(res.body.title).to.equal(post.title);
+                  expect(res.body.distanceValue).to.equal(post.distanceValue);
+                  expect(res.body.distanceUnit).to.equal(post.distanceUnit);
+                  expect(res.body.durationHours).to.equal(post.durationHours);
+                  expect(res.body.durationMinutes).to.equal(post.durationMinutes);
+                  expect(res.body.durationSeconds).to.equal(post.durationSeconds);
+                  expect(res.body.runType).to.equal(post.runType);
+                  expect(res.body.date).to.equal(post.date);
+                  expect(res.body.time).to.equal(post.time);
+                  expect(res.body.description).to.equal(post.description);
+                  expect(res.body.privacy).to.equal(post.privacy);
+                  expect(res.body.user.id).to.equal(post.user.toString());
                 });
             });
         });
@@ -493,7 +568,6 @@ describe('///////////// API RESOURCES //////////', function() {
         // Test the normal case
         it('Should update the data fields of a post with a specific ID', function() {
           const updateData = generatePostData();
-          delete updateData.user;
           delete updateData.upvotes[0];
 
           return Post.findOne()
@@ -511,9 +585,17 @@ describe('///////////// API RESOURCES //////////', function() {
               return Post.findById(updateData.id);
             })
             .then(function(post){
-              expect(post.distance).to.equal(updateData.distance);
-              expect(post.runTime).to.equal(updateData.runTime);
-              expect(post.dateTime).to.equal(updateData.dateTime);
+              expect(updateData.title).to.equal(post.title);
+              expect(updateData.distanceValue).to.equal(post.distanceValue);
+              expect(updateData.distanceUnit).to.equal(post.distanceUnit);
+              expect(updateData.durationHours).to.equal(post.durationHours);
+              expect(updateData.durationMinutes).to.equal(post.durationMinutes);
+              expect(updateData.durationSeconds).to.equal(post.durationSeconds);
+              expect(updateData.runType).to.equal(post.runType);
+              expect(updateData.date).to.equal(post.date);
+              expect(updateData.time).to.equal(post.time);
+              expect(updateData.description).to.equal(post.description);
+              expect(updateData.privacy).to.equal(post.privacy);
             });
         });
       });

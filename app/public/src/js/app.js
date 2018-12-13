@@ -9,6 +9,9 @@ if (process.env.NODE_ENV === 'dev') {
 /* ---------------------------------------- */
 /* ------------ IMPORT MODULES ------------ */
 
+// Import 3rd party modules
+import * as moment from 'moment';
+
 // Import DOM elements and dynamic hooks
 import {
   DOMelements, 
@@ -22,6 +25,7 @@ import {appState} from './state/state.app';
 
 // Import /models modules
 import User from './models/model.user';
+import Post from './models/model.post';
 
 // Import /views modules
 import * as headerView from './views/view.header';
@@ -30,20 +34,16 @@ import * as footerView from './views/view.footer';
 
 /* ---------------------------------------- */
 /* ---------------------------------------- */
-/* ---------- APP SUPERCONTROLLER --------- */
+/* ---------------- APP START ------------- */
 /* ---------------------------------------- */
 /* ---------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initializeAppControllers();
-}, false);
-
-
-function initializeAppControllers() {
   documentLevelController(); // Register global event listeners
-  logoController(); // Open home page
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
-}
+  logoController(); 
+  homeViewController('home', 'Recent Posts');
+}, false);
 
 /* ---------------------------------------- */
 /* ------ DOCUMENT-LEVEL CONTROLLER ------- */
@@ -71,8 +71,13 @@ function isTargetElementInsideOf(event, parent) {
 }
 
 /* ---------------------------------------- */
-/* ------------ LOGO CONTROLLER ----------- */
+/* ---- HOMEPAGE & LOGO CONTROLLER ------- */
 /* ---------------------------------------- */
+
+function homeViewController(view, message) {
+  postsController(); 
+  renderPostsPage(view, message);
+}
 
 function logoController() {
   attachEventListener([DOMelements.headerLogo], 'click', [logoClickEvent]);
@@ -81,32 +86,141 @@ function logoController() {
 function logoClickEvent(e) {
   if (appState.session.currentView !== 'home') {
     clearCurrentPage();
-    renderHomePage();
+    homeViewController('home', 'Recent Posts');
   }
 }
 
-function renderHomePage() {
-  headerView.renderIntroHeading();
-  mainView.renderPostsTitle();
-  mainView.renderPosts();
+function renderPostsPage(view,  message) {
+  if (view === 'home' && !appState.session.loggedIn) {
+    headerView.renderIntroHeading();
+  } else if ((view === 'home' || view === 'myRuns') && appState.session.loggedIn) {
+    mainView.renderProfileBanner();
+  }
+  mainView.renderTitle(message);
+  retrievePostsFromAPI();
   footerView.renderIconsCredit();
-  appState.session.currentView = 'home';
+  appState.session.currentView = view;
+}
+
+async function retrievePostsFromAPI() {
+  // create new Post instance
+  appState.posts.retrieved = new Post();
+
+  // retrieve all posts from server
+  await appState.posts.retrieved.retrieveAll();
+
+  // if logged in and there is min 1 retrieved post, adjust offset of first post
+  if (appState.session.loggedIn && appState.posts.retrieved) {
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
+  }
+
+  // sort retrieved posts by date in descending order
+  sortPosts('desc');
+ 
+  // render ordered posts (initialy only first page with 10 posts)
+  renderPosts(appState.session.postsPage);
+
+  // TODO: ERROR HANDLING
+}
+
+function sortPosts(method) {
+
+  const sortByDateDesc = function (lhs, rhs) {
+    lhs = moment(lhs.date, 'YYYY-MM-DD');
+    rhs = moment(rhs.date, 'YYYY-MM-DD');
+    return lhs < rhs ? 1 : lhs > rhs ? -1 : 0;
+  }
+
+  const sortByDateAsc = function (lhs, rhs) {
+    lhs = moment(lhs.date, 'YYYY-MM-DD');
+    rhs = moment(rhs.date, 'YYYY-MM-DD');
+    return lhs > rhs ? 1 : lhs < rhs ? -1 : 0;
+  }
+
+  if (method === 'desc') {
+    appState.posts.retrieved.result.data.sort(sortByDateDesc);
+  } else if (method === 'asc') {
+    appState.posts.retrieved.result.data.sort(sortByDateAsc);
+  }
+  
+}
+
+function renderPosts(page) {
+  const remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
+  let loopLimit;
+
+  if (remainingPosts <= 10) {
+    loopLimit = remainingPosts;
+  } else {
+    loopLimit = 10;
+  }
+
+  for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
+    mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
+  }
+
+  if (remainingPosts > 10) {
+    mainView.renderPostLoaderBtn();
+  }
 }
 
 function clearCurrentPage() {
   if (appState.session.currentView === 'home') {
     headerView.removeIntroHeading();
-    footerView.removeIconsCredit(); 
+    // footerView.removeIconsCredit(); 
+  } else if (appState.session.currentView === 'addNewRun') {
+    mainView.removeNewRunFormBackground();
   }
 
+  appState.session.postsPage = 1; // reset posts current page
   mainView.removeMainContent(); 
 
   // Detach event listeners
   if (appState.registeredClickEvents.registerForm) {
     detachEventListener([DOMelements.mainContent], 'submit', [registerSubmitEvent]);
     appState.registeredClickEvents.registerForm = false;
+  } else if (appState.registeredClickEvents.addNewRunForm) {
+    detachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+    appState.registeredClickEvents.addNewRunForm = false;
+  } else if (appState.registeredClickEvents.posts) {
+    detachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
+    appState.registeredClickEvents.posts = false;
   }
 }
+
+/* ---------------------------------------- */
+/* ------------ POSTS CONTROLLER ---------- */
+/* ---------------------------------------- */
+
+function postsController() {
+  attachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
+  appState.registeredClickEvents.posts = true;
+}
+
+
+function postClickEvent(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  
+  if (e.target.closest(`.${DOMstrings.posts.collapsibleContainer}`)) {
+    mainView.toggleCollapsiblePost(e.target);
+  } else if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
+    loadMorePostsSubController(e);
+  }
+}
+
+/* ------------------------------------------- */
+/* ------- LOAD MORE POSTS SUBCONTROLLER ----- */
+
+function loadMorePostsSubController(e) {
+  let currentLoaderElement = e.target.closest(`.${DOMstrings.posts.loadMore}`);
+  
+  mainView.hideLoaderElement(currentLoaderElement);
+
+  appState.session.postsPage++;
+  renderPosts(appState.session.postsPage);
+}
+
 
 /* ---------------------------------------- */
 /* ------- NAVIGATION MENU CONTROLLER ----- */
@@ -138,12 +252,11 @@ function navMenuClickEvent(e) {
   }
 }
 
-function addNewRunViewSubController() {
-  // some code
-  console.log('Add new run hello!');
-
+function addNewRunViewSubController() { // TODO:
   if (appState.session.currentView !== 'addNewRun') {
-    // some code
+    clearCurrentPage();
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController, apiData.infoMessages.login.fail.server.unknown);    
+    mainView.renderNewRunForm();
     appState.session.currentView = 'addNewRun';
   }
 }
@@ -168,6 +281,7 @@ function dropDownListSubController() {
       logoutSubController]
       );
   }
+
   // toggle event state
   appState.registeredClickEvents.dropDownList = !appState.registeredClickEvents.dropDownList;
 }
@@ -178,19 +292,7 @@ function dropDownListSubController() {
 function registerViewSubController() {
   if (appState.session.currentView !== 'register') {
     clearCurrentPage();
-    attachMutationObserver(DOMelements.mainContent)
-      .then(result => {
-        appState.mutationObserver.result = result;
-        registerNewUserController(); 
-      })
-      .then(()=> {
-        appState.mutationObserver.result.observer.disconnect();
-        deleteAllObjectProperties(appState.mutationObserver);
-      })
-      .catch(error => {
-        clearCurrentPage();
-        failedRegistration(apiData.infoMessages.registration.fail.server);
-      });
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, registerNewUserController, apiData.infoMessages.unknown);
     
     mainView.renderRegistrationForm();
     appState.session.currentView = 'register';   
@@ -238,7 +340,7 @@ async function registerSubmitEvent(e) {
     
     // Check if password and repeat password are the same
     if (newUser.password !== newUser.repeatPassword) {
-      return failedRegistration(apiData.infoMessages.registration.fail.validation.password);
+      return displayFailMessage(apiData.infoMessages.registration.fail.validation.password);
     }
 
     // Create a new user instance
@@ -251,17 +353,17 @@ async function registerSubmitEvent(e) {
     try {
       await appState.register.user.createNew();
     } catch (error) {
-      failedRegistration(apiData.infoMessages.registration.fail.server);
+      displayFailMessage(apiData.infoMessages.unknown);
     }
 
     if (appState.register.user.result) {
       appState.register.user.result.status === 201 ? 
-      successfulRegistration(apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
-      : failedRegistration(apiData.infoMessages.registration.fail.server);
+      formSubmitSuccessfullyExecuted('registration', apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
+      : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.register.user.error) {
-      return failedRegistration(`${appState.register.user.error.message}!`);
+      return displayFailMessage(`${appState.register.user.error.message}!`);
     } else {
-      return failedRegistration(apiData.infoMessages.registration.fail.server);
+      return displayFailMessage(apiData.infoMessages.unknown);
     }
 
     // Delete all data from appState.register.user
@@ -272,17 +374,15 @@ async function registerSubmitEvent(e) {
   // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
 }
 
-function successfulRegistration(...messages) {
-  mainView.clearRegistrationFormData();
+function formSubmitSuccessfullyExecuted(type, ...messages) {
+  if (type === 'registration') {
+    mainView.clearRegistrationFormData();
+  } else if (type === 'addNewRun') {
+    mainView.clearNewRunFormData();
+  }
+
   clearCurrentPage();
   transitionRegistrationSuccessMessage(messages, true);
-}
-
-function failedRegistration(...messages) {
-  console.clear(); 
-  if (!mainView.warningMessageExists()) {
-    displayRegistrationFailMessage(messages, false, 'afterbegin');
-  }
 }
 
 function transitionRegistrationSuccessMessage(messages, animate = false) {
@@ -290,13 +390,15 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
 
   setTimeout(()=> {
     clearCurrentPage();
-    renderHomePage();
-  }, 1200);
+    homeViewController('home', 'Recent Posts');
+  }, 1000);
 }
 
-function displayRegistrationFailMessage(messages, animate = false, position) {
-  renderMainViewMessages(messages, animate, position);
-  mainView.styleWarningMessage();
+function displayFailMessage(...messages) {
+  if (!mainView.warningMessageExists()) {
+    renderMainViewMessages(messages, false, 'afterbegin');
+    mainView.styleWarningMessage();
+  }
 }
 
 function renderMainViewMessages(messages, animate, position='') {
@@ -355,7 +457,7 @@ async function loginSubmitEvent(e) {
       appState.login.user.result.status === 200 
       && appState.login.user.result.data.authToken ? 
       successfullLogin() 
-      : failedLogin(apiData.infoMessages.login.fail.server.unknown);
+      : failedLogin(apiData.infoMessages.unknown);
     } else if (appState.login.user.error) {
       if (appState.login.user.error.toLowerCase() === 'unauthorized') {
         return failedLogin(`${apiData.infoMessages.login.fail.server.noUser}`);
@@ -363,7 +465,7 @@ async function loginSubmitEvent(e) {
         return failedLogin(`${appState.login.user.error}`);
       }
     } else {
-      return failedLogin(apiData.infoMessages.login.fail.server.unknown);
+      return failedLogin(apiData.infoMessages.unknown);
     }
   }
 }
@@ -374,7 +476,6 @@ function successfullLogin() {
 }
 
 function failedLogin(message) {
-  console.clear(); 
   if (!headerView.warningMessageExists()) {
     headerView.renderLoginFailMessage(message);
   }
@@ -391,10 +492,11 @@ function closeLoginMenu() {
 }
 
 function enterLoggedInSessionMode() {
+  appState.session.loggedIn = true;
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
-  renderHomePage();
+  homeViewController('home', 'Recent Posts');
 }
 
 function hideLoggedOutMenuItems() {
@@ -436,24 +538,14 @@ function myProfileViewSubController() {
 }
 
 function myRunsViewSubController() {
-  // some code
-  console.log('My Runs Hello!');
-
   if (appState.session.currentView !== 'myRuns') {
     clearCurrentPage();
-    mainView.renderProfileBanner();
-    mainView.renderMyRunsTitle();
-    mainView.renderPosts();  // TODO: Render only logged users posts
-    footerView.renderIconsCredit();
-    appState.session.currentView = 'myRuns';
+    homeViewController('myRuns', 'My Runs'); // TODO: Render only logged users posts
   }
   closeDropDownList();
 }
 
 function analyticsViewSubController() {
-  // some code
-  console.log('Analytics Hello!');
-
   if (appState.session.currentView !== 'analytics') {
     // some code
     appState.session.currentView = 'analytics';
@@ -462,6 +554,7 @@ function analyticsViewSubController() {
 
 function logoutSubController() {
   appState.session.loggedIn = false;
+  deleteAllObjectProperties(appState.login);
   closeDropDownList();
   exitLoggedInSessionMode();
 }
@@ -484,7 +577,7 @@ function exitLoggedInSessionMode() {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
   clearCurrentPage();
-  renderHomePage();
+  homeViewController('home', 'Recent Posts');
 }
 
 function showLoggedOutMenuItems() {
@@ -497,6 +590,90 @@ function hideLoggedInMenuItems() {
   headerView.hideAnalyticsButton();
   headerView.hideAddNewRunButton();
   headerView.hideAvatarDropDownListButton();
+}
+
+/* ---------------------------------------- */
+/* -------- ADD NEW RUN CONTROLLER -------- */
+/* ---------------------------------------- */
+
+function addNewRunController() {
+  attachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+  appState.registeredClickEvents.addNewRunForm = true;
+}
+
+async function submitNewRunEvent(e) {
+  e.stopPropagation();
+  e.preventDefault();
+
+  // Remove existing warning messages
+  if (mainView.warningMessageExists()) {
+    mainView.removeMessage();
+  }
+
+  // 2) read values from input fields
+  const newPost = mainView.getNewRunFormData();
+
+  if (newPost) {
+
+    // 2.1) validate input data
+    const durationValidator = validateTotalDurationTime(newPost.duration);
+    if (durationValidator) {
+      return displayFailMessage(durationValidator);
+    }
+
+    const dateValidator = validateDateFormat(newPost.date);
+    if (dateValidator) {
+      return displayFailMessage(dateValidator);
+    }
+
+    const timeValidator = validateTimeFormat(newPost.time);
+    if (timeValidator) {
+      return displayFailMessage(timeValidator);
+    }
+
+    const descriptionValidator = validateDescription(newPost.description);
+    if (descriptionValidator) {
+      return displayFailMessage(descriptionValidator);
+    }
+  
+    // 3) create a new instance of Post object
+    appState.posts.created = new Post(newPost);
+
+    // 4) create new post using provided JWT token
+    try {
+      await appState.posts.created.createNew();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);
+      console.log(error);
+    }
+  
+    // 5) read and store the returned data
+    if (appState.posts.created.result) {
+      appState.posts.created.result.status === 201 
+      && appState.posts.created.result.data ? 
+      formSubmitSuccessfullyExecuted('addNewRun', apiData.infoMessages.addNewRun.success.info1, apiData.infoMessages.addNewRun.success.info2) : displayFailMessage(apiData.infoMessages.unknown);
+    } else if (appState.posts.created.error) {
+      return displayFailMessage(`${appState.posts.created.error.message}`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+  }
+}
+
+function validateTotalDurationTime(duration) {
+  return (duration.hours + duration.minutes + duration.seconds) === 0 ? apiData.infoMessages.addNewRun.fail.validation.duration : false;
+}
+
+function validateDateFormat(date) {
+  return !moment(date, 'YYYY-MM-DD').isValid() ? apiData.infoMessages.addNewRun.fail.validation.date : false;
+}
+
+function validateTimeFormat(time) {
+  return !moment(time, 'HH:mm', true).isValid() ? apiData.infoMessages.addNewRun.fail.validation.time : false;
+}
+
+function validateDescription(description) {
+  return description.length < 10 ? apiData.infoMessages.addNewRun.fail.validation.description : false;
 }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
@@ -528,6 +705,23 @@ function deleteAllObjectProperties(obj) {
     }
   }
 }
+
+function executeFunctionAfterDOMContentLoaded(element, func, msg='Something went wrong!') {
+  attachMutationObserver(element)
+      .then(result => {
+        appState.mutationObserver.result = result;
+        func();
+      })
+      .then(()=> {
+        appState.mutationObserver.result.observer.disconnect();
+        deleteAllObjectProperties(appState.mutationObserver);
+      })
+      .catch(error => {
+        clearCurrentPage();
+        displayFailMessage(msg);
+      });
+}
+
 
 function attachMutationObserver(observedElement) {
   const config = {childList: true}

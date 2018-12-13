@@ -23,12 +23,15 @@ export const controledHooksStrings = {
   headingToggleVisibility: 'header__heading--toggle-visibility',
   iconsCreditToggleVisibility: 'credit--toggle-visibility',
   navMenuItemHide: 'menu__item--hidden',
-  warningMessageStyle: 'content__user-info--warning'
+  warningMessageStyle: 'content__user-info--warning',
+  addNewRunBackground: 'add-new-run__form--background',
+  postsCollapsibleToggleVisibility: 'content__post--active'
 }
 
 export const DOMstrings = {
   menuDropDownList: 'js-dropdown-list',
   loginMenu: 'js-login-menu',
+  mainViewWarningMessage: 'js-content__user-info',
   registerForm : {
     inputFields: {
       firstName: 'registration__input-first-name',
@@ -37,10 +40,35 @@ export const DOMstrings = {
       password: 'registration__input-password',
       repeatPassword: 'registration__input-repeatPassword'
     },
-    infoMessage: 'js-content__user-info'
   },
   loginForm: {
     infoMessage: 'js-login__info'
+  },
+  addNewRunForm: {
+    inputFields: {
+      runTitle: 'js-add-new-run__title',
+      distance: {
+        value: 'js-add-new-run__distance-value',
+        unit: 'js-add-new-run__distance-unit'
+      },
+      duration: {
+        hours: 'js-add-new-run__duration-hours',
+        minutes: 'js-add-new-run__duration-minutes',
+        seconds: 'js-add-new-run__duration-seconds'
+      },
+      runType: 'js-add-new-run__run-type',
+      date: 'js-add-new-run__date',
+      time: 'js-add-new-run__time',
+      description: 'js-add-new-run__description',
+      privacy: 'js-add-new-run__privacy'
+    }
+  },
+  posts: {
+    mainContainer: 'js-content__post',
+    collapsibleContainer: 'js-post-collapsible',
+    collapsibleSymbol: 'js-post-collapsible__symbol',
+    additional: 'js-post-additional',
+    loadMore: 'js-main-content__loader'
   }
 }
 
@@ -84,34 +112,43 @@ export const DOMelements = {
 const serverFail = 'Something went wrong. Please refresh the page and try again.';
 
 export const apiData = {
-  users: {
-    url: '/api/users/'
-  },
-  posts: {
-    url: '/api/posts/'
-  },
-  auth: {
-    url: '/api/auth/'
+  urls: {
+    users: '/api/users/',
+    posts:  '/api/posts/',
+    auth: '/api/auth/'
   },
   infoMessages: {
+    unknown: serverFail, 
     registration: {
       fail: {
-        server: serverFail,
         validation: {
           password: 'The passwords are not matching!'
         },
       },
       success: {
-        info1: 'Success!',
+        info1: 'Registration successful!',
         info2: 'Loading main page.'
       }
     },
     login: {
       fail: {
         server: {
-          unknown: serverFail,
           noUser: 'Login failed! Username or password not correct.'
         }
+      }
+    },
+    addNewRun: {
+      fail: {
+        validation: {
+          duration: 'Total duration time must be greater than 0s.',
+          date: 'Required date format is yyyy-mm-dd.',
+          time: 'Required time format is hh:ss.',
+          description: 'Description should have 10 characters minimum.'
+        }
+      }, 
+      success: {
+        info1: 'Post successfully submited!',
+        info2: 'Loading main page.'
       }
     }
   }

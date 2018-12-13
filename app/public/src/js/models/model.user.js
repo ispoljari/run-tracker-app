@@ -23,7 +23,7 @@ export default class User {
     try {
       const res = await axios({
         method: 'post',
-        url: apiData.users.url,
+        url: apiData.urls.users,
         data: {
           name: this.name,
           displayName: this.displayName,
@@ -44,7 +44,7 @@ export default class User {
     try {
       const res = await axios({
         method: 'post',
-        url: `${apiData.auth.url}/login`,
+        url: `${apiData.urls.auth}/login`,
         data: {
           username: this.username,
           password: this.password,
