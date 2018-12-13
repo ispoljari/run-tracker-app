@@ -143,6 +143,8 @@ export const apiData = {
           duration: 'Total duration time must be greater than 0s.',
           date: 'Required date format is yyyy-mm-dd.',
           time: 'Required time format is hh:ss.',
+          dateDiff: 'Please choose a date which is not in the future.',
+          timeDiff: 'Please choose a time which is not in the future.',
           description: 'Description should have 10 characters minimum.'
         }
       }, 
