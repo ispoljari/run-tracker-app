@@ -470,13 +470,19 @@ export const getNewRunFormData = () => {
   }
 }
 
-// export const clearNewRunFormData = () => {
-//   document.querySelector(`.${DOMstrings.registerForm.inputFields.firstName}`).value = '',
-//   document.querySelector(`.${DOMstrings.registerForm.inputFields.lastName}`).value = '',
-//   document.querySelector(`.${DOMstrings.registerForm.inputFields.username}`).value = '',
-//   document.querySelector(`.${DOMstrings.registerForm.inputFields.password}`).value = '',
-//   document.querySelector(`.${DOMstrings.registerForm.inputFields.repeatPassword}`).value = ''
-// }
+export const clearNewRunFormData = () => {
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runTitle}`).value = '';
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value = 0;
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.unit}`).value = 'm';
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.hours}`).value = 0;
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.minutes}`).value = 0;
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.duration.seconds}`).value = 0;
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runType}`).value = 'workout';
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.date}`).value = '2018-11-18';
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.time}`).value = '10:00';
+  document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.description}`).value = '';
+  // document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.privacy}`).value = '';
+}
 
 // Help functions
 

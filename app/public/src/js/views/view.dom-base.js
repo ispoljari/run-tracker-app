@@ -126,7 +126,7 @@ export const apiData = {
         },
       },
       success: {
-        info1: 'Success!',
+        info1: 'Registration successful!',
         info2: 'Loading main page.'
       }
     },
@@ -145,6 +145,10 @@ export const apiData = {
           time: 'Required time format is hh:ss.',
           description: 'Description should have 10 characters minimum.'
         }
+      }, 
+      success: {
+        info1: 'Post successfully submited!',
+        info2: 'Loading main page.'
       }
     }
   }

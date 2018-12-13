@@ -358,7 +358,7 @@ async function registerSubmitEvent(e) {
 
     if (appState.register.user.result) {
       appState.register.user.result.status === 201 ? 
-      successfulRegistration(apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
+      formSubmitSuccessfullyExecuted('registration', apiData.infoMessages.registration.success.info1, apiData.infoMessages.registration.success.info2) 
       : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.register.user.error) {
       return displayFailMessage(`${appState.register.user.error.message}!`);
@@ -374,8 +374,13 @@ async function registerSubmitEvent(e) {
   // TODO: ENABLE USER TO CHANGE PASSWORD IF FORGOTEN
 }
 
-function successfulRegistration(...messages) {
-  mainView.clearRegistrationFormData();
+function formSubmitSuccessfullyExecuted(type, ...messages) {
+  if (type === 'registration') {
+    mainView.clearRegistrationFormData();
+  } else if (type === 'addNewRun') {
+    mainView.clearNewRunFormData();
+  }
+
   clearCurrentPage();
   transitionRegistrationSuccessMessage(messages, true);
 }
@@ -386,7 +391,7 @@ function transitionRegistrationSuccessMessage(messages, animate = false) {
   setTimeout(()=> {
     clearCurrentPage();
     homeViewController('home', 'Recent Posts');
-  }, 1200);
+  }, 1000);
 }
 
 function displayFailMessage(...messages) {
@@ -644,16 +649,14 @@ async function submitNewRunEvent(e) {
   
     // 5) read and store the returned data
     if (appState.posts.created.result) {
-      console.log(appState.posts.created.result);
-      // appState.login.user.result.status === 201 
-      // && appState.login.user.result.data.authToken ? 
-      // successfullLogin() 
-      // : failedLogin(apiData.infoMessages.unknown);
-    } else if (appState.login.user.error) {
-      console.log(error);
+      appState.posts.created.result.status === 201 
+      && appState.posts.created.result.data ? 
+      formSubmitSuccessfullyExecuted('addNewRun', apiData.infoMessages.addNewRun.success.info1, apiData.infoMessages.addNewRun.success.info2) : displayFailMessage(apiData.infoMessages.unknown);
+    } else if (appState.posts.created.error) {
+      return displayFailMessage(`${appState.posts.created.error.message}`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
     }
-  
-    // 6) validate server-side errors, if any
   }
 }
 
