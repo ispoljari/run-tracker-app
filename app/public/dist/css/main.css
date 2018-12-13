@@ -10,7 +10,7 @@ body {
 
 .header--style {
   /* Layout */
-  padding: 10px 10px 25px 10px;
+  padding: 5px 5px 10px 5px;
 
   /* Style */
   background-color: #0ea7b5;
@@ -302,7 +302,7 @@ a {
 
 .main--style {
   /* Layout */
-  padding: 0 10px 25px 10px;
+  padding: 20px 10px;
   border-radius: 5px;
 }
 
@@ -322,7 +322,7 @@ a {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  margin: 25px auto 0 auto;
+  margin: 0 auto 25px auto;
 
    /* Style */
   height: 150px;
@@ -404,7 +404,7 @@ div.content__post:nth-child(n+3) {
 .content__heading-posts,
 .content__user-info {
   /* Layout */
-  margin: 25px auto 0 auto;
+  margin: 0 auto;
 
   /* Style */
   max-width: 450px;
@@ -615,8 +615,6 @@ div.content__post:nth-child(n+3) {
   /* Styles */
   width: 100%;
   max-width: 420px;
-  background-color: #fdf8f8;
-  padding: 30px 15px;
   border-radius: 5px;
 }
 
@@ -698,11 +696,6 @@ div.content__post:nth-child(n+3) {
 }
 
 /* --------------- ADD NEW RUN FORM --------------- */
-
-.add-new-run {
-  /* Style */
-	padding: 30px 15px;
-}
 
 .add-new-run h2 {
   /* Style */
@@ -891,6 +884,7 @@ div.content__post:nth-child(n+3) {
 
 .footer--style {
   /* Style   */
+  min-height: 40px;
   background-color: #e8702a;
   border-radius: 5px;
 }
@@ -1181,7 +1175,6 @@ footer {
 
 .add-new-run__form--background {
   /* Style */
-  background-color: #fdf8f8;
   border-radius: 5px;
 }
 
