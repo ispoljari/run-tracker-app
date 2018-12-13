@@ -635,6 +635,16 @@ async function submitNewRunEvent(e) {
       return displayFailMessage(timeValidator);
     }
 
+    const dateDiffValidator = compareToCurrentDate(newPost.date);
+    if (dateDiffValidator) {
+      return displayFailMessage(dateDiffValidator);
+    }
+
+    const timeDiffValidator = compareToCurrentTime(newPost.date, newPost.time);
+    if (timeDiffValidator) {
+      return displayFailMessage(timeDiffValidator);
+    }
+
     const descriptionValidator = validateDescription(newPost.description);
     if (descriptionValidator) {
       return displayFailMessage(descriptionValidator);
@@ -678,6 +688,40 @@ function validateDateFormat(date) {
 
 function validateTimeFormat(time) {
   return !moment(time, 'HH:mm', true).isValid() ? apiData.infoMessages.addNewRun.fail.validation.time : false;
+}
+
+function compareToCurrentDate(date) {
+  const selectedDate = moment(date, 'YYYY-MM-DD');
+  const currentDateTime = moment();
+
+  if (selectedDate.diff(currentDateTime, 'years')>0 || 
+      selectedDate.diff(currentDateTime, 'months')>0 || 
+      Math.ceil(selectedDate.diff(currentDateTime, 'days', true))>0
+      ) {
+    return apiData.infoMessages.addNewRun.fail.validation.dateDiff;
+  } else {
+    return false;
+  }
+
+}
+
+function compareToCurrentTime(date, time) {
+  const selectedDate = moment(date, 'YYYY-MM-DD');
+  const selectedTime = moment(time, 'HH:mm');
+  const currentDateTime = moment();
+
+  if (selectedDate.diff(currentDateTime, 'years')===0 && 
+      selectedDate.diff(currentDateTime, 'months')===0 && 
+      Math.ceil(selectedDate.diff(currentDateTime, 'days', true)) === 0
+      ) {
+        if (selectedTime.diff(currentDateTime, 'hours')>0 || 
+            selectedTime.diff(currentDateTime, 'minutes')>0) {
+          return apiData.infoMessages.addNewRun.fail.validation.timeDiff;
+        } else {
+          return false;
+        }
+      }
+
 }
 
 function validateDescription(description) {
