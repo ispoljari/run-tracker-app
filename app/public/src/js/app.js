@@ -98,11 +98,6 @@ function renderPostsPage(view,  message) {
   }
   mainView.renderTitle(message);
   retrievePostsFromAPI();
-
-  if (appState.session.loggedIn) {
-    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
-  }
-  
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
@@ -113,6 +108,11 @@ async function retrievePostsFromAPI() {
 
   // retrieve all posts from server
   await appState.posts.retrieved.retrieveAll();
+
+  // if logged in and there is min 1 retrieved post, adjust offset of first post
+  if (appState.session.loggedIn && appState.posts.retrieved) {
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
+  }
 
   // sort retrieved posts by date in descending order
   sortPosts('desc');
@@ -639,21 +639,21 @@ async function submitNewRunEvent(e) {
       await appState.posts.created.createNew();
     } catch (error) {
       displayFailMessage(apiData.infoMessages.unknown);
+      console.log(error);
     }
-    
-    console.log(appState.posts.created);
   
     // 5) read and store the returned data
-    // if (appState.posts.created.result) {
-    //   appState.posts.created.result.status === 201 
-    //   && allDataFieldsStoredToDB() ? 
-    //   successfullLogin() 
-    //   : 'Login fail!';
-    // }
-    // console.log(allSentDataStoredToDB(newPost));
+    if (appState.posts.created.result) {
+      console.log(appState.posts.created.result);
+      // appState.login.user.result.status === 201 
+      // && appState.login.user.result.data.authToken ? 
+      // successfullLogin() 
+      // : failedLogin(apiData.infoMessages.unknown);
+    } else if (appState.login.user.error) {
+      console.log(error);
+    }
   
     // 6) validate server-side errors, if any
-
   }
 }
 
@@ -666,21 +666,12 @@ function validateDateFormat(date) {
 }
 
 function validateTimeFormat(time) {
-  return !moment(time, 'hh:mm', true).isValid() ? apiData.infoMessages.addNewRun.fail.validation.time : false;
+  return !moment(time, 'HH:mm', true).isValid() ? apiData.infoMessages.addNewRun.fail.validation.time : false;
 }
 
 function validateDescription(description) {
   return description.length < 10 ? apiData.infoMessages.addNewRun.fail.validation.description : false;
 }
-
-// function allSentDataStoredToDB(sentData) {
-//   sentData.forEach(field => {
-//     if ((field in appState.posts.created.result.data)) {
-//       return false;
-//     }
-//     return true;
-//   });
-// }
 
 /* --------- GLOBAL HELP FUNCTIONS ------- */
 

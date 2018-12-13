@@ -88,13 +88,13 @@ export const renderPosts = (post) => {
   let minPartAvrSpeed = Math.floor(avrSpeedRaw);
   let secPartAvrSpeed = Math.round((avrSpeedRaw - Math.floor(avrSpeedRaw))*60);
 
-  const displayAvrMinSpeed = minPartAvrSpeed > 0 ? `${minPartAvrSpeed}:` : '';
+  let displayAvrMinSpeed = minPartAvrSpeed >= 0 ? `${minPartAvrSpeed}:` : '';
 
   let displayAvrSecSpeed;
   if (secPartAvrSpeed < 10) {
-    displayAvrSecSpeed = secPartAvrSpeed > 0 ? `0${secPartAvrSpeed}` : '';
+    displayAvrSecSpeed = secPartAvrSpeed >= 0 ? `0${secPartAvrSpeed}` : '';
   } else {
-    displayAvrSecSpeed = secPartAvrSpeed > 0 ? `${secPartAvrSpeed}` : '';
+    displayAvrSecSpeed = `${secPartAvrSpeed}`;
   }
 
 

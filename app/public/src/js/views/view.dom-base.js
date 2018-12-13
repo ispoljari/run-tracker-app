@@ -141,8 +141,8 @@ export const apiData = {
       fail: {
         validation: {
           duration: 'Total duration time must be greater than 0s.',
-          date: 'Required date format is YYYY-MM-DD.',
-          time: 'Required time format is HH:SS.',
+          date: 'Required date format is yyyy-mm-dd.',
+          time: 'Required time format is hh:ss.',
           description: 'Description should have 10 characters minimum.'
         }
       }
