@@ -263,11 +263,13 @@ export const renderProfileBanner = (user) => {
       </div>
       <div class="profile-banner__info">
         <div class="profile-info__full-name">
-          <h2>${user.name}</h2>
+          <h2><input type="text" value="${user.name}" placeholder="Name?"/></h2>
         </div>
+        <hr class="profile-banner__underline" />
         <div class="profile-info__display-name">
-          <p>@${user.displayName}</p>
+          <p>@<input type="text" value="${user.displayName}" placeholder="Nickname?"></p>
         </div>
+        <hr class="profile-banner__underline" />
       </div>
     </div>
   </div>`

@@ -507,7 +507,7 @@ function enterLoggedInSessionMode() {
   updateDropDownListElements();
   showLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('myRuns', 'My Runs');
+  homeViewController('home', 'Main Feed');
 }
 
 function extractUserDataFromJWT() {
@@ -549,8 +549,15 @@ function dropDownListController() {
 
 function myProfileViewSubController() {
   if (appState.session.currentView !== 'myProfile') {
+    clearCurrentPage();
+    renderMyProfilePage();
     appState.session.currentView = 'myProfile';
   }
+  closeDropDownList();
+}
+
+function renderMyProfilePage() {
+  mainView.renderProfileBanner(appState.login.JWT.user);
 }
 
 function myRunsViewSubController() {
