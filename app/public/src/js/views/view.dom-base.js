@@ -30,6 +30,8 @@ export const controledHooksStrings = {
 
 export const DOMstrings = {
   menuDropDownList: 'js-dropdown-list',
+  menuDropDownAvatarImg: 'js-menu__avatar',
+  menuDropDownUserName: 'js-dropdown-list__user-name',
   loginMenu: 'js-login-menu',
   mainViewWarningMessage: 'js-content__user-info',
   registerForm : {

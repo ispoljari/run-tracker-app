@@ -95,7 +95,7 @@ function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
   } else if (view === 'myRuns' && appState.session.loggedIn) {
-    mainView.renderProfileBanner();
+    mainView.renderProfileBanner(appState.login.JWT.user);
   }
   mainView.renderTitle(message);
   retrievePostsFromAPI('desc');
@@ -504,6 +504,7 @@ function enterLoggedInSessionMode() {
   appState.session.loggedIn = true;
   extractUserDataFromJWT();
   hideLoggedOutMenuItems();
+  updateDropDownListElements();
   showLoggedInMenuItems();
   clearCurrentPage();
   homeViewController('myRuns', 'My Runs');
@@ -511,7 +512,6 @@ function enterLoggedInSessionMode() {
 
 function extractUserDataFromJWT() {
   appState.login.JWT = jwt.decode(appState.login.user.result.data.authToken);
-  console.log(appState.login);
 }
 
 function hideLoggedOutMenuItems() {
@@ -522,8 +522,13 @@ function hideLoggedOutMenuItems() {
 function showLoggedInMenuItems() {
   headerView.showMyRunsButton();
   headerView.showAnalyticsButton();
-  headerView.showAddNewRunButton();
+  headerView.showAddNewRunButton();  
   headerView.showAvatarDropDownListButton();
+}
+
+function updateDropDownListElements() {
+  headerView.updateDropDownListUsername(appState.login.JWT.user.name);
+  headerView.updateDropDownListAvatar(appState.login.JWT.user.avatar);
 }
 
 /* ---------------------------------------- */
