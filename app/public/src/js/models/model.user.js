@@ -52,6 +52,7 @@ export default class User {
       });
 
       delete this.password;
+      delete this.username;
       this.result = res;
     } catch (error) {
       this.error = error.response.data

@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'dev') {
 
 // Import 3rd party modules
 import * as moment from 'moment';
+import jwt from 'jsonwebtoken';
 
 // Import DOM elements and dynamic hooks
 import {
@@ -501,10 +502,16 @@ function closeLoginMenu() {
 
 function enterLoggedInSessionMode() {
   appState.session.loggedIn = true;
+  extractUserDataFromJWT();
   hideLoggedOutMenuItems();
   showLoggedInMenuItems();
   clearCurrentPage();
   homeViewController('myRuns', 'My Runs');
+}
+
+function extractUserDataFromJWT() {
+  appState.login.JWT = jwt.decode(appState.login.user.result.data.authToken);
+  console.log(appState.login);
 }
 
 function hideLoggedOutMenuItems() {
