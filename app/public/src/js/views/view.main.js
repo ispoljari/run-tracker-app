@@ -254,19 +254,19 @@ export const clearRegistrationFormData = () => {
 
 // My Runs page
 
-export const renderProfileBanner = () => {
+export const renderProfileBanner = (user) => {
   const htmlString = 
   `<div class="content__profile-banner">
     <div class="profile-banner__inner-container">
       <div class="profile-banner__avatar-img">
-        <img src="svg/monsters/monster-1.svg" alt="An image of a random monster">
+        <img src="svg/monsters/monster-${user.avatar}.svg" alt="An image of a random monster">
       </div>
       <div class="profile-banner__info">
         <div class="profile-info__full-name">
-          <h2>Wolfgang A. Mozart</h2>
+          <h2>${user.name}</h2>
         </div>
         <div class="profile-info__display-name">
-          <p>@dementor</p>
+          <p>@${user.displayName}</p>
         </div>
       </div>
     </div>
