@@ -65,6 +65,15 @@ export const DOMstrings = {
       privacy: 'js-add-new-run__privacy'
     }
   },
+  myProfileForm: {
+    inputFields: {
+      fullName: 'js-myProfile__full-name-input',
+      displayName: 'js-myProfile__display-name-input'
+    },
+    buttons: {
+      changeAvatar: 'js-myProfile__change-avatar-button'
+    }
+  },
   posts: {
     mainContainer: 'js-content__post',
     collapsibleContainer: 'js-post-collapsible',

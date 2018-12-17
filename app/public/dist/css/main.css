@@ -230,9 +230,15 @@ a {
 }
 
 .dropdown-list__item:nth-child(n+3) a {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .dropdown-list__item--voffset {
@@ -340,7 +346,7 @@ a {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  margin: 0 auto 25px auto;
+  margin: 0 auto 10px auto;
 
    /* Style */
   height: 150px;
@@ -386,11 +392,16 @@ a {
   width: 65%;
 }
 
+.profile-info__full-name h2 {
+  font-size: 22px;
+}
+
 .profile-info__full-name input {
   /* Style */
   width: 100%;
   background-color: transparent;
   border: none;
+  color:black;
 }
 
 .profile-info__display-name {
@@ -401,10 +412,29 @@ a {
   font-size: 18px;
 }
 
+.profile-info__display-name p {
+  font-size: 18px;
+}
+
 .profile-info__display-name input {
+  /* Style */
   width: 85%;
   background-color: transparent;
   border: none;
+  color: black;
+}
+
+.myProfile__change-avatar-button {
+  /* Layout */
+  display: none;
+
+  /* Style */
+  font-size: 16px;
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid #e3e3e3;
+  cursor: pointer;
+  background-color: white;
 }
 
 .profile-banner__underline {
@@ -919,10 +949,6 @@ div.content__post:nth-child(n+3) {
   width: 100%;
 }
 
-.myProfile__update-account button {
-  background-color: #E6EE9C;
-}
-
 .myProfile__form-container:last-of-type {
   margin-top: 10px;
 }
@@ -1003,9 +1029,15 @@ footer {
   }
 
   .myProfile {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+            align-items: flex-end;
   }
 
   .myProfile__form-container {
@@ -1045,31 +1077,9 @@ footer {
     display: none;
   }
 
-  .heading__title {
-    /* Style */
-    font-size: 26px;
-  }
-
   .header__logo-img {
     /* Styles */
     width: 65px;
-  }
-
-  .login__form label,
-  .login__form button {
-    font-size: 18px;
-  }
-
-  .registration legend {
-    font-size: 22px;
-  }
-
-  .registration label,
-  .registration input,
-  .registration__submit,
-  .content-loader-btn
-  {
-    font-size: 18px;
   }
 
   .dropdown-list,
@@ -1077,17 +1087,42 @@ footer {
     top: 61px;
   }
 
+  .heading__title {
+    /* Style */
+    font-size: 26px;
+  }
+
   .content__heading-posts h2,
-  .content__user-info h2 {
+  .content__user-info h2,
+  .profile-info__full-name h2  {
     /* Style */
     font-size: 24px;
   }
 
+  .registration legend,
+  .post-data__distance--style-results p:last-of-type {
+    font-size: 22px;
+  }
+
   .post-header__user h3,
   .post-data__title h4,
-  .post-additional__description h4 {
+  .post-additional__description h4,
+  .profile-info__display-name p {
     /* Style */
     font-size: 20px;
+  }
+
+  .login__form label,
+  .login__form button,
+  .registration label,
+  .registration input,
+  .registration__submit,
+  .content-loader-btn,
+  .header__nav-container li,
+  .dropdown-list li,
+  .myProfile__delete-account button,
+  .myProfile__update-account button {
+    font-size: 18px;
   }
 
   .post-additional__description p,
@@ -1095,16 +1130,6 @@ footer {
   .post-data__distance--style-results p:first-of-type {
     font-size: 16px;
   }
-
-  .post-data__distance--style-results p:last-of-type {
-    font-size: 22px;
-  }
-
-  .header__nav-container li,
-  .dropdown-list li {
-    font-size: 18px;
-  }
-  
 }
 
 
@@ -1113,23 +1138,31 @@ footer {
 		margin-top: 0;
   }
 
-  .registration legend {
+  .content__heading-posts h2,
+  .content__user-info h2,
+  .profile-info__full-name h2 {
+    /* Style */
+    font-size: 26px;
+  }
+
+  .post-data__distance--style-results p:last-of-type,
+  .registration legend,
+  .add-new-run h2 {
     font-size: 24px;
   }
 
+  .post-header__user h3,
+  .post-data__title h4,
+  .post-additional__description h4,
+  .profile-info__display-name p {
+    /* Style */
+    font-size: 22px;
+  }
+  
   .registration label,
   .registration input,
   .registration__submit,
-  .content-loader-btn
-  {
-    font-size: 20px;
-  }
-  
-  .add-new-run h2 {
-    /* Style */
-    font-size: 24px;
-  }
-
+  .content-loader-btn,
   .title legend,
   .distance legend,
   .duration legend,
@@ -1150,6 +1183,13 @@ footer {
   .privacy select {
     /* Style */
     font-size: 20px;
+  }
+
+  .post-additional__description p,
+  .post-header__datetime p,
+  .myProfile__change-avatar-button,
+  .post-data__distance--style-results p:first-of-type {
+    font-size: 18px;
   }
 
   .distance__value {
@@ -1174,31 +1214,6 @@ footer {
     width: 45%;
   } 
 
-  .content__heading-posts h2,
-  .content__user-info h2 {
-    /* Style */
-    font-size: 26px;
-  }
-
-  .post-header__user h3,
-  .post-data__title h4,
-  .post-additional__description h4 {
-    /* Style */
-    font-size: 22px;
-  }
-
-  .post-additional__description p,
-  .post-header__datetime p,
-  .post-data__distance--style-results p:first-of-type {
-    font-size: 18px;
-  }
-
-  .post-data__distance--style-results p:last-of-type {
-    font-size: 24px;
-  }
-}
-
-@media only screen and (min-width: 820px) {
   .duration__hours label,
   .duration__minutes label,
   .duration__seconds label {

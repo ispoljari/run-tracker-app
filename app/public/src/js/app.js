@@ -557,6 +557,7 @@ function myProfileViewSubController() {
 }
 
 function renderMyProfilePage() {
+  executeFunctionAfterDOMContentLoaded(DOMelements.mainContent,mainView.enableProfileBannerClickableFields);
   mainView.renderProfileBanner(appState.login.JWT.user);
   mainView.renderMyProfileSaveDeleteButtons();
 }
@@ -571,7 +572,6 @@ function myRunsViewSubController() {
 
 function analyticsViewSubController() {
   if (appState.session.currentView !== 'analytics') {
-    // some code
     appState.session.currentView = 'analytics';
   }
 }

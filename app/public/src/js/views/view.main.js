@@ -260,14 +260,19 @@ export const renderProfileBanner = (user) => {
     <div class="profile-banner__inner-container">
       <div class="profile-banner__avatar-img">
         <img src="svg/monsters/monster-${user.avatar}.svg" alt="An image of a random monster">
+        <button type="button" class="myProfile__change-avatar-button js-myProfile__change-avatar-button">Change avatar</button>
       </div>
       <div class="profile-banner__info">
         <div class="profile-info__full-name">
-          <h2><input type="text" value="${user.name}" placeholder="Name?"/></h2>
+          <h2>
+            <input type="text" value="${user.name}" placeholder="Name?" class="js-myProfile__full-name-input" disabled/>
+          </h2>
         </div>
         <hr class="profile-banner__underline" />
         <div class="profile-info__display-name">
-          <p>@<input type="text" value="${user.displayName}" placeholder="Nickname?"></p>
+          <p>
+            @<input type="text" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" disabled>
+          </p>
         </div>
         <hr class="profile-banner__underline" />
       </div>
@@ -504,6 +509,12 @@ export const renderMyProfileSaveDeleteButtons = () => {
   </div>`
 
   appendHtmlToMainContent(htmlString);
+}
+
+export const enableProfileBannerClickableFields = () => {
+  DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.inputFields.fullName}`).disabled = false;
+  DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.inputFields.displayName}`).disabled = false;
+  DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.buttons.changeAvatar}`).style.display = 'block';
 }
 
 // Help functions
