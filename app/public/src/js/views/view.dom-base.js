@@ -72,6 +72,11 @@ export const DOMstrings = {
     },
     buttons: {
       changeAvatar: 'js-myProfile__change-avatar-button'
+    },
+    container: {
+      avatarImg: 'js-profile-banner__avatar',
+      saveChangesForm: 'js-myProfile__form-saveChanges',
+      deleteAccount: 'js-myProfile__form-deleteAccount'
     }
   },
   posts: {

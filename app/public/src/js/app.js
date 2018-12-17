@@ -196,6 +196,12 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.posts) {
     detachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
     appState.registeredClickEvents.posts = false;
+  } else if (appState.registeredClickEvents.myProfileClick) {
+    detachEventListener([DOMelements.mainContent], 'click', [myProfileClickEvent]);
+    appState.registeredClickEvents.myProfileClick = false;
+  } else if (appState.registeredClickEvents.myProfileSubmit) {
+    detachEventListener([DOMelements.mainContent], 'submit', [myProfileSubmitEvent]);
+    appState.registeredClickEvents.myProfileSubmit = false;
   }
 }
 
@@ -566,9 +572,7 @@ function renderMyProfilePage() {
 function myProfileDOMLoadedSetupFunctions() {
   mainView.enableProfileBannerInputFields();
   mainView.showChangeAvatarButton();
-  changeAvatarSubController();
-  saveProfileChangesController();
-  deleteAccountController();
+  registerMyProfileEventListeners();
 }
 
 function myRunsViewSubController() {
@@ -628,8 +632,33 @@ function hideLoggedInMenuItems() {
 /* ---------------------------------------- */
 /* ------ CHANGE AVATAR SUBCONTROLLER ----- */
 
+function registerMyProfileEventListeners() {
+  attachEventListener([DOMelements.mainContent], 'click', [myProfileClickEvent]);
+  appState.registeredClickEvents.myProfileClick = true;
+  attachEventListener([DOMelements.mainContent], 'submit', [myProfileSubmitEvent]);
+  appState.registeredClickEvents.myProfileClick = true;
+  appState.registeredClickEvents.myProfileSubmit = true;
+}
+
+function myProfileClickEvent(e) {  
+  if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.avatarImg)){
+    changeAvatarSubController();
+  } 
+}
+
+function myProfileSubmitEvent(e) {
+  if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.saveChangesForm)){
+    saveProfileChangesController();
+  } else if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.deleteAccount)) {
+    deleteAccountController();
+  }
+}
+
+/* ---------------------------------------- */
+/* ------ CHANGE AVATAR SUBCONTROLLER ----- */
+
 function changeAvatarSubController() {
-  // some code
+  console.log('Change Avatar!');
 }
 
 /* ---------------------------------------- */
@@ -637,7 +666,7 @@ function changeAvatarSubController() {
 /* ---------------------------------------- */
 
 function saveProfileChangesController() {
-  // some code
+  console.log('Submit Profile Changes!');
 }
 
 /* ---------------------------------------- */
@@ -645,7 +674,7 @@ function saveProfileChangesController() {
 /* ---------------------------------------- */
 
 function deleteAccountController() {
-  // some code
+  console.log('Delete Account!');
 }
 
 /* ---------------------------------------- */

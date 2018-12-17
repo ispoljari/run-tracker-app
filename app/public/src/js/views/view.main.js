@@ -258,7 +258,7 @@ export const renderProfileBanner = (user) => {
   const htmlString = 
   `<div class="content__profile-banner">
     <div class="profile-banner__inner-container">
-      <div class="profile-banner__avatar-img">
+      <div class="profile-banner__avatar-img js-profile-banner__avatar">
         <img src="svg/monsters/monster-${user.avatar}.svg" alt="An image of a random monster">
         <button type="button" class="myProfile__change-avatar-button js-myProfile__change-avatar-button">Change avatar</button>
       </div>
@@ -496,12 +496,12 @@ export const clearNewRunFormData = () => {
 export const renderMyProfileSaveDeleteButtons = () => {
   const htmlString = 
   `<div class="myProfile">
-    <div class="myProfile__form-container">
+    <div class="myProfile__form-container js-myProfile__form-saveChanges">
       <form id="myProfile__update-account" class="myProfile__update-account">
         <button type="submit" class="btn-style">Save Changes</button>
       </form>
     </div>
-    <div class="myProfile__form-container">
+    <div class="myProfile__form-container js-myProfile__form-deleteAccount">
       <form id="myProfile__delete-account" class="myProfile__delete-account">
         <button type="submit" class="btn-style">Delete Account</button>
       </form>
