@@ -12,6 +12,7 @@ if (process.env.NODE_ENV === 'dev') {
 // Import 3rd party modules
 import * as moment from 'moment';
 import jwt from 'jsonwebtoken';
+import tingle from 'tingle.js';
 
 // Import DOM elements and dynamic hooks
 import {
@@ -629,8 +630,7 @@ function hideLoggedInMenuItems() {
   headerView.hideAvatarDropDownListButton();
 }
 
-/* ---------------------------------------- */
-/* ------ CHANGE AVATAR SUBCONTROLLER ----- */
+/* ------ REGISTER MY PROFILE EVENT LISTENERS ----- */
 
 function registerMyProfileEventListeners() {
   attachEventListener([DOMelements.mainContent], 'click', [myProfileClickEvent]);
@@ -674,7 +674,41 @@ function saveProfileChangesController() {
 /* ---------------------------------------- */
 
 function deleteAccountController() {
-  console.log('Delete Account!');
+  var modal = new tingle.modal({
+    footer: true,
+    stickyFooter: false,
+    closeMethods: [],
+    onOpen: function() {
+        console.log('modal open'); //TODO:
+    },
+    onClose: function() {
+        console.log('modal closed'); //TODO:
+    },
+    beforeClose: function() {
+        // here's goes some logic
+        // e.g. save content before closing the modal
+        return true; // close the modal
+        return false; // nothing happens //TODO:
+    }
+});
+
+// set content
+modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
+
+// add a button
+modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+    // here goes some logic
+    modal.close();
+});
+
+// add another button
+modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', function() {
+    // here goes some logic
+    modal.close();
+});
+
+// open modal
+modal.open();
 }
 
 /* ---------------------------------------- */
