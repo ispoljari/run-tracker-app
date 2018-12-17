@@ -913,6 +913,24 @@ div.content__post:nth-child(n+3) {
   max-width: 250px;
 }
 
+/* ---------------- MY PROFILE FORM ---------------- */
+
+.myProfile__form-container {
+  width: 100%;
+}
+
+.myProfile__update-account button {
+  background-color: #E6EE9C;
+}
+
+.myProfile__form-container:last-of-type {
+  margin-top: 10px;
+}
+
+.myProfile__delete-account button {
+  background-color: #F44336;
+}
+
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
 /* ------------------------------------------------- */
@@ -982,6 +1000,17 @@ footer {
   
   .horizontal-ruler {
     width: 90%;
+  }
+
+  .myProfile {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .myProfile__form-container {
+    width: 40%;
+    max-width: 170px;
   }
 }
 

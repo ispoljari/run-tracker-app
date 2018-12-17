@@ -558,6 +558,7 @@ function myProfileViewSubController() {
 
 function renderMyProfilePage() {
   mainView.renderProfileBanner(appState.login.JWT.user);
+  mainView.renderMyProfileSaveDeleteButtons();
 }
 
 function myRunsViewSubController() {

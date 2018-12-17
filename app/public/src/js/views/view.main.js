@@ -486,6 +486,26 @@ export const clearNewRunFormData = () => {
   // document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.privacy}`).value = '';
 }
 
+// My profile page
+
+export const renderMyProfileSaveDeleteButtons = () => {
+  const htmlString = 
+  `<div class="myProfile">
+    <div class="myProfile__form-container">
+      <form id="myProfile__update-account" class="myProfile__update-account">
+        <button type="submit" class="btn-style">Save Changes</button>
+      </form>
+    </div>
+    <div class="myProfile__form-container">
+      <form id="myProfile__delete-account" class="myProfile__delete-account">
+        <button type="submit" class="btn-style">Delete Account</button>
+      </form>
+    </div>
+  </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
 // Help functions
 
 function appendHtmlToMainContent(html, position='beforeend') {
