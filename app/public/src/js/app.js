@@ -557,9 +557,18 @@ function myProfileViewSubController() {
 }
 
 function renderMyProfilePage() {
-  executeFunctionAfterDOMContentLoaded(DOMelements.mainContent,mainView.enableProfileBannerClickableFields);
+  executeFunctionAfterDOMContentLoaded(DOMelements.mainContent,myProfileDOMLoadedSetupFunctions);
+
   mainView.renderProfileBanner(appState.login.JWT.user);
   mainView.renderMyProfileSaveDeleteButtons();
+}
+
+function myProfileDOMLoadedSetupFunctions() {
+  mainView.enableProfileBannerInputFields();
+  mainView.showChangeAvatarButton();
+  changeAvatarSubController();
+  saveProfileChangesController();
+  deleteAccountController();
 }
 
 function myRunsViewSubController() {
@@ -614,6 +623,29 @@ function hideLoggedInMenuItems() {
   headerView.hideAnalyticsButton();
   headerView.hideAddNewRunButton();
   headerView.hideAvatarDropDownListButton();
+}
+
+/* ---------------------------------------- */
+/* ------ CHANGE AVATAR SUBCONTROLLER ----- */
+
+function changeAvatarSubController() {
+  // some code
+}
+
+/* ---------------------------------------- */
+/* ---- SAVE PROFILE CHANGES CONTROLLER --- */
+/* ---------------------------------------- */
+
+function saveProfileChangesController() {
+  // some code
+}
+
+/* ---------------------------------------- */
+/* ------ DELETE ACCOUNT CONTROLLER ------- */
+/* ---------------------------------------- */
+
+function deleteAccountController() {
+  // some code
 }
 
 /* ---------------------------------------- */

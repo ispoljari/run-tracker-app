@@ -511,9 +511,12 @@ export const renderMyProfileSaveDeleteButtons = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const enableProfileBannerClickableFields = () => {
+export const enableProfileBannerInputFields = () => {
   DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.inputFields.fullName}`).disabled = false;
   DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.inputFields.displayName}`).disabled = false;
+}
+
+export const showChangeAvatarButton = () => {
   DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.buttons.changeAvatar}`).style.display = 'block';
 }
 

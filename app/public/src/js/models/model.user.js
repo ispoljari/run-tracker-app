@@ -3,18 +3,9 @@ import {apiData} from '../views/view.dom-base';
 
 export default class User {
   constructor (user) {
-    if (user.name) {
-      this.name = user.name
-    } 
-    
-    if (user.displayName) {
-      this.displayName = user.displayName
-    } 
-    
-    if (user.avatar) {
-      this.avatar = user.avatar
-    }
-
+    this.name = user.name
+    this.displayName = user.displayName
+    this.avatar = user.avatar
     this.username = user.username,
     this.password = user.password
   }
