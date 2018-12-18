@@ -254,20 +254,27 @@ export const clearRegistrationFormData = () => {
 
 // My Runs page
 
-export const renderProfileBanner = () => {
+export const renderProfileBanner = (user) => {
   const htmlString = 
   `<div class="content__profile-banner">
     <div class="profile-banner__inner-container">
-      <div class="profile-banner__avatar-img">
-        <img src="svg/monsters/monster-1.svg" alt="An image of a random monster">
+      <div class="profile-banner__avatar-img js-profile-banner__avatar">
+        <img src="svg/monsters/monster-${user.avatar}.svg" alt="An image of a random monster" data-avatar-index="${user.avatar}">
+        <button type="button" class="myProfile__change-avatar-button js-myProfile__change-avatar-button">Change avatar</button>
       </div>
       <div class="profile-banner__info">
         <div class="profile-info__full-name">
-          <h2>Wolfgang A. Mozart</h2>
+          <h2>
+            <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed" value="${user.name}" placeholder="Name?" class="js-myProfile__full-name-input" form="myProfile__update-account" disabled/>
+          </h2>
         </div>
+        <hr class="profile-banner__underline" />
         <div class="profile-info__display-name">
-          <p>@dementor</p>
+          <p>
+            @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
+          </p>
         </div>
+        <hr class="profile-banner__underline" />
       </div>
     </div>
   </div>`
@@ -482,6 +489,65 @@ export const clearNewRunFormData = () => {
   document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.time}`).value = '10:00';
   document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.description}`).value = '';
   // document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.privacy}`).value = '';
+}
+
+// My profile page
+
+export const renderMyProfileSaveDeleteButtons = () => {
+  const htmlString = 
+  `<div class="myProfile">
+    <div class="myProfile__form-container js-myProfile__form-saveChanges">
+      <form id="myProfile__update-account" class="myProfile__update-account">
+        <button type="submit" class="btn-style">Save Changes</button>
+      </form>
+    </div>
+    <div class="myProfile__form-container js-myProfile__form-deleteAccount">
+      <form id="myProfile__delete-account" class="myProfile__delete-account">
+        <button type="submit" class="btn-style">Delete Account</button>
+      </form>
+    </div>
+  </div>`
+
+  appendHtmlToMainContent(htmlString);
+}
+
+export const enableProfileBannerInputFields = () => {
+  DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.inputFields.fullName}`).disabled = false;
+  DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.inputFields.displayName}`).disabled = false;
+}
+
+export const showChangeAvatarButton = () => {
+  DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.buttons.changeAvatar}`).style.display = 'block';
+}
+
+export const changeAvatarImg = (newAvatar) => {
+  document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].src = `svg/monsters/monster-${newAvatar}.svg`;
+  document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].dataset.avatarIndex = newAvatar;
+}
+
+export const getMyProfileFormData = () => {
+  return {
+    name: document.querySelector(`.${DOMstrings.myProfileForm.inputFields.fullName}`).value,
+    displayName: document.querySelector(`.${DOMstrings.myProfileForm.inputFields.displayName}`).value,
+    avatar: parseInt(document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].dataset.avatarIndex, 10)
+  }
+}
+
+// Modal window: Change avatar
+
+export const populateModalWithAvatars = () => {
+  let htmlString = ``;
+  for (let i=1; i<=30; i++) {
+    htmlString += `
+      <img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+  }
+  return htmlString;
+}
+
+export const adjustModalWithAvatarsStyle = () => {
+  document.querySelector(`.${DOMstrings.modal.content}`).classList.add(controledHooksStrings.modalAdjustPadding);
+  document.querySelector(`.${DOMstrings.modal.outerBox}`).classList.add(controledHooksStrings.modalAdjustWidth);
+  document.querySelector(`.${DOMstrings.modal.outerBox}`).classList.add(controledHooksStrings.modalAdjustTopMargin);
 }
 
 // Help functions

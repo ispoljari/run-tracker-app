@@ -25,11 +25,16 @@ export const controledHooksStrings = {
   navMenuItemHide: 'menu__item--hidden',
   warningMessageStyle: 'content__user-info--warning',
   addNewRunBackground: 'add-new-run__form--background',
-  postsCollapsibleToggleVisibility: 'content__post--active'
+  postsCollapsibleToggleVisibility: 'content__post--active',
+  modalAdjustPadding: 'tingle-modal-box__content--adjust-padding',
+  modalAdjustWidth: 'tingle-modal-box--adjust-width',
+  modalAdjustTopMargin: 'tingle-modal-box--adjust-topMargin'
 }
 
 export const DOMstrings = {
   menuDropDownList: 'js-dropdown-list',
+  menuDropDownAvatarImg: 'js-menu__avatar',
+  menuDropDownUserName: 'js-dropdown-list__user-name',
   loginMenu: 'js-login-menu',
   mainViewWarningMessage: 'js-content__user-info',
   registerForm : {
@@ -63,12 +68,30 @@ export const DOMstrings = {
       privacy: 'js-add-new-run__privacy'
     }
   },
+  myProfileForm: {
+    inputFields: {
+      fullName: 'js-myProfile__full-name-input',
+      displayName: 'js-myProfile__display-name-input'
+    },
+    buttons: {
+      changeAvatar: 'js-myProfile__change-avatar-button'
+    },
+    container: {
+      avatarImg: 'js-profile-banner__avatar',
+      saveChangesForm: 'js-myProfile__form-saveChanges',
+      deleteAccount: 'js-myProfile__form-deleteAccount'
+    }
+  },
   posts: {
     mainContainer: 'js-content__post',
     collapsibleContainer: 'js-post-collapsible',
     collapsibleSymbol: 'js-post-collapsible__symbol',
     additional: 'js-post-additional',
     loadMore: 'js-main-content__loader'
+  },
+  modal: {
+    outerBox: 'tingle-modal-box',
+    content: 'tingle-modal-box__content'
   }
 }
 

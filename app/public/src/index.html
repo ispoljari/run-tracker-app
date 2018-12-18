@@ -9,6 +9,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Run Tracker</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/tingle.css">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/grid.css">
   <link rel="stylesheet" href="css/main.css">
@@ -39,7 +40,7 @@
               </li>
               <li class="menu__item menu__item--avatar menu__item--hidden" data-menu-type="dropDownList">
                 <a href="#" class="menu__link">
-                  <img src="svg/monsters/monster-1.svg" alt="An image of a random monster " class="menu__avatar menu__avatar--mobile">
+                  <img src="svg/monsters/monster-1.svg" alt="An image of a random monster " class="menu__avatar js-menu__avatar menu__avatar--mobile" data-avatar-index="1">
                   <i class="fa fa-angle-down fa_angle--mobile"></i>
                 </a>
               </li>
@@ -54,7 +55,7 @@
 
           <div class="dropdown-list js-dropdown-list">
             <ul class="dropdown-list__container">
-              <li class="dropdown-list__item dropdown-list__item--emphasize">
+              <li class="dropdown-list__item dropdown-list__item--emphasize js-dropdown-list__user-name">
                 <p>Wolfgang A. Mozart</p>
               </li>
               <hr>
@@ -89,7 +90,7 @@
             <form action="#" class="login__form js-login__form">
               <label>
                 Email (username):
-                <input type="email" name="email" placeholder="demo@run-tracker.test" class="login__input-username" required>
+                <input type="email" name="email" placeholder="demo@run-tracker.test"  class="login__input-username" required>
               </label>
               <label>
                 Password:

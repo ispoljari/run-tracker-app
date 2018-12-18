@@ -12,10 +12,13 @@ export const appState = {
     registerForm: false,
     addNewRunForm: false,
     dropDownList: false,
-    posts: false
+    posts: false,
+    myProfileClick: false,
+    myProfileSubmit: false
   },
   register: {},
   login: {},
+  user: {},
   posts: {},
   mutationObserver: {}
 }

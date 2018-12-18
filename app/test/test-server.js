@@ -281,7 +281,7 @@ describe('///////////// API RESOURCES //////////', function() {
                 .send(updateData);
             })
             .then(function(res) {
-              expect(res).to.have.status(HTTP_STATUS_CODES.NO_CONTENT);
+              expect(res).to.have.status(HTTP_STATUS_CODES.CREATED);
               
               return User.findById(updateData.id);
             })

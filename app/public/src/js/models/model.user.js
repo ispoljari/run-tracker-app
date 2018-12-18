@@ -1,8 +1,13 @@
 import axios from 'axios';
 import {apiData} from '../views/view.dom-base';
+import {appState} from '../state/state.app';
 
 export default class User {
   constructor (user) {
+    if (user.id) {
+      this.id = user.id
+    } 
+
     if (user.name) {
       this.name = user.name
     } 
@@ -13,10 +18,15 @@ export default class User {
     
     if (user.avatar) {
       this.avatar = user.avatar
+    } 
+    
+    if (user.username) {
+      this.username = user.username
+    } 
+    
+    if (user.password) {
+      this.password = user.password
     }
-
-    this.username = user.username,
-    this.password = user.password
   }
 
   async createNew() {
@@ -52,9 +62,33 @@ export default class User {
       });
 
       delete this.password;
+      delete this.username;
       this.result = res;
     } catch (error) {
       this.error = error.response.data
+    }
+  }
+
+  async update() {
+    try {
+      const res = await axios({
+        method: 'put',
+        url: `${apiData.urls.users}/${this.id}`,
+        data: {
+          id: this.id,
+          name: this.name,
+          displayName: this.displayName,
+          avatar: this.avatar
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+
+      this.result = res;
+    } catch (error) {
+      this.error = error.response.data;
     }
   }
 }

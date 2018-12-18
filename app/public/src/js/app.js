@@ -11,6 +11,8 @@ if (process.env.NODE_ENV === 'dev') {
 
 // Import 3rd party modules
 import * as moment from 'moment';
+import jwt from 'jsonwebtoken';
+import tingle from 'tingle.js';
 
 // Import DOM elements and dynamic hooks
 import {
@@ -93,8 +95,8 @@ function logoClickEvent(e) {
 function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if (view === 'myRuns' && appState.session.loggedIn) {
-    mainView.renderProfileBanner();
+  } else if ((view === 'myRuns' || view === 'home') && appState.session.loggedIn) {
+    mainView.renderProfileBanner(appState.login.JWT.user);
   }
   mainView.renderTitle(message);
   retrievePostsFromAPI('desc');
@@ -195,6 +197,12 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.posts) {
     detachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
     appState.registeredClickEvents.posts = false;
+  } else if (appState.registeredClickEvents.myProfileClick) {
+    detachEventListener([DOMelements.mainContent], 'click', [myProfileClickEvent]);
+    appState.registeredClickEvents.myProfileClick = false;
+  } else if (appState.registeredClickEvents.myProfileSubmit) {
+    detachEventListener([DOMelements.mainContent], 'submit', [myProfileSubmitEvent]);
+    appState.registeredClickEvents.myProfileSubmit = false;
   }
 }
 
@@ -501,10 +509,16 @@ function closeLoginMenu() {
 
 function enterLoggedInSessionMode() {
   appState.session.loggedIn = true;
+  extractUserDataFromJWT();
   hideLoggedOutMenuItems();
+  updateDropDownListElements();
   showLoggedInMenuItems();
   clearCurrentPage();
-  homeViewController('myRuns', 'My Runs');
+  homeViewController('home', 'Main Feed');
+}
+
+function extractUserDataFromJWT() {
+  appState.login.JWT = jwt.decode(appState.login.user.result.data.authToken);
 }
 
 function hideLoggedOutMenuItems() {
@@ -515,8 +529,13 @@ function hideLoggedOutMenuItems() {
 function showLoggedInMenuItems() {
   headerView.showMyRunsButton();
   headerView.showAnalyticsButton();
-  headerView.showAddNewRunButton();
+  headerView.showAddNewRunButton();  
   headerView.showAvatarDropDownListButton();
+}
+
+function updateDropDownListElements() {
+  headerView.updateDropDownListUsername(appState.login.JWT.user.name);
+  headerView.updateDropDownListAvatar(appState.login.JWT.user.avatar);
 }
 
 /* ---------------------------------------- */
@@ -537,8 +556,24 @@ function dropDownListController() {
 
 function myProfileViewSubController() {
   if (appState.session.currentView !== 'myProfile') {
+    clearCurrentPage();
+    renderMyProfilePage();
     appState.session.currentView = 'myProfile';
   }
+  closeDropDownList();
+}
+
+function renderMyProfilePage() {
+  executeFunctionAfterDOMContentLoaded(DOMelements.mainContent,myProfileDOMLoadedSetupFunctions);
+
+  mainView.renderProfileBanner(appState.login.JWT.user);
+  mainView.renderMyProfileSaveDeleteButtons();
+}
+
+function myProfileDOMLoadedSetupFunctions() {
+  mainView.enableProfileBannerInputFields();
+  mainView.showChangeAvatarButton();
+  registerMyProfileEventListeners();
 }
 
 function myRunsViewSubController() {
@@ -551,7 +586,6 @@ function myRunsViewSubController() {
 
 function analyticsViewSubController() {
   if (appState.session.currentView !== 'analytics') {
-    // some code
     appState.session.currentView = 'analytics';
   }
 }
@@ -594,6 +628,152 @@ function hideLoggedInMenuItems() {
   headerView.hideAnalyticsButton();
   headerView.hideAddNewRunButton();
   headerView.hideAvatarDropDownListButton();
+}
+
+/* ------ REGISTER MY PROFILE EVENT LISTENERS ----- */
+
+function registerMyProfileEventListeners() {
+  attachEventListener([DOMelements.mainContent], 'click', [myProfileClickEvent]);
+  appState.registeredClickEvents.myProfileClick = true;
+  attachEventListener([DOMelements.mainContent], 'submit', [myProfileSubmitEvent]);
+  appState.registeredClickEvents.myProfileClick = true;
+  appState.registeredClickEvents.myProfileSubmit = true;
+}
+
+function myProfileClickEvent(e) {  
+  if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.avatarImg)){
+    changeAvatarSubController(e);
+  } 
+}
+
+function myProfileSubmitEvent(e) {
+  if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.saveChangesForm)){
+    saveProfileChangesController(e);
+  } else if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.deleteAccount)) {
+    deleteAccountController(e);
+  }
+}
+
+/* ---------------------------------------- */
+/* ------ CHANGE AVATAR SUBCONTROLLER ----- */
+
+function changeAvatarSubController(e) {
+  e.preventDefault();
+
+  const modal = new tingle.modal({
+    footer: false,
+    stickyFooter: false,
+    closeMethods: ['escape', 'button'],
+    beforeOpen: function() {
+      mainView.adjustModalWithAvatarsStyle();
+    },
+    onClose: function() {
+      detachEventListener([document.querySelector(`.${DOMstrings.modal.outerBox}`)], 'click', [selectAvatarSubController]);
+    },
+    onOpen: function() {
+      attachEventListener([document.querySelector(`.${DOMstrings.modal.outerBox}`)], 'click', [selectAvatarSubController]);
+    },
+  });
+
+  modal.setContent(mainView.populateModalWithAvatars());
+  modal.open();
+
+  function selectAvatarSubController(e) {
+    e.preventDefault();
+  
+    const targetElement = e.target;
+    if (e.target.dataset.avatarIndex) {
+      mainView.changeAvatarImg(targetElement.dataset.avatarIndex)   
+      modal.close();
+    }
+  }
+}
+
+
+/* ---------------------------------------- */
+/* ---- SAVE PROFILE CHANGES CONTROLLER --- */
+/* ---------------------------------------- */
+
+async function saveProfileChangesController(e) {
+  e.preventDefault();
+
+   // Remove existing warning messages
+   if (mainView.warningMessageExists()) {
+    mainView.removeMessage();
+  }
+
+  const updatedUser = mainView.getMyProfileFormData();
+  updatedUser.id = appState.login.JWT.user.id;
+
+  if (updatedUser) {
+    // Create a new updated user instance
+    appState.user.updated = new User(updatedUser);
+
+    // Delete all data from newUser
+    deleteAllObjectProperties(updatedUser);
+
+    // POST new user to server
+    try {
+      await appState.user.updated.update();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);
+    }
+
+    if (appState.user.updated.result) {
+      appState.user.updated.result.status === 201 ? 
+      userUpdateSuccessfullyExecuted() 
+      : displayFailMessage(apiData.infoMessages.unknown);
+    } else if (appState.user.updated.error) {
+      return displayFailMessage(`${appState.user.updated.error.message}!`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+
+    // Delete all data from appState.register.user
+    deleteAllObjectProperties(appState.user.updated);
+  }
+}
+
+function userUpdateSuccessfullyExecuted() {
+  appState.login.JWT.user = JSON.parse(JSON.stringify(appState.user.updated.result.data));
+  
+  updateDropDownListElements();
+}
+
+/* ---------------------------------------- */
+/* ------ DELETE ACCOUNT CONTROLLER ------- */
+/* ---------------------------------------- */
+
+function deleteAccountController(e) {
+  e.preventDefault();
+
+  const modal = new tingle.modal({
+    footer: true,
+    stickyFooter: false,
+    closeMethods: [],
+    onClose: function() {
+        console.log('modal closed'); //TODO:
+    },
+    beforeClose: function() {
+        console.log('Closing!');
+        // Delete all user posts
+        // Delete user account
+        return true;
+    }
+  });
+
+  modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
+
+  modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+      // No action required
+      modal.close();
+  });
+
+  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', function() {
+      modal.close();
+  });
+
+  modal.open();
 }
 
 /* ---------------------------------------- */

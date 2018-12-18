@@ -230,9 +230,15 @@ a {
 }
 
 .dropdown-list__item:nth-child(n+3) a {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .dropdown-list__item--voffset {
@@ -340,13 +346,13 @@ a {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  margin: 0 auto 25px auto;
+  margin: 0 auto 10px auto;
 
    /* Style */
   height: 150px;
   width: 100%;
   padding: 15px;
-  background-color: 	#0c457d;
+  background-color: #6bd2db85;
   border-radius: 5px;
 }
 
@@ -365,7 +371,7 @@ a {
   height: 100%;
   background-color: #f9f9f9;
   border-radius: 5px;
-  padding: 20px;
+  padding: 10px;
 }
 
 .profile-banner__avatar-img {
@@ -380,18 +386,59 @@ a {
 .profile-banner__info {
   /* Layout */
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 30px;
 
   /* Style */
   width: 65%;
 }
 
+.profile-info__full-name h2 {
+  font-size: 22px;
+}
+
+.profile-info__full-name input {
+  /* Style */
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color:black;
+}
+
 .profile-info__display-name {
   /* Layout */
-  margin-top: 5px;
+  margin-top: 10px;
 
   /* Style */
   font-size: 18px;
+}
+
+.profile-info__display-name p {
+  font-size: 18px;
+}
+
+.profile-info__display-name input {
+  /* Style */
+  width: 85%;
+  background-color: transparent;
+  border: none;
+  color: black;
+}
+
+.myProfile__change-avatar-button {
+  /* Layout */
+  display: none;
+
+  /* Style */
+  font-size: 16px;
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid #e3e3e3;
+  cursor: pointer;
+  background-color: white;
+}
+
+.profile-banner__underline {
+  border: 1px solid #e3e3e3;
 }
 
 .content__post {
@@ -896,6 +943,47 @@ div.content__post:nth-child(n+3) {
   max-width: 250px;
 }
 
+/* ---------------- MY PROFILE PAGE ---------------- */
+
+.myProfile__form-container {
+  width: 100%;
+}
+
+.myProfile__form-container:last-of-type {
+  margin-top: 15px;
+}
+
+.myProfile__delete-account button {
+  background-color: #f44336;
+}
+
+/* --------------- AVATAR CHOOSE MODAL ------------- */
+
+.modal__avatar {
+  display: inline-block;
+  width: calc(65px + (90 - 65) * ((100vw - 320px) / (1100 - 320)));
+  padding: 5px;
+  margin: 5px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal__avatar:hover {
+  background-color: #dcd6d6;
+}
+
+.tingle-modal-box__content--adjust-padding {
+  padding: 10px;
+}
+
+.tingle-modal-box--adjust-width {
+  max-width: 650px;
+}
+
+.tingle-modal-box--adjust-topMargin {
+  margin-top: 60px;
+}
+
 /* ------------------------------------------------- */
 /* ------------------------FOOTER------------------- */
 /* ------------------------------------------------- */
@@ -966,6 +1054,23 @@ footer {
   .horizontal-ruler {
     width: 90%;
   }
+
+  .myProfile {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+            align-items: flex-end;
+  }
+
+  .myProfile__form-container {
+    width: 40%;
+    max-width: 170px;
+  }
 }
 
 @media only screen and (min-width: 460px) {
@@ -986,6 +1091,11 @@ footer {
   }
 }
 
+@media screen and (min-device-width: 540px) {
+  .tingle-modal-box--adjust-topMargin {
+    margin-top: auto;
+  }
+}
 
 
 @media screen and (min-device-width: 590px) {
@@ -999,31 +1109,9 @@ footer {
     display: none;
   }
 
-  .heading__title {
-    /* Style */
-    font-size: 26px;
-  }
-
   .header__logo-img {
     /* Styles */
     width: 65px;
-  }
-
-  .login__form label,
-  .login__form button {
-    font-size: 18px;
-  }
-
-  .registration legend {
-    font-size: 22px;
-  }
-
-  .registration label,
-  .registration input,
-  .registration__submit,
-  .content-loader-btn
-  {
-    font-size: 18px;
   }
 
   .dropdown-list,
@@ -1031,17 +1119,42 @@ footer {
     top: 61px;
   }
 
+  .heading__title {
+    /* Style */
+    font-size: 26px;
+  }
+
   .content__heading-posts h2,
-  .content__user-info h2 {
+  .content__user-info h2,
+  .profile-info__full-name h2  {
     /* Style */
     font-size: 24px;
   }
 
+  .registration legend,
+  .post-data__distance--style-results p:last-of-type {
+    font-size: 22px;
+  }
+
   .post-header__user h3,
   .post-data__title h4,
-  .post-additional__description h4 {
+  .post-additional__description h4,
+  .profile-info__display-name p {
     /* Style */
     font-size: 20px;
+  }
+
+  .login__form label,
+  .login__form button,
+  .registration label,
+  .registration input,
+  .registration__submit,
+  .content-loader-btn,
+  .header__nav-container li,
+  .dropdown-list li,
+  .myProfile__delete-account button,
+  .myProfile__update-account button {
+    font-size: 18px;
   }
 
   .post-additional__description p,
@@ -1049,16 +1162,6 @@ footer {
   .post-data__distance--style-results p:first-of-type {
     font-size: 16px;
   }
-
-  .post-data__distance--style-results p:last-of-type {
-    font-size: 22px;
-  }
-
-  .header__nav-container li,
-  .dropdown-list li {
-    font-size: 18px;
-  }
-  
 }
 
 
@@ -1067,23 +1170,31 @@ footer {
 		margin-top: 0;
   }
 
-  .registration legend {
+  .content__heading-posts h2,
+  .content__user-info h2,
+  .profile-info__full-name h2 {
+    /* Style */
+    font-size: 26px;
+  }
+
+  .post-data__distance--style-results p:last-of-type,
+  .registration legend,
+  .add-new-run h2 {
     font-size: 24px;
   }
 
+  .post-header__user h3,
+  .post-data__title h4,
+  .post-additional__description h4,
+  .profile-info__display-name p {
+    /* Style */
+    font-size: 22px;
+  }
+  
   .registration label,
   .registration input,
   .registration__submit,
-  .content-loader-btn
-  {
-    font-size: 20px;
-  }
-  
-  .add-new-run h2 {
-    /* Style */
-    font-size: 24px;
-  }
-
+  .content-loader-btn,
   .title legend,
   .distance legend,
   .duration legend,
@@ -1104,6 +1215,13 @@ footer {
   .privacy select {
     /* Style */
     font-size: 20px;
+  }
+
+  .post-additional__description p,
+  .post-header__datetime p,
+  .myProfile__change-avatar-button,
+  .post-data__distance--style-results p:first-of-type {
+    font-size: 18px;
   }
 
   .distance__value {
@@ -1128,31 +1246,6 @@ footer {
     width: 45%;
   } 
 
-  .content__heading-posts h2,
-  .content__user-info h2 {
-    /* Style */
-    font-size: 26px;
-  }
-
-  .post-header__user h3,
-  .post-data__title h4,
-  .post-additional__description h4 {
-    /* Style */
-    font-size: 22px;
-  }
-
-  .post-additional__description p,
-  .post-header__datetime p,
-  .post-data__distance--style-results p:first-of-type {
-    font-size: 18px;
-  }
-
-  .post-data__distance--style-results p:last-of-type {
-    font-size: 24px;
-  }
-}
-
-@media only screen and (min-width: 820px) {
   .duration__hours label,
   .duration__minutes label,
   .duration__seconds label {
@@ -1167,6 +1260,12 @@ footer {
   .duration__seconds label {
     /* Layout */
     right: 25px;
+  }
+}
+
+@media only screen and (min-width: 1100px) {
+  .modal__avatar {
+    width: 90px;
   }
 }
 

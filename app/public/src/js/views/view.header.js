@@ -46,6 +46,15 @@ export const hideAddNewRunButton = () => {
   DOMelements.navMenuItems.logedIn.addNewRun.classList.add(controledHooksStrings.navMenuItemHide);
 }
 
+export const updateDropDownListAvatar = (avatar) => {
+  DOMelements.navMenu.querySelector(`.${DOMstrings.menuDropDownAvatarImg}`).src=`svg/monsters/monster-${avatar}.svg`;
+  DOMelements.navMenu.querySelector(`.${DOMstrings.menuDropDownAvatarImg}`).dataset.avatarIndex = avatar;
+}
+
+export const updateDropDownListUsername = (name) => {
+  DOMelements.menuDropDownList.querySelector(`.${DOMstrings.menuDropDownUserName}`).getElementsByTagName("p")[0].textContent = name;
+}
+
 export const showAvatarDropDownListButton = () => {
   DOMelements.navMenuItems.logedIn.avatarDropDown.classList.remove(controledHooksStrings.navMenuItemHide);
 }
