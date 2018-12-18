@@ -18,6 +18,7 @@ export const appState = {
   },
   register: {},
   login: {},
+  user: {},
   posts: {},
   mutationObserver: {}
 }

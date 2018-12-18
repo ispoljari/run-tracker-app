@@ -694,7 +694,7 @@ function changeAvatarSubController(e) {
 /* ---- SAVE PROFILE CHANGES CONTROLLER --- */
 /* ---------------------------------------- */
 
-function saveProfileChangesController(e) {
+async function saveProfileChangesController(e) {
   e.preventDefault();
 
    // Remove existing warning messages
@@ -705,19 +705,39 @@ function saveProfileChangesController(e) {
   const updatedUser = mainView.getMyProfileFormData();
 
   if (updatedUser) {
-    // // Create a new updated user instance
-    // appState.register.user = new User(newUser);
+    // Create a new updated user instance
+    appState.user.updated = new User(updatedUser);
+    console.log(appState.user.updated);
 
-    // // Delete all data from newUser
-    // deleteAllObjectProperties(newUser);
+    // Delete all data from newUser
+    deleteAllObjectProperties(updatedUser);
 
-    // // POST new user to server
-    // try {
-    //   await appState.register.user.createNew();
-    // } catch (error) {
-    //   displayFailMessage(apiData.infoMessages.unknown);
-    // }
+    // POST new user to server
+    try {
+      console.log('Hello');
+      await appState.user.updated.update();
+    } catch (error) {
+      console.log(error);
+      displayFailMessage(apiData.infoMessages.unknown);
+    }
+
+    if (appState.user.updated.result) {
+      appState.user.updated.result.status === 204 ? 
+      userUpdateSuccessfullyExecuted() 
+      : displayFailMessage(apiData.infoMessages.unknown);
+    } else if (appState.user.updated.error) {
+      return displayFailMessage(`${appState.user.updated.error.message}!`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+
+    // Delete all data from appState.register.user
+    // deleteAllObjectProperties(appState.register.user);
   }
+}
+
+function userUpdateSuccessfullyExecuted() {
+  console.log(appState.user.updated.result);
 }
 
 /* ---------------------------------------- */

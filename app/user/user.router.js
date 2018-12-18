@@ -118,7 +118,7 @@ router.put('/:id', jwtAuth, (req, res) => {
 
   User.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
   .then(updatedUser => {
-    return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedUser.serialize());
+    return res.status(HTTP_STATUS_CODES.CREATED).json(updatedUser.serialize());
   })
   .catch(err => {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({

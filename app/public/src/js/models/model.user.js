@@ -3,11 +3,25 @@ import {apiData} from '../views/view.dom-base';
 
 export default class User {
   constructor (user) {
-    this.name = user.name
-    this.displayName = user.displayName
-    this.avatar = user.avatar
-    this.username = user.username,
-    this.password = user.password
+    if (user.name) {
+      this.name = user.name
+    } 
+    
+    if (user.displayName) {
+      this.displayName = user.displayName
+    } 
+    
+    if (user.avatar) {
+      this.avatar = user.avatar
+    } 
+    
+    if (user.username) {
+      this.username = user.username
+    } 
+    
+    if (user.password) {
+      this.password = user.password
+    }
   }
 
   async createNew() {
@@ -54,8 +68,9 @@ export default class User {
     try {
       const res = await axios({
         method: 'put',
-        url: `${apiData.urls.users}:${appState.login.JWT.user.id}`,
+        url: `${apiData.urls.users}/${appState.login.JWT.user.id}`,
         data: {
+          id: appState.login.JWT.user.id,
           name: this.name,
           displayName: this.displayName,
           avatar: this.avatar
