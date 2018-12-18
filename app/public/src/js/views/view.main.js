@@ -259,7 +259,7 @@ export const renderProfileBanner = (user) => {
   `<div class="content__profile-banner">
     <div class="profile-banner__inner-container">
       <div class="profile-banner__avatar-img js-profile-banner__avatar">
-        <img src="svg/monsters/monster-${user.avatar}.svg" alt="An image of a random monster">
+        <img src="svg/monsters/monster-${user.avatar}.svg" alt="An image of a random monster" data-avatar-index="${user.avatar}">
         <button type="button" class="myProfile__change-avatar-button js-myProfile__change-avatar-button">Change avatar</button>
       </div>
       <div class="profile-banner__info">
@@ -518,6 +518,22 @@ export const enableProfileBannerInputFields = () => {
 
 export const showChangeAvatarButton = () => {
   DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.buttons.changeAvatar}`).style.display = 'block';
+}
+
+// Modal window: Change avatar
+
+export const populateModalWithAvatars = () => {
+  let htmlString = ``;
+  for (let i=1; i<=30; i++) {
+    htmlString += `<img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+  }
+  return htmlString;
+}
+
+export const adjustModalWithAvatarsStyle = () => {
+  document.querySelector(`.${DOMstrings.modal.content}`).classList.add(controledHooksStrings.modalAdjustPadding);
+  document.querySelector(`.${DOMstrings.modal.outerBox}`).classList.add(controledHooksStrings.modalAdjustWidth);
+  document.querySelector(`.${DOMstrings.modal.outerBox}`).classList.add(controledHooksStrings.modalAdjustTopMargin);
 }
 
 // Help functions

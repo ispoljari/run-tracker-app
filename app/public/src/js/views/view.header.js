@@ -48,6 +48,7 @@ export const hideAddNewRunButton = () => {
 
 export const updateDropDownListAvatar = (avatar) => {
   DOMelements.navMenu.querySelector(`.${DOMstrings.menuDropDownAvatarImg}`).src=`svg/monsters/monster-${avatar}.svg`;
+  DOMelements.navMenu.querySelector(`.${DOMstrings.menuDropDownAvatarImg}`).dataset.avatarIndex = avatar;
 }
 
 export const updateDropDownListUsername = (name) => {

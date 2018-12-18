@@ -642,30 +642,56 @@ function registerMyProfileEventListeners() {
 
 function myProfileClickEvent(e) {  
   if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.avatarImg)){
-    changeAvatarSubController();
+    changeAvatarSubController(e);
   } 
 }
 
 function myProfileSubmitEvent(e) {
   if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.saveChangesForm)){
-    saveProfileChangesController();
+    saveProfileChangesController(e);
   } else if (isTargetElementInsideOf(e, DOMstrings.myProfileForm.container.deleteAccount)) {
-    deleteAccountController();
+    deleteAccountController(e);
   }
 }
 
 /* ---------------------------------------- */
 /* ------ CHANGE AVATAR SUBCONTROLLER ----- */
 
-function changeAvatarSubController() {
-  console.log('Change Avatar!');
+function changeAvatarSubController(e) {
+  e.preventDefault();
+
+  const modal = new tingle.modal({
+    footer: false,
+    stickyFooter: false,
+    closeMethods: ['escape', 'button'],
+    beforeOpen: function() {
+      mainView.adjustModalWithAvatarsStyle();
+    },
+    onClose: function() {
+      detachEventListener([document.querySelector(`.${DOMstrings.modal.outerBox}`)], 'click', [selectAvatarSubController]);
+    },
+    onOpen: function() {
+      attachEventListener([document.querySelector(`.${DOMstrings.modal.outerBox}`)], 'click', [selectAvatarSubController]);
+    },
+  });
+
+  modal.setContent(mainView.populateModalWithAvatars());
+  modal.open();
+}
+
+function selectAvatarSubController(e) {
+  e.preventDefault();
+
+  console.log(e.target);
 }
 
 /* ---------------------------------------- */
 /* ---- SAVE PROFILE CHANGES CONTROLLER --- */
 /* ---------------------------------------- */
 
-function saveProfileChangesController() {
+function saveProfileChangesController(e) {
+  e.preventDefault();
+
   console.log('Submit Profile Changes!');
 }
 
@@ -673,42 +699,36 @@ function saveProfileChangesController() {
 /* ------ DELETE ACCOUNT CONTROLLER ------- */
 /* ---------------------------------------- */
 
-function deleteAccountController() {
-  var modal = new tingle.modal({
+function deleteAccountController(e) {
+  e.preventDefault();
+
+  const modal = new tingle.modal({
     footer: true,
     stickyFooter: false,
     closeMethods: [],
-    onOpen: function() {
-        console.log('modal open'); //TODO:
-    },
     onClose: function() {
         console.log('modal closed'); //TODO:
     },
     beforeClose: function() {
-        // here's goes some logic
-        // e.g. save content before closing the modal
-        return true; // close the modal
-        return false; // nothing happens //TODO:
+        console.log('Closing!');
+        // Delete all user posts
+        // Delete user account
+        return true;
     }
-});
+  });
 
-// set content
-modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
+  modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
 
-// add a button
-modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
-    // here goes some logic
-    modal.close();
-});
+  modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+      // No action required
+      modal.close();
+  });
 
-// add another button
-modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', function() {
-    // here goes some logic
-    modal.close();
-});
+  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', function() {
+      modal.close();
+  });
 
-// open modal
-modal.open();
+  modal.open();
 }
 
 /* ---------------------------------------- */

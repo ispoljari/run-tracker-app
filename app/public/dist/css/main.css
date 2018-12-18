@@ -943,18 +943,45 @@ div.content__post:nth-child(n+3) {
   max-width: 250px;
 }
 
-/* ---------------- MY PROFILE FORM ---------------- */
+/* ---------------- MY PROFILE PAGE ---------------- */
 
 .myProfile__form-container {
   width: 100%;
 }
 
 .myProfile__form-container:last-of-type {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .myProfile__delete-account button {
-  background-color: #F44336;
+  background-color: #f44336;
+}
+
+/* --------------- AVATAR CHOOSE MODAL ------------- */
+
+.modal__avatar {
+  display: inline-block;
+  width: calc(65px + (90 - 65) * ((100vw - 320px) / (1100 - 320)));
+  padding: 5px;
+  margin: 5px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal__avatar:hover {
+  background-color: #dcd6d6;
+}
+
+.tingle-modal-box__content--adjust-padding {
+  padding: 10px;
+}
+
+.tingle-modal-box--adjust-width {
+  max-width: 650px;
+}
+
+.tingle-modal-box--adjust-topMargin {
+  margin-top: 60px;
 }
 
 /* ------------------------------------------------- */
@@ -1064,6 +1091,11 @@ footer {
   }
 }
 
+@media screen and (min-device-width: 540px) {
+  .tingle-modal-box--adjust-topMargin {
+    margin-top: auto;
+  }
+}
 
 
 @media screen and (min-device-width: 590px) {
@@ -1228,6 +1260,12 @@ footer {
   .duration__seconds label {
     /* Layout */
     right: 25px;
+  }
+}
+
+@media only screen and (min-width: 1100px) {
+  .modal__avatar {
+    width: 90px;
   }
 }
 

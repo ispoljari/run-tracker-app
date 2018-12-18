@@ -178,23 +178,21 @@
   border-radius: 5px;
   background-color: grey;
   box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
-  color: #fff;
+  color: black;
   vertical-align: middle;
   text-decoration: none;
   font-size: inherit;
   font-family: inherit;
   line-height: normal;
   cursor: pointer;
-  -webkit-transition: background-color .4s ease;
-  transition: background-color .4s ease;
 }
 
 .tingle-btn--primary {
-  background-color: #3498db;
+  background-color: #fff;
 }
 
 .tingle-btn--danger {
-  background-color: #e74c3c;
+  background-color: #f44336;
 }
 
 .tingle-btn--default {
