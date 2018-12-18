@@ -677,13 +677,18 @@ function changeAvatarSubController(e) {
 
   modal.setContent(mainView.populateModalWithAvatars());
   modal.open();
+
+  function selectAvatarSubController(e) {
+    e.preventDefault();
+  
+    const targetElement = e.target;
+    if (e.target.dataset.avatarIndex) {
+      mainView.changeAvatarImg(targetElement.dataset.avatarIndex)   
+      modal.close();
+    }
+  }
 }
 
-function selectAvatarSubController(e) {
-  e.preventDefault();
-
-  console.log(e.target);
-}
 
 /* ---------------------------------------- */
 /* ---- SAVE PROFILE CHANGES CONTROLLER --- */

@@ -520,12 +520,18 @@ export const showChangeAvatarButton = () => {
   DOMelements.mainContent.querySelector(`.${DOMstrings.myProfileForm.buttons.changeAvatar}`).style.display = 'block';
 }
 
+export const changeAvatarImg = (newAvatar) => {
+  document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].src = `svg/monsters/monster-${newAvatar}.svg`;
+  document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].dataset.avatarIndex = newAvatar;
+}
+
 // Modal window: Change avatar
 
 export const populateModalWithAvatars = () => {
   let htmlString = ``;
   for (let i=1; i<=30; i++) {
-    htmlString += `<img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+    htmlString += `
+      <img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
   }
   return htmlString;
 }
