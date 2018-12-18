@@ -49,4 +49,26 @@ export default class User {
       this.error = error.response.data
     }
   }
+
+  async update() {
+    try {
+      const res = await axios({
+        method: 'put',
+        url: `${apiData.urls.users}:${appState.login.JWT.user.id}`,
+        data: {
+          name: this.name,
+          displayName: this.displayName,
+          avatar: this.avatar
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+
+      this.result = res;
+    } catch (error) {
+      this.error = error.response.data;
+    }
+  }
 }

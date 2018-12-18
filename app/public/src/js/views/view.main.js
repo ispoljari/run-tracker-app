@@ -265,13 +265,13 @@ export const renderProfileBanner = (user) => {
       <div class="profile-banner__info">
         <div class="profile-info__full-name">
           <h2>
-            <input type="text" value="${user.name}" placeholder="Name?" class="js-myProfile__full-name-input" disabled/>
+            <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed" value="${user.name}" placeholder="Name?" class="js-myProfile__full-name-input" form="myProfile__update-account" disabled/>
           </h2>
         </div>
         <hr class="profile-banner__underline" />
         <div class="profile-info__display-name">
           <p>
-            @<input type="text" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" disabled>
+            @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
           </p>
         </div>
         <hr class="profile-banner__underline" />
@@ -523,6 +523,14 @@ export const showChangeAvatarButton = () => {
 export const changeAvatarImg = (newAvatar) => {
   document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].src = `svg/monsters/monster-${newAvatar}.svg`;
   document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].dataset.avatarIndex = newAvatar;
+}
+
+export const getMyProfileFormData = () => {
+  return {
+    name: document.querySelector(`.${DOMstrings.myProfileForm.inputFields.fullName}`).value,
+    displayName: document.querySelector(`.${DOMstrings.myProfileForm.inputFields.displayName}`).value,
+    avatar: parseInt(document.querySelector(`.${DOMstrings.myProfileForm.container.avatarImg}`).children[0].dataset.avatarIndex, 10)
+  }
 }
 
 // Modal window: Change avatar

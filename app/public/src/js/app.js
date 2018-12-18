@@ -95,7 +95,7 @@ function logoClickEvent(e) {
 function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if (view === 'myRuns' && appState.session.loggedIn) {
+  } else if ((view === 'myRuns' || view === 'home') && appState.session.loggedIn) {
     mainView.renderProfileBanner(appState.login.JWT.user);
   }
   mainView.renderTitle(message);
@@ -697,7 +697,27 @@ function changeAvatarSubController(e) {
 function saveProfileChangesController(e) {
   e.preventDefault();
 
-  console.log('Submit Profile Changes!');
+   // Remove existing warning messages
+   if (mainView.warningMessageExists()) {
+    mainView.removeMessage();
+  }
+
+  const updatedUser = mainView.getMyProfileFormData();
+
+  if (updatedUser) {
+    // // Create a new updated user instance
+    // appState.register.user = new User(newUser);
+
+    // // Delete all data from newUser
+    // deleteAllObjectProperties(newUser);
+
+    // // POST new user to server
+    // try {
+    //   await appState.register.user.createNew();
+    // } catch (error) {
+    //   displayFailMessage(apiData.infoMessages.unknown);
+    // }
+  }
 }
 
 /* ---------------------------------------- */
