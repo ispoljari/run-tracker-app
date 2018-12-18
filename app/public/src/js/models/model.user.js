@@ -1,8 +1,13 @@
 import axios from 'axios';
 import {apiData} from '../views/view.dom-base';
+import {appState} from '../state/state.app';
 
 export default class User {
   constructor (user) {
+    if (user.id) {
+      this.id = user.id
+    } 
+
     if (user.name) {
       this.name = user.name
     } 
@@ -68,9 +73,9 @@ export default class User {
     try {
       const res = await axios({
         method: 'put',
-        url: `${apiData.urls.users}/${appState.login.JWT.user.id}`,
+        url: `${apiData.urls.users}/${this.id}`,
         data: {
-          id: appState.login.JWT.user.id,
+          id: this.id,
           name: this.name,
           displayName: this.displayName,
           avatar: this.avatar

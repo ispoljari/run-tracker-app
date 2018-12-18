@@ -703,26 +703,24 @@ async function saveProfileChangesController(e) {
   }
 
   const updatedUser = mainView.getMyProfileFormData();
+  updatedUser.id = appState.login.JWT.user.id;
 
   if (updatedUser) {
     // Create a new updated user instance
     appState.user.updated = new User(updatedUser);
-    console.log(appState.user.updated);
 
     // Delete all data from newUser
     deleteAllObjectProperties(updatedUser);
 
     // POST new user to server
     try {
-      console.log('Hello');
       await appState.user.updated.update();
     } catch (error) {
-      console.log(error);
       displayFailMessage(apiData.infoMessages.unknown);
     }
 
     if (appState.user.updated.result) {
-      appState.user.updated.result.status === 204 ? 
+      appState.user.updated.result.status === 201 ? 
       userUpdateSuccessfullyExecuted() 
       : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.user.updated.error) {
@@ -732,12 +730,14 @@ async function saveProfileChangesController(e) {
     }
 
     // Delete all data from appState.register.user
-    // deleteAllObjectProperties(appState.register.user);
+    deleteAllObjectProperties(appState.user.updated);
   }
 }
 
 function userUpdateSuccessfullyExecuted() {
-  console.log(appState.user.updated.result);
+  appState.login.JWT.user = JSON.parse(JSON.stringify(appState.user.updated.result.data));
+  
+  updateDropDownListElements();
 }
 
 /* ---------------------------------------- */
