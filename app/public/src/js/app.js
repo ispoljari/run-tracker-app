@@ -150,8 +150,12 @@ function sortPosts(method) {
 }
 
 function renderPosts(page) {
-  const remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
   let loopLimit;
+  let remainingPosts;
+
+  if (appState.posts.retrieved.result) {
+    remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
+  }
 
   if (remainingPosts) {
     if (remainingPosts <= 10) {
