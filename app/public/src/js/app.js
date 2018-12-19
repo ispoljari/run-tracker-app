@@ -100,6 +100,11 @@ async function renderPostsPage(view,  message) {
   }
   mainView.renderTitle(message);
   await retrieveAllPostsFromAPI('desc');
+
+  if (view === 'myRuns') {
+    appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data);
+  }
+
   renderPosts(appState.session.postsPage);
   footerView.renderIconsCredit();
   appState.session.currentView = view;
@@ -577,7 +582,7 @@ function myProfileDOMLoadedSetupFunctions() {
 function myRunsViewSubController() {
   if (appState.session.currentView !== 'myRuns') {
     clearCurrentPage();
-    homeViewController('myRuns', 'My Runs'); // TODO: Render only logged users posts
+    homeViewController('myRuns', 'My Runs');
   }
   closeDropDownList();
 }
@@ -756,14 +761,7 @@ function deleteAccountController(e) {
   const modal = new tingle.modal({
     footer: true,
     stickyFooter: false,
-    closeMethods: [],
-    onClose: function() {
-      // TODO: Log out of user account
-    },
-    beforeClose: function() {
-      // TODO:
-      return true;
-    }
+    closeMethods: []
   });
 
   modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');

@@ -271,7 +271,7 @@ export const renderProfileBanner = (user) => {
         <hr class="profile-banner__underline" />
         <div class="profile-info__display-name">
           <p>
-            @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
+            @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
           </p>
         </div>
         <hr class="profile-banner__underline" />
