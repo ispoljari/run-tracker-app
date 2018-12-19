@@ -102,7 +102,9 @@ async function renderPostsPage(view,  message) {
   await retrieveAllPostsFromAPI('desc');
 
   if (view === 'myRuns') {
-    appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data);
+    if (appState.posts.retrieved.result.data.length > 0) {
+      appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data);
+    }
   }
 
   renderPosts(appState.session.postsPage);
