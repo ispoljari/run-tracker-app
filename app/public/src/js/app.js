@@ -663,6 +663,7 @@ function changeAvatarSubController(e) {
     closeMethods: ['escape', 'button'],
     beforeOpen: function() {
       mainView.adjustModalWithAvatarsStyle();
+      mainView.populateModalWithAvatars();
     },
     onClose: function() {
       detachEventListener([document.querySelector(`.${DOMstrings.modal.outerBox}`)], 'click', [selectAvatarSubController]);
@@ -672,7 +673,7 @@ function changeAvatarSubController(e) {
     },
   });
 
-  modal.setContent(mainView.populateModalWithAvatars());
+  modal.setContent('');
   modal.open();
 
   function selectAvatarSubController(e) {

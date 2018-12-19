@@ -536,12 +536,13 @@ export const getMyProfileFormData = () => {
 // Modal window: Change avatar
 
 export const populateModalWithAvatars = () => {
-  let htmlString = ``;
+  const element = document.querySelector(`.${DOMstrings.modal.content}`);
+
   for (let i=1; i<=30; i++) {
-    htmlString += `
-      <img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+    let htmlString = `<img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+
+    element.insertAdjacentHTML('beforeend', htmlString);
   }
-  return htmlString;
 }
 
 export const adjustModalWithAvatarsStyle = () => {
