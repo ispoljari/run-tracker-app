@@ -389,7 +389,7 @@ function formSubmitSuccessfullyExecuted(type, ...messages) {
     mainView.clearRegistrationFormData();
   } else if (type === 'addNewRun') {
     mainView.clearNewRunFormData();
-  }
+  } 
 
   clearCurrentPage();
   transitionRegistrationSuccessMessage(messages, true);
@@ -584,11 +584,11 @@ function analyticsViewSubController() {
   }
 }
 
-function logoutSubController() {
+function logoutSubController(type='') {
   appState.session.loggedIn = false;
   deleteAllObjectProperties(appState.login);
   closeDropDownList();
-  exitLoggedInSessionMode();
+  exitLoggedInSessionMode(type);
 }
 
 function closeDropDownList() {
@@ -605,11 +605,18 @@ function closeDropDownList() {
   appState.registeredClickEvents.dropDownList = false;
 }
 
-function exitLoggedInSessionMode() {
+function exitLoggedInSessionMode(type) {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
-  clearCurrentPage();
-  homeViewController('home', 'Main Feed');
+  
+  if (type !== 'deleteAccount') {
+    clearCurrentPage();
+    homeViewController('home', 'Main Feed');
+  }
+
+  if (type === 'deleteAccount') {
+    formSubmitSuccessfullyExecuted('',apiData.infoMessages.deleteAccount.success.info1, apiData.infoMessages.deleteAccount.success.info2);
+  }
 }
 
 function showLoggedOutMenuItems() {
@@ -779,8 +786,7 @@ async function deleteLoggedUserPosts() {
     await deletePostsFromDB(appState.posts.myRuns);
   }
 
-  deleteAllObjectProperties(appState.posts.retrieved.result.data);
-  return deleteAllObjectProperties(appState.posts.myRuns);
+  return deleteAllObjectProperties(appState.posts);
 }
 
 function filterPostsByID(posts) {
@@ -788,7 +794,25 @@ function filterPostsByID(posts) {
 }
 
 async function deleteUserFromDB() {
-  return console.log('Delete User!');
+  const loggedUser = new User({id: appState.login.JWT.user.id});
+
+  try {
+    await loggedUser.deleteByID();
+  } catch (error) {
+    displayFailMessage(apiData.infoMessages.unknown);;
+  }
+
+  if (loggedUser.result) {
+    if (loggedUser.result.status === 204) {
+      logoutSubController('deleteAccount');
+    } else {
+      displayFailMessage(apiData.infoMessages.unknown);
+    }
+  } else if (loggedUser.error) {
+    return displayFailMessage(`${loggedUser.error.message}!`);
+  } else {
+    return displayFailMessage(apiData.infoMessages.unknown);
+  }
 }
 
 async function deletePostsFromDB(posts) {
@@ -802,7 +826,7 @@ async function deletePostsFromDB(posts) {
     } catch (error) {
       displayFailMessage(apiData.infoMessages.unknown);;
     }
-    
+
     if (post.result) {
       if (post.result.status === 204) {
         continue;
