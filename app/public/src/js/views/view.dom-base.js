@@ -175,6 +175,12 @@ export const apiData = {
         info1: 'Post successfully submited!',
         info2: 'Loading main page.'
       }
+    },
+    deleteAccount: {
+      success: {
+        info1: 'Account successfully deleted!',
+        info2: 'Loading main page.'
+      }
     }
   }
 }

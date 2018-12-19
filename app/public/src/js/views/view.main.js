@@ -207,7 +207,7 @@ export const renderRegistrationForm = () => {
 
         <div class="registration__email">
           <label>
-            Email (username)
+            Email
             <input type="email" name="email" placeholder="john.smith@gmail.com" class="registration__input-username" required>
           </label>
         </div>
@@ -271,7 +271,7 @@ export const renderProfileBanner = (user) => {
         <hr class="profile-banner__underline" />
         <div class="profile-info__display-name">
           <p>
-            @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
+            @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
           </p>
         </div>
         <hr class="profile-banner__underline" />
@@ -536,12 +536,13 @@ export const getMyProfileFormData = () => {
 // Modal window: Change avatar
 
 export const populateModalWithAvatars = () => {
-  let htmlString = ``;
+  const element = document.querySelector(`.${DOMstrings.modal.content}`);
+
   for (let i=1; i<=30; i++) {
-    htmlString += `
-      <img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+    let htmlString = `<img src="svg/monsters/monster-${i}.svg" alt="An image of a random monster" class="modal__avatar" data-avatar-index="${i}">`
+
+    element.insertAdjacentHTML('beforeend', htmlString);
   }
-  return htmlString;
 }
 
 export const adjustModalWithAvatarsStyle = () => {

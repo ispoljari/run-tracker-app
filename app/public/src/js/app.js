@@ -92,19 +92,27 @@ function logoClickEvent(e) {
   }
 }
 
-function renderPostsPage(view,  message) {
+async function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
   } else if ((view === 'myRuns' || view === 'home') && appState.session.loggedIn) {
     mainView.renderProfileBanner(appState.login.JWT.user);
   }
   mainView.renderTitle(message);
-  retrievePostsFromAPI('desc');
+  await retrieveAllPostsFromAPI('desc');
+
+  if (view === 'myRuns') {
+    if (appState.posts.retrieved.result.data.length > 0) {
+      appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data);
+    }
+  }
+
+  renderPosts(appState.session.postsPage);
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
 
-async function retrievePostsFromAPI(sort) {
+async function retrieveAllPostsFromAPI(sort) {
   // create new Post instance
   appState.posts.retrieved = new Post();
 
@@ -117,22 +125,13 @@ async function retrievePostsFromAPI(sort) {
 
   if (appState.posts.retrieved.result) {
     if (appState.posts.retrieved.result.status === 200 && appState.posts.retrieved.result.data.length > 0 ) {
-      if (appState.session.loggedIn) {
-        executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
-      } 
-      displayPosts(sort);
+      return sortPosts(sort);
     }
   } else if (appState.posts.retrieved.error) {
     return displayFailMessage(`${appState.posts.retrieved.error.message}`);
   } else {
     return displayFailMessage(apiData.infoMessages.unknown);
   }
-}
-
-function displayPosts(sort) {
-  sortPosts(sort);
-  // render ordered posts (initialy only first page with 10 posts)
-  renderPosts(appState.session.postsPage);
 }
 
 function sortPosts(method) {
@@ -158,21 +157,27 @@ function sortPosts(method) {
 }
 
 function renderPosts(page) {
-  const remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
   let loopLimit;
+  let remainingPosts;
 
-  if (remainingPosts <= 10) {
-    loopLimit = remainingPosts;
-  } else {
-    loopLimit = 10;
+  if (appState.posts.retrieved.result) {
+    remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
   }
 
-  for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
-    mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
-  }
-
-  if (remainingPosts > 10) {
-    mainView.renderPostLoaderBtn();
+  if (remainingPosts) {
+    if (remainingPosts <= 10) {
+      loopLimit = remainingPosts;
+    } else {
+      loopLimit = 10;
+    }
+  
+    for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
+      mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
+    }
+  
+    if (remainingPosts > 10) {
+      mainView.renderPostLoaderBtn();
+    }
   }
 }
 
@@ -395,7 +400,7 @@ function formSubmitSuccessfullyExecuted(type, ...messages) {
     mainView.clearRegistrationFormData();
   } else if (type === 'addNewRun') {
     mainView.clearNewRunFormData();
-  }
+  } 
 
   clearCurrentPage();
   transitionRegistrationSuccessMessage(messages, true);
@@ -579,7 +584,7 @@ function myProfileDOMLoadedSetupFunctions() {
 function myRunsViewSubController() {
   if (appState.session.currentView !== 'myRuns') {
     clearCurrentPage();
-    homeViewController('myRuns', 'My Runs'); // TODO: Render only logged users posts
+    homeViewController('myRuns', 'My Runs');
   }
   closeDropDownList();
 }
@@ -590,11 +595,11 @@ function analyticsViewSubController() {
   }
 }
 
-function logoutSubController() {
+function logoutSubController(type='') {
   appState.session.loggedIn = false;
   deleteAllObjectProperties(appState.login);
   closeDropDownList();
-  exitLoggedInSessionMode();
+  exitLoggedInSessionMode(type);
 }
 
 function closeDropDownList() {
@@ -611,11 +616,18 @@ function closeDropDownList() {
   appState.registeredClickEvents.dropDownList = false;
 }
 
-function exitLoggedInSessionMode() {
+function exitLoggedInSessionMode(type) {
   showLoggedOutMenuItems();
   hideLoggedInMenuItems();
-  clearCurrentPage();
-  homeViewController('home', 'Main Feed');
+  
+  if (type !== 'deleteAccount') {
+    clearCurrentPage();
+    homeViewController('home', 'Main Feed');
+  }
+
+  if (type === 'deleteAccount') {
+    formSubmitSuccessfullyExecuted('',apiData.infoMessages.deleteAccount.success.info1, apiData.infoMessages.deleteAccount.success.info2);
+  }
 }
 
 function showLoggedOutMenuItems() {
@@ -666,6 +678,7 @@ function changeAvatarSubController(e) {
     closeMethods: ['escape', 'button'],
     beforeOpen: function() {
       mainView.adjustModalWithAvatarsStyle();
+      mainView.populateModalWithAvatars();
     },
     onClose: function() {
       detachEventListener([document.querySelector(`.${DOMstrings.modal.outerBox}`)], 'click', [selectAvatarSubController]);
@@ -675,7 +688,7 @@ function changeAvatarSubController(e) {
     },
   });
 
-  modal.setContent(mainView.populateModalWithAvatars());
+  modal.setContent('');
   modal.open();
 
   function selectAvatarSubController(e) {
@@ -750,30 +763,86 @@ function deleteAccountController(e) {
   const modal = new tingle.modal({
     footer: true,
     stickyFooter: false,
-    closeMethods: [],
-    onClose: function() {
-        console.log('modal closed'); //TODO:
-    },
-    beforeClose: function() {
-        console.log('Closing!');
-        // Delete all user posts
-        // Delete user account
-        return true;
-    }
+    closeMethods: []
   });
 
   modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
 
   modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
-      // No action required
-      modal.close();
+    modal.close();
   });
 
-  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', function() {
-      modal.close();
+  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', async function() {
+    await deleteLoggedUserPosts();
+    await deleteUserFromDB();
+    modal.close();
   });
 
   modal.open();
+}
+
+async function deleteLoggedUserPosts() {
+  await retrieveAllPostsFromAPI('desc');
+
+  appState.posts.myRuns = filterPostsByID(appState.posts.retrieved.result.data);
+
+  if (appState.posts.myRuns.length > 0) {
+    await deletePostsFromDB(appState.posts.myRuns);
+  }
+
+  return deleteAllObjectProperties(appState.posts);
+}
+
+function filterPostsByID(posts) {
+  return posts.filter(post => post.user.id === appState.login.JWT.user.id);
+}
+
+async function deleteUserFromDB() {
+  const loggedUser = new User({id: appState.login.JWT.user.id});
+
+  try {
+    await loggedUser.deleteByID();
+  } catch (error) {
+    displayFailMessage(apiData.infoMessages.unknown);;
+  }
+
+  if (loggedUser.result) {
+    if (loggedUser.result.status === 204) {
+      logoutSubController('deleteAccount');
+    } else {
+      displayFailMessage(apiData.infoMessages.unknown);
+    }
+  } else if (loggedUser.error) {
+    return displayFailMessage(`${loggedUser.error.message}!`);
+  } else {
+    return displayFailMessage(apiData.infoMessages.unknown);
+  }
+}
+
+async function deletePostsFromDB(posts) {
+  const postsLen = posts.length;
+
+  for (let i=0; i<postsLen; i++) {
+    const post = new Post({id: posts[i].id});
+
+    try {
+      await post.deleteByID();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);;
+    }
+
+    if (post.result) {
+      if (post.result.status === 204) {
+        continue;
+      } else {
+        displayFailMessage(apiData.infoMessages.unknown);
+      }
+    } else if (post.error) {
+      return displayFailMessage(`${post.error.message}!`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+  }
 }
 
 /* ---------------------------------------- */

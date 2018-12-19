@@ -91,4 +91,21 @@ export default class User {
       this.error = error.response.data;
     }
   }
+
+  async deleteByID() {
+    try {
+      const res = await axios({
+        method: 'delete',
+        url: `${apiData.urls.users}/${this.id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+      
+      this.result = res; 
+    } catch (error) {
+      this.error = error.response.data;  
+    }
+  }
 }
