@@ -117,9 +117,6 @@ async function retrievePostsFromAPI(sort) {
 
   if (appState.posts.retrieved.result) {
     if (appState.posts.retrieved.result.status === 200 && appState.posts.retrieved.result.data.length > 0 ) {
-      if (appState.session.loggedIn) {
-        executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, mainView.adjustFirstPostVerticalOffset, apiData.infoMessages.unknown);
-      } 
       displayPosts(sort);
     }
   } else if (appState.posts.retrieved.error) {

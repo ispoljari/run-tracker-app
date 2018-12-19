@@ -346,7 +346,7 @@ a {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  margin: 0 auto 10px auto;
+  margin: 0 auto 25px auto;
 
    /* Style */
   height: 150px;
@@ -401,7 +401,8 @@ a {
   width: 100%;
   background-color: transparent;
   border: none;
-  color:black;
+  color: black;
+  -webkit-text-fill-color: black;
 }
 
 .profile-info__display-name {
@@ -460,10 +461,6 @@ a {
           box-shadow: 4px 4px 0px 0px rgba(162, 162, 162, 0.75);
   background-color: white;
   max-width: 450px;
-}
-
-div.content__post:nth-child(n+3) {
-  margin: 50px auto 0 auto;
 }
 
 .content__heading-posts,
