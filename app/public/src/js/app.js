@@ -99,13 +99,13 @@ async function renderPostsPage(view,  message) {
     mainView.renderProfileBanner(appState.login.JWT.user);
   }
   mainView.renderTitle(message);
-  await retrievePostsFromAPI('desc');
+  await retrieveAllPostsFromAPI('desc');
   renderPosts(appState.session.postsPage);
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
 
-async function retrievePostsFromAPI(sort) {
+async function retrieveAllPostsFromAPI(sort) {
   // create new Post instance
   appState.posts.retrieved = new Post();
 
@@ -762,7 +762,7 @@ function deleteAccountController(e) {
   });
 
   modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', async function() {
-    await deleteAllUserPostsFromDB();
+    await deleteLoggedUserPosts();
     await deleteUserFromDB();
     modal.close();
   });
@@ -770,14 +770,51 @@ function deleteAccountController(e) {
   modal.open();
 }
 
-async function deleteAllUserPostsFromDB() {
-  await retrievePostsFromAPI('desc');
-  console.log('Delete posts!');
-  return console.log(appState.posts.retrieved.result);
+async function deleteLoggedUserPosts() {
+  await retrieveAllPostsFromAPI('desc');
+
+  appState.posts.myRuns = filterPostsByID(appState.posts.retrieved.result.data);
+
+  if (appState.posts.myRuns.length > 0) {
+    await deletePostsFromDB(appState.posts.myRuns);
+  }
+
+  deleteAllObjectProperties(appState.posts.retrieved.result.data);
+  return deleteAllObjectProperties(appState.posts.myRuns);
+}
+
+function filterPostsByID(posts) {
+  return posts.filter(post => post.user.id === appState.login.JWT.user.id);
 }
 
 async function deleteUserFromDB() {
   return console.log('Delete User!');
+}
+
+async function deletePostsFromDB(posts) {
+  const postsLen = posts.length;
+
+  for (let i=0; i<postsLen; i++) {
+    const post = new Post({id: posts[i].id});
+
+    try {
+      await post.deleteByID();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);;
+    }
+    
+    if (post.result) {
+      if (post.result.status === 204) {
+        continue;
+      } else {
+        displayFailMessage(apiData.infoMessages.unknown);
+      }
+    } else if (post.error) {
+      return displayFailMessage(`${post.error.message}!`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+  }
 }
 
 /* ---------------------------------------- */

@@ -5,18 +5,43 @@ import {appState} from '../state/state.app';
 export default class Post {
   constructor(post) {
     if (post) {
-      this.title = post.runTitle,
-      this.distanceValue = post.distance.value, 
-      this.distanceUnit = post.distance.unit,
-      this.durationHours = post.duration.hours,
-      this.durationMinutes = post.duration.minutes,
-      this.durationSeconds = post.duration.seconds,
-      this.runType = post.runType,
-      this.date = post.date,
-      this.time = post.time,
-      this.description = post.description
-      // this.privacy = post.privacy
+      if (post.id) {
+        this.id = post.id
+      } 
+      
+      if (post.runTitle) {
+        this.title = post.runTitle
+      } 
+  
+      if (post.distance) {
+        this.distanceValue = post.distance.value 
+        this.distanceUnit = post.distance.unit
+      }
+  
+      if (post.duration) {
+        this.durationHours = post.duration.hours
+        this.durationMinutes = post.duration.minutes
+        this.durationSeconds = post.duration.seconds
+      }
+  
+      if (post.runType) {
+        this.runType = post.runType
+      }
+  
+      if (post.date) {
+        this.date = post.date
+      }
+      
+      if (post.time) {
+        this.time = post.time
+      }
+  
+      if (post.description) {
+        this.description = post.description
+      }
     }
+
+    // this.privacy = post.privacy
   }
 
   async createNew() {
@@ -61,12 +86,20 @@ export default class Post {
     }
   }
 
-  async retrieveSingleByID() {
-    // some code
-  }
-
   async deleteByID() {
-    // some code
+    try {
+      const res = await axios({
+        method: 'delete',
+        url: `${apiData.urls.posts}/${this.id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+      this.result = res; 
+    } catch (error) {
+      this.error = error.response.data;  
+    }
   }
 
   async updateByID() {
