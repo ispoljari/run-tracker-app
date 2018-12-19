@@ -92,14 +92,15 @@ function logoClickEvent(e) {
   }
 }
 
-function renderPostsPage(view,  message) {
+async function renderPostsPage(view,  message) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
   } else if ((view === 'myRuns' || view === 'home') && appState.session.loggedIn) {
     mainView.renderProfileBanner(appState.login.JWT.user);
   }
   mainView.renderTitle(message);
-  retrievePostsFromAPI('desc');
+  await retrievePostsFromAPI('desc');
+  renderPosts(appState.session.postsPage);
   footerView.renderIconsCredit();
   appState.session.currentView = view;
 }
@@ -117,19 +118,13 @@ async function retrievePostsFromAPI(sort) {
 
   if (appState.posts.retrieved.result) {
     if (appState.posts.retrieved.result.status === 200 && appState.posts.retrieved.result.data.length > 0 ) {
-      displayPosts(sort);
+      return sortPosts(sort);
     }
   } else if (appState.posts.retrieved.error) {
     return displayFailMessage(`${appState.posts.retrieved.error.message}`);
   } else {
     return displayFailMessage(apiData.infoMessages.unknown);
   }
-}
-
-function displayPosts(sort) {
-  sortPosts(sort);
-  // render ordered posts (initialy only first page with 10 posts)
-  renderPosts(appState.session.postsPage);
 }
 
 function sortPosts(method) {
@@ -158,18 +153,20 @@ function renderPosts(page) {
   const remainingPosts = appState.posts.retrieved.result.data.length - (page-1)*10;
   let loopLimit;
 
-  if (remainingPosts <= 10) {
-    loopLimit = remainingPosts;
-  } else {
-    loopLimit = 10;
-  }
-
-  for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
-    mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
-  }
-
-  if (remainingPosts > 10) {
-    mainView.renderPostLoaderBtn();
+  if (remainingPosts) {
+    if (remainingPosts <= 10) {
+      loopLimit = remainingPosts;
+    } else {
+      loopLimit = 10;
+    }
+  
+    for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
+      mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
+    }
+  
+    if (remainingPosts > 10) {
+      mainView.renderPostLoaderBtn();
+    }
   }
 }
 
@@ -750,28 +747,37 @@ function deleteAccountController(e) {
     stickyFooter: false,
     closeMethods: [],
     onClose: function() {
-        console.log('modal closed'); //TODO:
+      // TODO: Log out of user account
     },
     beforeClose: function() {
-        console.log('Closing!');
-        // Delete all user posts
-        // Delete user account
-        return true;
+      // TODO:
+      return true;
     }
   });
 
   modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
 
   modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
-      // No action required
-      modal.close();
+    modal.close();
   });
 
-  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', function() {
-      modal.close();
+  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', async function() {
+    await deleteAllUserPostsFromDB();
+    await deleteUserFromDB();
+    modal.close();
   });
 
   modal.open();
+}
+
+async function deleteAllUserPostsFromDB() {
+  await retrievePostsFromAPI('desc');
+  console.log('Delete posts!');
+  return console.log(appState.posts.retrieved.result);
+}
+
+async function deleteUserFromDB() {
+  return console.log('Delete User!');
 }
 
 /* ---------------------------------------- */
