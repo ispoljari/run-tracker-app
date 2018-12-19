@@ -207,7 +207,7 @@ export const renderRegistrationForm = () => {
 
         <div class="registration__email">
           <label>
-            Email (username)
+            Email
             <input type="email" name="email" placeholder="john.smith@gmail.com" class="registration__input-username" required>
           </label>
         </div>
