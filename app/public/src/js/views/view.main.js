@@ -461,7 +461,7 @@ export const getNewRunFormData = () => {
   return {
     runTitle: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runTitle}`).value,
     distance: {
-      value: parseInt(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value, 10),
+      value: parseFloat(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value),
       unit: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.unit}`).value
     },
     duration: {
