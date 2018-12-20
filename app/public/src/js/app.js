@@ -958,6 +958,9 @@ async function submitNewRunEvent(e) {
 
   // 2) read values from input fields
   const newPost = mainView.getNewRunFormData();
+  if (appState.session.currentView !== 'addNewRun') {
+    newPost.id = appState.session.currentView;
+  }
 
   if (newPost) {
 
@@ -1010,14 +1013,18 @@ async function submitNewRunEvent(e) {
     }
 
     let statusMessage,
+        returnCondition,
         info1,
         info2;
+
     if (appState.session.currentView === 'addNewRun') {
       statusMessage = 201;
+      returnCondition = appState.posts.created.result.data;
       info1 = apiData.infoMessages.addNewRun.success.info1;
       info2 = apiData.infoMessages.addNewRun.success.info2;
     } else {
       statusMessage = 204;
+      returnCondition = true;
       info1 = apiData.infoMessages.addNewRun.success.info3;
       info2 = apiData.infoMessages.addNewRun.success.info2;
     }
@@ -1025,7 +1032,7 @@ async function submitNewRunEvent(e) {
     // 5) read and store the returned data
     if (appState.posts.created.result) {
       appState.posts.created.result.status === statusMessage 
-      && appState.posts.created.result.data ? 
+      && returnCondition ? 
       formSubmitSuccessfullyExecuted('addNewRun', info1, info2) : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.posts.created.error) {
       return displayFailMessage(`${appState.posts.created.error.message}`);
