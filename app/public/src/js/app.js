@@ -76,9 +76,9 @@ function isTargetElementInsideOf(event, parent) {
 /* ---- HOMEPAGE & LOGO CONTROLLER ------- */
 /* ---------------------------------------- */
 
-function homeViewController(view, message) {
-  postsController(); 
-  renderPostsPage(view, message);
+function homeViewController(view, message, anotherUser='') {
+  postsController();
+  renderPostsPage(view, message, anotherUser);
 }
 
 function logoController() {
@@ -92,19 +92,26 @@ function logoClickEvent(e) {
   }
 }
 
-async function renderPostsPage(view,  message) {
+async function renderPostsPage(view,  message, anotherUser) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if ((view === 'myRuns' || view === 'home') && appState.session.loggedIn) {
-    mainView.renderProfileBanner(appState.login.JWT.user);
+  } else if ((view === 'myRuns' || view === 'home' || anotherUser) && appState.session.loggedIn) {
+    if (!anotherUser) {
+      mainView.renderProfileBanner(appState.login.JWT.user);
+    } else {
+      mainView.renderProfileBanner(anotherUser);
+    }
   }
+
   mainView.renderTitle(message);
   await retrieveAllPostsFromAPI('desc');
 
-  if (view === 'myRuns') {
-    if (appState.posts.retrieved.result.data.length > 0) {
-      appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data);
-    }
+  if (appState.posts.retrieved.result.data.length > 0) {
+    if (view === 'myRuns') {
+        appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
+      } else if (anotherUser) {
+        appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, anotherUser.id);
+      }
   }
 
   renderPosts(appState.session.postsPage);
@@ -228,6 +235,34 @@ function postClickEvent(e) {
     mainView.toggleCollapsiblePost(e.target);
   } else if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
     loadMorePostsSubController(e);
+  } else if (e.target.closest(`.${DOMstrings.posts.username}`) || e.target.closest(`.${DOMstrings.posts.avatar}`)) {
+    if (appState.session.loggedIn) {
+      if (e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.userId === appState.login.JWT.user.id) {
+        myRunsViewSubController();
+      } else {
+        const userData = harvestUserData(e);
+        openSelectedUserPage(userData);
+      }
+    }
+  }
+}
+
+/* ------------------------------------------- */
+/* ----------- OPEN ANOTHER USERS PAGE ------- */
+
+function harvestUserData(e) {
+  return {
+    id: e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.userId,
+    displayName: e.target.closest(`.${DOMstrings.posts.mainContainer}`).querySelector(`.${DOMstrings.posts.username}`).dataset.userDisname,
+    avatar: e.target.closest(`.${DOMstrings.posts.mainContainer}`).querySelector(`.${DOMstrings.posts.avatar}`).dataset.userAvatar,
+    name: 'placeholder'
+  }
+}
+
+function openSelectedUserPage(user) {
+  if (appState.session.currentView !== user.id) {
+    clearCurrentPage();
+    homeViewController(user.id, `@${user.displayName}'s runs`, user);
   }
 }
 
@@ -784,7 +819,7 @@ function deleteAccountController(e) {
 async function deleteLoggedUserPosts() {
   await retrieveAllPostsFromAPI('desc');
 
-  appState.posts.myRuns = filterPostsByID(appState.posts.retrieved.result.data);
+  appState.posts.myRuns = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
 
   if (appState.posts.myRuns.length > 0) {
     await deletePostsFromDB(appState.posts.myRuns);
@@ -793,8 +828,8 @@ async function deleteLoggedUserPosts() {
   return deleteAllObjectProperties(appState.posts);
 }
 
-function filterPostsByID(posts) {
-  return posts.filter(post => post.user.id === appState.login.JWT.user.id);
+function filterPostsByID(posts, ID) {
+  return posts.filter(post => post.user.id === ID);
 }
 
 async function deleteUserFromDB() {

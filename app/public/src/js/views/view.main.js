@@ -97,20 +97,21 @@ export const renderPosts = (post) => {
     displayAvrSecSpeed = `${secPartAvrSpeed}`;
   }
 
-
   const htmlString = 
-  `<div class="content__post js-content__post">
+  `<div class="content__post js-content__post" data-user-id="${post.user.id}">
     <div class="post-collapsible js-post-collapsible">
       <a href="#">
         <span class="js-post-collapsible__symbol">&#10133;</span>
       </a>
     </div>
-    <div class="post-avatar">
-      <img src="svg/monsters/monster-${post.user.avatar}.svg" alt="An image of a random monster">
+    <div class="post-avatar js-post-avatar" data-user-avatar="${post.user.avatar}">
+      <a href="#">
+        <img src="svg/monsters/monster-${post.user.avatar}.svg" alt="An image of a random monster">
+      </a>
     </div>
     <div class="post-info">
       <div class="post-header">
-        <div class="post-header__user">
+        <div class="post-header__user js-post-header__user" data-user-disname="${post.user.displayName}">
           <a href="#">
             <h3>@${post.user.displayName}</h3>
           </a>

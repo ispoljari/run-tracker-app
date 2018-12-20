@@ -87,7 +87,9 @@ export const DOMstrings = {
     collapsibleContainer: 'js-post-collapsible',
     collapsibleSymbol: 'js-post-collapsible__symbol',
     additional: 'js-post-additional',
-    loadMore: 'js-main-content__loader'
+    loadMore: 'js-main-content__loader',
+    username: 'js-post-header__user',
+    avatar: 'js-post-avatar'
   },
   modal: {
     outerBox: 'tingle-modal-box',
