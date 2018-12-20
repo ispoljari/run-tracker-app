@@ -223,6 +223,9 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.myProfileSubmit) {
     detachEventListener([DOMelements.mainContent], 'submit', [myProfileSubmitEvent]);
     appState.registeredClickEvents.myProfileSubmit = false;
+  } else if (appState.registeredClickEvents.addNewRunClick ) {
+    detachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
+    appState.registeredClickEvents.addNewRunClick = false;
   }
 }
 
@@ -302,7 +305,37 @@ function editSelectedPostController(post) {
 
 function submitEditedPostForm() {
   attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
+  
   appState.registeredClickEvents.addNewRunForm = true;
+  appState.registeredClickEvents.addNewRunClick = true;
+}
+
+function clickDeleteRunEvent(e) {
+  e.preventDefault();
+
+  const modal = new tingle.modal({
+    footer: true,
+    stickyFooter: false,
+    closeMethods: []
+  });
+
+  modal.setContent('<h1>Are you sure you whish to delete this post?</h1>');
+
+  modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+    modal.close();
+  });
+
+  modal.addFooterBtn('YES. DELETE POST', 'tingle-btn tingle-btn--danger', async function() {
+    deletePostFromDB();
+    modal.close();
+  });
+
+  modal.open();
+}
+
+function deletePostFromDB() {
+  console.log('deleted!');
 }
 
 /* ------------------------------------------- */
