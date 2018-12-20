@@ -236,7 +236,7 @@ function postsController() {
 }
 
 
-function postClickEvent(e) {
+async function postClickEvent(e) {
   e.preventDefault();
   
   if (e.target.closest(`.${DOMstrings.posts.collapsibleContainer}`)) {
@@ -254,8 +254,12 @@ function postClickEvent(e) {
     }
   } else if (e.target.closest(`.${DOMstrings.posts.editable}`)) {
     if (appState.session.loggedIn) {
-      const postData = harvestPostData(e);
-      // editSelectedPostController(postData);
+      if (e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.userId === appState.login.JWT.user.id) {
+        const postData = await retrievePostData(e);
+        if (postData) {
+          editSelectedPostController(postData);
+        }
+      }
     }
   }
 }
@@ -263,28 +267,38 @@ function postClickEvent(e) {
 /* ------------------------------------------- */
 /* ------- EDIT SELECTED POST CONTROLLER ----- */
 
-function retrievePostData(e) {
+async function retrievePostData(e) {
   const postID = e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.postId;
 
   const retrievedPost = new Post({id: postID});
 
-  // try {
-  //   await loggedUser.deleteByID();
-  // } catch (error) {
-  //   displayFailMessage(apiData.infoMessages.unknown);;
-  // }
+  try {
+    await retrievedPost.retrieveSingleByID();
+  } catch (error) {
+    displayFailMessage(apiData.infoMessages.unknown);;
+  }
 
-  // if (loggedUser.result) {
-  //   if (loggedUser.result.status === 204) {
-  //     logoutSubController('deleteAccount');
-  //   } else {
-  //     displayFailMessage(apiData.infoMessages.unknown);
-  //   }
-  // } else if (loggedUser.error) {
-  //   return displayFailMessage(`${loggedUser.error.message}!`);
-  // } else {
-  //   return displayFailMessage(apiData.infoMessages.unknown);
-  // }
+  if (retrievedPost.result) {
+    if (retrievedPost.result.status === 200) {
+       return retrievedPost.result.data;
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+  } else if (retrievedPost.error) {
+    return displayFailMessage(`${retrievedPost.error.message}!`);
+  } else {
+    return displayFailMessage(apiData.infoMessages.unknown);
+  }
+}
+
+function editSelectedPostController(post) {
+  clearCurrentPage();
+  executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, submitEditedPostForm, apiData.infoMessages.login.fail.server.unknown);    
+  mainView.renderNewRunForm('Edit Run', post);
+}
+
+function submitEditedPostForm() {
+  // console.log()
 }
 
 /* ------------------------------------------- */
@@ -353,7 +367,7 @@ function addNewRunViewSubController() {
   if (appState.session.currentView !== 'addNewRun') {
     clearCurrentPage();
     executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController, apiData.infoMessages.login.fail.server.unknown);    
-    mainView.renderNewRunForm();
+    mainView.renderNewRunForm('Add New Run');
     appState.session.currentView = 'addNewRun';
   }
 }
@@ -885,7 +899,7 @@ async function deleteUserFromDB() {
     if (loggedUser.result.status === 204) {
       logoutSubController('deleteAccount');
     } else {
-      displayFailMessage(apiData.infoMessages.unknown);
+      return displayFailMessage(apiData.infoMessages.unknown);
     }
   } else if (loggedUser.error) {
     return displayFailMessage(`${loggedUser.error.message}!`);
@@ -910,7 +924,7 @@ async function deletePostsFromDB(posts) {
       if (post.result.status === 204) {
         continue;
       } else {
-        displayFailMessage(apiData.infoMessages.unknown);
+        return displayFailMessage(apiData.infoMessages.unknown);
       }
     } else if (post.error) {
       return displayFailMessage(`${post.error.message}!`);

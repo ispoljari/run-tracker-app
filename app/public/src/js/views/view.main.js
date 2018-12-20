@@ -301,14 +301,14 @@ export const renderProfileBanner = (user, nameHidden=false) => {
 
 // Add new run page
 
-export const renderNewRunForm = () => {
+export const renderNewRunForm = (title) => {
 
   const htmlString = 
   `<form class="add-new-run">
     <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
-          <h2>Add New Run</h2>
+          <h2>${title}</h2>
         </div>
       </div>
     </div>
