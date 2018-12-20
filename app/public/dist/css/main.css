@@ -626,8 +626,16 @@ a {
 
 .post-data__editable {
   margin-left: 5px;
+  padding: 0 1px;
+  background-color: #6bd2db85;
+  border-radius: 5px;
+  position: relative;
 }
 
+.post-data__editable img {
+  position: relative;
+  top: 2px;
+}
 
 .post-header__user,
 .post-header__datetime,
