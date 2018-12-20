@@ -310,7 +310,6 @@ a {
 .heading__subtitle {
   /* Layout */
   display: inline-block;
-  margin-top: 7px;
 }
 
 .heading__subtitle span {
@@ -414,7 +413,7 @@ a {
 }
 
 .profile-info__display-name p {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .profile-info__display-name input {
@@ -470,6 +469,18 @@ a {
 
   /* Style */
   max-width: 450px;
+}
+
+.content__heading-posts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.posts__sort-method {
+  display: none;
+  max-width: 140px;
+  width: 45%;
 }
 
 .main-content__loader {
@@ -619,7 +630,24 @@ a {
   margin-left: 10px;
 }
 
-.post-data__title,
+.post-data__title {
+  display: flex;
+  align-items: center;
+}
+
+.post-data__editable {
+  margin-left: 5px;
+  padding: 0 1px;
+  background-color: #6bd2db85;
+  border-radius: 5px;
+  position: relative;
+}
+
+.post-data__editable img {
+  position: relative;
+  top: 2px;
+}
+
 .post-header__user,
 .post-header__datetime,
 .post-data__time {
@@ -852,10 +880,22 @@ a {
 .date input,
 .time input,
 .description textarea,
-.privacy select {
+.privacy select,
+.posts__sort-method select {
   /* Layout */
 	min-height: 25px;
   width: 100%;
+  
+  /* Style */
+  background-color: white;
+  font-size: 18px;
+	border-radius: 5px;
+	border: 1px solid #cccccc;
+}
+
+.posts__sort-method select {
+  /* Layout */
+  min-height: 25px;
   
   /* Style */
   background-color: white;
@@ -940,6 +980,12 @@ a {
   max-width: 250px;
 }
 
+.delete-post-btn {
+  max-width: 250px;
+  margin-top: 20px;
+  background-color: #f44336;
+}
+
 /* ---------------- MY PROFILE PAGE ---------------- */
 
 .myProfile__form-container {
@@ -1013,6 +1059,10 @@ footer {
   margin: 5px 0;
 }
 
+.credit__menu-icons a {
+  display: block;
+  margin-top:5px;
+}
 
 /* ------------------------------------------------- */
 /* --------------------MEDIA QUERIES---------------- */
@@ -1067,6 +1117,10 @@ footer {
   .myProfile__form-container {
     width: 40%;
     max-width: 170px;
+  }
+
+  .myProfile__form-container:last-of-type {
+    margin-top: 0px;
   }
 }
 
@@ -1129,14 +1183,14 @@ footer {
   }
 
   .registration legend,
-  .post-data__distance--style-results p:last-of-type {
+  .post-data__distance--style-results p:last-of-type,
+  .profile-info__display-name p {
     font-size: 22px;
   }
 
   .post-header__user h3,
   .post-data__title h4,
-  .post-additional__description h4,
-  .profile-info__display-name p {
+  .post-additional__description h4 {
     /* Style */
     font-size: 20px;
   }
@@ -1176,14 +1230,14 @@ footer {
 
   .post-data__distance--style-results p:last-of-type,
   .registration legend,
-  .add-new-run h2 {
+  .add-new-run h2,
+  .profile-info__display-name p {
     font-size: 24px;
   }
 
   .post-header__user h3,
   .post-data__title h4,
-  .post-additional__description h4,
-  .profile-info__display-name p {
+  .post-additional__description h4 {
     /* Style */
     font-size: 22px;
   }
@@ -1209,7 +1263,8 @@ footer {
   .date input,
   .time input,
   .description textarea,
-  .privacy select {
+  .privacy select,
+  .posts__sort-method select {
     /* Style */
     font-size: 20px;
   }
@@ -1300,6 +1355,10 @@ footer {
   background-color: #f8fffc;
 }
 
-.future-development--hiden {
+.future-development--hiden,
+.profile-banner__underline--hidden,
+.profile-info__full-name--hidden,
+.post-data__editable--hidden,
+.delete-post-btn--hidden {
   display: none;
 }

@@ -86,6 +86,23 @@ export default class Post {
     }
   }
 
+  async retrieveSingleByID() {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `${apiData.urls.posts}/${this.id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+      
+      this.result = res; 
+    } catch (error) {
+      this.error = error.response.data;  
+    }
+  }
+
   async deleteByID() {
     try {
       const res = await axios({
@@ -103,6 +120,33 @@ export default class Post {
   }
 
   async updateByID() {
-    // some code
+    try {
+      const res = await axios({
+        method: 'put',
+        url: `${apiData.urls.posts}/${this.id}`,
+        data: {
+          id: this.id,
+          title: this.title,
+          distanceValue: this.distanceValue, 
+          distanceUnit: this.distanceUnit,
+          durationHours: this.durationHours,
+          durationMinutes: this.durationMinutes,
+          durationSeconds: this.durationSeconds,
+          runType: this.runType,
+          date: this.date,
+          time: this.time,
+          description: this.description
+          // privacy: this.privacy
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+
+      this.result = res;
+    } catch (error) {
+      this.error = error.response.data;
+    }
   }
 }

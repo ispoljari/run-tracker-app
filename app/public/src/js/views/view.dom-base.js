@@ -66,6 +66,9 @@ export const DOMstrings = {
       time: 'js-add-new-run__time',
       description: 'js-add-new-run__description',
       privacy: 'js-add-new-run__privacy'
+    },
+    buttons: {
+      deleteContainer: 'js-delete-post'
     }
   },
   myProfileForm: {
@@ -83,11 +86,17 @@ export const DOMstrings = {
     }
   },
   posts: {
+    sortContainer: 'js-content__heading-posts',
+    sortSelect: 'js-posts__sort-method',
     mainContainer: 'js-content__post',
     collapsibleContainer: 'js-post-collapsible',
     collapsibleSymbol: 'js-post-collapsible__symbol',
     additional: 'js-post-additional',
-    loadMore: 'js-main-content__loader'
+    loadMore: 'js-main-content__loader',
+    username: 'js-post-header__user',
+    avatar: 'js-post-avatar',
+    title: 'js-post-data__title',
+    editable: 'js-post-data__editable'
   },
   modal: {
     outerBox: 'tingle-modal-box',
@@ -173,7 +182,9 @@ export const apiData = {
       }, 
       success: {
         info1: 'Post successfully submited!',
-        info2: 'Loading main page.'
+        info2: 'Loading main page.',
+        info3: 'Post successfully edited!',
+        info4: 'Post successfully deleted!'
       }
     },
     deleteAccount: {

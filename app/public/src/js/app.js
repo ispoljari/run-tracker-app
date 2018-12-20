@@ -76,9 +76,9 @@ function isTargetElementInsideOf(event, parent) {
 /* ---- HOMEPAGE & LOGO CONTROLLER ------- */
 /* ---------------------------------------- */
 
-function homeViewController(view, message) {
-  postsController(); 
-  renderPostsPage(view, message);
+function homeViewController(view, message, anotherUser='') {
+  postsController();
+  renderPostsPage(view, message, anotherUser);
 }
 
 function logoController() {
@@ -92,19 +92,26 @@ function logoClickEvent(e) {
   }
 }
 
-async function renderPostsPage(view,  message) {
+async function renderPostsPage(view,  message, anotherUser) {
   if (view === 'home' && !appState.session.loggedIn) {
     headerView.renderIntroHeading();
-  } else if ((view === 'myRuns' || view === 'home') && appState.session.loggedIn) {
-    mainView.renderProfileBanner(appState.login.JWT.user);
+  } else if ((view === 'myRuns' || view === 'home' || anotherUser) && appState.session.loggedIn) {
+    if (!anotherUser) {
+      mainView.renderProfileBanner(appState.login.JWT.user);
+    } else {
+      mainView.renderProfileBanner(anotherUser, true);
+    }
   }
+
   mainView.renderTitle(message);
   await retrieveAllPostsFromAPI('desc');
 
-  if (view === 'myRuns') {
-    if (appState.posts.retrieved.result.data.length > 0) {
-      appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data);
-    }
+  if (appState.posts.retrieved.result.data.length > 0) {
+    if (view === 'myRuns') {
+        appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
+      } else if (anotherUser) {
+        appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, anotherUser.id);
+      }
   }
 
   renderPosts(appState.session.postsPage);
@@ -156,7 +163,7 @@ function sortPosts(method) {
   
 }
 
-function renderPosts(page) {
+function renderPosts(page, sorted=false) {
   let loopLimit;
   let remainingPosts;
 
@@ -172,10 +179,20 @@ function renderPosts(page) {
     }
   
     for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
-      mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
+      let editable = false;
+
+      if (appState.session.loggedIn) {
+        if (appState.posts.retrieved.result.data[i].user.id === appState.login.JWT.user.id) {
+          editable = true;
+        }
+      }
+
+      appState.posts.displayed++;
+      mainView.renderPosts(appState.posts.retrieved.result.data[i], editable, sorted); 
     }
   
     if (remainingPosts > 10) {
+      appState.posts.loaders++;
       mainView.renderPostLoaderBtn();
     }
   }
@@ -190,6 +207,9 @@ function clearCurrentPage() {
   }
 
   appState.session.postsPage = 1; // reset posts current page
+  appState.posts.loaders = 0;
+  appState.posts.displayed = 0;
+
   mainView.removeMainContent(); 
 
   // Detach event listeners
@@ -197,7 +217,7 @@ function clearCurrentPage() {
     detachEventListener([DOMelements.mainContent], 'submit', [registerSubmitEvent]);
     appState.registeredClickEvents.registerForm = false;
   } else if (appState.registeredClickEvents.addNewRunForm) {
-    detachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+    detachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
     appState.registeredClickEvents.addNewRunForm = false;
   } else if (appState.registeredClickEvents.posts) {
     detachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
@@ -208,6 +228,12 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.myProfileSubmit) {
     detachEventListener([DOMelements.mainContent], 'submit', [myProfileSubmitEvent]);
     appState.registeredClickEvents.myProfileSubmit = false;
+  } else if (appState.registeredClickEvents.addNewRunClick ) {
+    detachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
+    appState.registeredClickEvents.addNewRunClick = false;
+  } else if (appState.registeredClickEvents.sort) {
+    attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
+    appState.registeredClickEvents.sort = false;
   }
 }
 
@@ -217,17 +243,169 @@ function clearCurrentPage() {
 
 function postsController() {
   attachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
+  attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
+  
   appState.registeredClickEvents.posts = true;
+  appState.registeredClickEvents.sort = true;
 }
 
 
-function postClickEvent(e) {
+async function postClickEvent(e) {
   e.preventDefault();
   
   if (e.target.closest(`.${DOMstrings.posts.collapsibleContainer}`)) {
     mainView.toggleCollapsiblePost(e.target);
   } else if (e.target.closest(`.${DOMstrings.posts.loadMore}`)) {
     loadMorePostsSubController(e);
+  } else if (e.target.closest(`.${DOMstrings.posts.username}`) || e.target.closest(`.${DOMstrings.posts.avatar}`)) {
+    if (appState.session.loggedIn) {
+      if (e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.userId === appState.login.JWT.user.id) {
+        myRunsViewSubController();
+      } else {
+        const userData = harvestUserData(e);
+        openSelectedUserPage(userData);
+      }
+    }
+  } else if (e.target.closest(`.${DOMstrings.posts.editable}`)) {
+    if (appState.session.loggedIn) {
+      if (e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.userId === appState.login.JWT.user.id) {
+        const postData = await retrievePostData(e);
+        if (postData) {
+          editSelectedPostController(postData);
+        }
+      }
+    }
+  }
+}
+
+async function sortChangeEvent(e) {
+  const totalNumPostsForRemoval = appState.posts.loaders + appState.posts.displayed;
+  appState.session.postsPage = 1;
+
+  mainView.removePostsAfterSortMenu(totalNumPostsForRemoval);
+  await retrieveAllPostsFromAPI(e.target.value);
+
+  // if (appState.posts.retrieved.result.data.length > 0) {
+  //   if (appState.currentView === 'myRuns') {
+  //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
+  //     } 
+      
+  //     else if (appState.currentView  !== 'myRuns' && appState.currentView !== 'home') {
+  //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, anotherUser.id);
+  //     }
+
+  // }
+
+  renderPosts(appState.session.postsPage, true);
+}
+
+/* ------------------------------------------- */
+/* ------- EDIT SELECTED POST CONTROLLER ----- */
+
+async function retrievePostData(e) {
+  const postID = e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.postId;
+
+  const retrievedPost = new Post({id: postID});
+
+  try {
+    await retrievedPost.retrieveSingleByID();
+  } catch (error) {
+    displayFailMessage(apiData.infoMessages.unknown);;
+  }
+
+  if (retrievedPost.result) {
+    if (retrievedPost.result.status === 200) {
+       return retrievedPost.result.data;
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+  } else if (retrievedPost.error) {
+    return displayFailMessage(`${retrievedPost.error.message}!`);
+  } else {
+    return displayFailMessage(apiData.infoMessages.unknown);
+  }
+}
+
+function editSelectedPostController(post) {
+  if (appState.session.currentView !== post.id) {
+    clearCurrentPage();
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, submitEditedPostForm, apiData.infoMessages.login.fail.server.unknown);    
+    mainView.renderNewRunForm('Edit Run', post);
+    appState.session.currentView = post.id;
+  }
+}
+
+function submitEditedPostForm() {
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
+  
+  appState.registeredClickEvents.addNewRunForm = true;
+  appState.registeredClickEvents.addNewRunClick = true;
+}
+
+function clickDeleteRunEvent(e) {
+  e.preventDefault();
+
+  if (e.target.closest(`.${DOMstrings.addNewRunForm.buttons.deleteContainer}`)) {
+    const modal = new tingle.modal({
+      footer: true,
+      stickyFooter: false,
+      closeMethods: []
+    });
+  
+    modal.setContent('<h1>Are you sure you whish to delete this post?</h1>');
+  
+    modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+      modal.close();
+    });
+  
+    modal.addFooterBtn('YES. DELETE POST', 'tingle-btn tingle-btn--danger', async function() {
+      deletePostFromDB();
+      modal.close();
+    });
+    
+    modal.open();
+  }
+}
+
+async function deletePostFromDB() {
+  const post = new Post({id: appState.session.currentView});
+
+    try {
+      await post.deleteByID();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);;
+    }
+
+    if (post.result) {
+      if (post.result.status === 204) {
+        formSubmitSuccessfullyExecuted('addNewRun', apiData.infoMessages.addNewRun.success.info4, apiData.infoMessages.addNewRun.success.info2)
+      } else {
+        return displayFailMessage(apiData.infoMessages.unknown);
+      }
+    } else if (post.error) {
+      return displayFailMessage(`${post.error.message}!`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
+}
+
+/* ------------------------------------------- */
+/* ----------- OPEN ANOTHER USERS PAGE ------- */
+
+function harvestUserData(e) {
+  return {
+    id: e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.userId,
+    displayName: e.target.closest(`.${DOMstrings.posts.mainContainer}`).querySelector(`.${DOMstrings.posts.username}`).dataset.userDisname,
+    avatar: e.target.closest(`.${DOMstrings.posts.mainContainer}`).querySelector(`.${DOMstrings.posts.avatar}`).dataset.userAvatar,
+    name: 'placeholder'
+  }
+}
+
+function openSelectedUserPage(user) {
+  if (appState.session.currentView !== user.id) {
+    clearCurrentPage();
+    homeViewController(user.id, `@${user.displayName}'s runs`, user);
   }
 }
 
@@ -237,6 +415,7 @@ function postClickEvent(e) {
 function loadMorePostsSubController(e) {
   let currentLoaderElement = e.target.closest(`.${DOMstrings.posts.loadMore}`);
   
+  appState.posts.loaders--;
   mainView.hideLoaderElement(currentLoaderElement);
 
   appState.session.postsPage++;
@@ -278,7 +457,7 @@ function addNewRunViewSubController() {
   if (appState.session.currentView !== 'addNewRun') {
     clearCurrentPage();
     executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, addNewRunController, apiData.infoMessages.login.fail.server.unknown);    
-    mainView.renderNewRunForm();
+    mainView.renderNewRunForm('Add New Run');
     appState.session.currentView = 'addNewRun';
   }
 }
@@ -784,7 +963,7 @@ function deleteAccountController(e) {
 async function deleteLoggedUserPosts() {
   await retrieveAllPostsFromAPI('desc');
 
-  appState.posts.myRuns = filterPostsByID(appState.posts.retrieved.result.data);
+  appState.posts.myRuns = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
 
   if (appState.posts.myRuns.length > 0) {
     await deletePostsFromDB(appState.posts.myRuns);
@@ -793,8 +972,8 @@ async function deleteLoggedUserPosts() {
   return deleteAllObjectProperties(appState.posts);
 }
 
-function filterPostsByID(posts) {
-  return posts.filter(post => post.user.id === appState.login.JWT.user.id);
+function filterPostsByID(posts, ID) {
+  return posts.filter(post => post.user.id === ID);
 }
 
 async function deleteUserFromDB() {
@@ -810,7 +989,7 @@ async function deleteUserFromDB() {
     if (loggedUser.result.status === 204) {
       logoutSubController('deleteAccount');
     } else {
-      displayFailMessage(apiData.infoMessages.unknown);
+      return displayFailMessage(apiData.infoMessages.unknown);
     }
   } else if (loggedUser.error) {
     return displayFailMessage(`${loggedUser.error.message}!`);
@@ -835,7 +1014,7 @@ async function deletePostsFromDB(posts) {
       if (post.result.status === 204) {
         continue;
       } else {
-        displayFailMessage(apiData.infoMessages.unknown);
+        return displayFailMessage(apiData.infoMessages.unknown);
       }
     } else if (post.error) {
       return displayFailMessage(`${post.error.message}!`);
@@ -850,11 +1029,11 @@ async function deletePostsFromDB(posts) {
 /* ---------------------------------------- */
 
 function addNewRunController() {
-  attachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
   appState.registeredClickEvents.addNewRunForm = true;
 }
 
-async function submitNewRunEvent(e) {
+async function submitAddOrEditRunEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 
@@ -865,6 +1044,9 @@ async function submitNewRunEvent(e) {
 
   // 2) read values from input fields
   const newPost = mainView.getNewRunFormData();
+  if (appState.session.currentView !== 'addNewRun') {
+    newPost.id = appState.session.currentView;
+  }
 
   if (newPost) {
 
@@ -907,16 +1089,37 @@ async function submitNewRunEvent(e) {
 
     // 4) create new post using provided JWT token
     try {
-      await appState.posts.created.createNew();
+      if (appState.session.currentView === 'addNewRun') {
+        await appState.posts.created.createNew();
+      } else {
+        await appState.posts.created.updateByID();
+      }
     } catch (error) {
       displayFailMessage(apiData.infoMessages.unknown);
+    }
+
+    let statusMessage,
+        returnCondition,
+        info1,
+        info2;
+
+    if (appState.session.currentView === 'addNewRun') {
+      statusMessage = 201;
+      returnCondition = appState.posts.created.result.data;
+      info1 = apiData.infoMessages.addNewRun.success.info1;
+      info2 = apiData.infoMessages.addNewRun.success.info2;
+    } else {
+      statusMessage = 204;
+      returnCondition = true;
+      info1 = apiData.infoMessages.addNewRun.success.info3;
+      info2 = apiData.infoMessages.addNewRun.success.info2;
     }
   
     // 5) read and store the returned data
     if (appState.posts.created.result) {
-      appState.posts.created.result.status === 201 
-      && appState.posts.created.result.data ? 
-      formSubmitSuccessfullyExecuted('addNewRun', apiData.infoMessages.addNewRun.success.info1, apiData.infoMessages.addNewRun.success.info2) : displayFailMessage(apiData.infoMessages.unknown);
+      appState.posts.created.result.status === statusMessage 
+      && returnCondition ? 
+      formSubmitSuccessfullyExecuted('addNewRun', info1, info2) : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.posts.created.error) {
       return displayFailMessage(`${appState.posts.created.error.message}`);
     } else {

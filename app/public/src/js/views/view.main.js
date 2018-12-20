@@ -12,11 +12,26 @@ export const removeMainContent = () => {
   DOMelements.mainContent.innerHTML = '';
 }
 
+export const removePostsAfterSortMenu = (numElements) => {
+  const targetElement = DOMelements.mainContent.querySelector(`.${DOMstrings.posts.sortContainer}`);
+
+  for (let i=0; i<numElements; i++) {
+    targetElement.nextElementSibling.remove();
+  }
+}
+
 export const renderTitle = (message) => {
   const htmlString = 
-  `<div class="content__heading-posts">
+  `<div class="content__heading-posts js-content__heading-posts">
     <h2>${message}</h2>
-   </div>`
+    <div class="posts__sort-method js-posts__sort-method">
+      <select name="sort-method" required>
+        <option value="">Select Sort Criteria</option>
+        <option value="desc" selected>Newest First</option>
+        <option value="asc">Oldest First</option>
+      </select>
+    </div>
+  </div>`
 
   appendHtmlToMainContent(htmlString);
 }
@@ -58,7 +73,7 @@ export const renderDotsAnimation = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderPosts = (post) => {
+export const renderPosts = (post, editable, sorted) => {
   const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
   const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
 
@@ -97,20 +112,26 @@ export const renderPosts = (post) => {
     displayAvrSecSpeed = `${secPartAvrSpeed}`;
   }
 
+  let editableClass = 'post-data__editable post-data__editable--hidden js-post-data__editable';
+  if (editable) {
+    editableClass = 'post-data__editable js-post-data__editable';
+  }
 
   const htmlString = 
-  `<div class="content__post js-content__post">
+  `<div class="content__post js-content__post" data-user-id="${post.user.id}" data-post-id="${post.id}">
     <div class="post-collapsible js-post-collapsible">
       <a href="#">
         <span class="js-post-collapsible__symbol">&#10133;</span>
       </a>
     </div>
-    <div class="post-avatar">
-      <img src="svg/monsters/monster-${post.user.avatar}.svg" alt="An image of a random monster">
+    <div class="post-avatar js-post-avatar" data-user-avatar="${post.user.avatar}">
+      <a href="#">
+        <img src="svg/monsters/monster-${post.user.avatar}.svg" alt="An image of a random monster">
+      </a>
     </div>
     <div class="post-info">
       <div class="post-header">
-        <div class="post-header__user">
+        <div class="post-header__user js-post-header__user" data-user-disname="${post.user.displayName}">
           <a href="#">
             <h3>@${post.user.displayName}</h3>
           </a>
@@ -120,8 +141,11 @@ export const renderPosts = (post) => {
         </div>
       </div>
       <div class="post-data">
-        <div class="post-data__title">
+        <div class="post-data__title js-post-data__title">
           <h4>${post.title}</h4>
+          <a href="#" class="${editableClass}">
+            <img src="https://img.icons8.com/material-outlined/24/000000/pencil.png">
+          </a>
         </div>
         <div class="post-data__distance post-data__distance--style-results">
           <p>Distance</p>
@@ -144,7 +168,11 @@ export const renderPosts = (post) => {
     </div>
   </div>`
 
-  appendHtmlToMainContent(htmlString);
+  if (sorted) {
+    appendHtmlAfterSortLabel(htmlString);
+  } else {
+    appendHtmlToMainContent(htmlString);
+  }
 }
 
 export const adjustFirstPostVerticalOffset = () => {
@@ -254,7 +282,15 @@ export const clearRegistrationFormData = () => {
 
 // My Runs page
 
-export const renderProfileBanner = (user) => {
+export const renderProfileBanner = (user, nameHidden=false) => {
+  let nameClass = 'profile-info__full-name'
+  let hrClass = 'profile-banner__underline'
+
+  if (nameHidden) {
+    nameClass = 'profile-info__full-name profile-info__full-name--hidden';
+    hrClass = 'profile-banner__underline profile-banner__underline--hidden'
+  }
+
   const htmlString = 
   `<div class="content__profile-banner">
     <div class="profile-banner__inner-container">
@@ -263,12 +299,12 @@ export const renderProfileBanner = (user) => {
         <button type="button" class="myProfile__change-avatar-button js-myProfile__change-avatar-button">Change avatar</button>
       </div>
       <div class="profile-banner__info">
-        <div class="profile-info__full-name">
+        <div class="${nameClass}">
           <h2>
             <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed" value="${user.name}" placeholder="Name?" class="js-myProfile__full-name-input" form="myProfile__update-account" disabled/>
           </h2>
         </div>
-        <hr class="profile-banner__underline" />
+        <hr class="${hrClass}" />
         <div class="profile-info__display-name">
           <p>
             @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>
@@ -284,14 +320,86 @@ export const renderProfileBanner = (user) => {
 
 // Add new run page
 
-export const renderNewRunForm = () => {
+export const renderNewRunForm = (formTitle, post='') => {
+
+  let runTitle='',
+      distanceUnit,
+      distanceValue=0,
+      durationHours=0,
+      durationMinutes=0,
+      durationSeconds=0,
+      runType,
+      date=moment().format('YYYY-MM-DD'),
+      time='10:00',
+      description='',
+      selectKM = '',
+      selectM = 'selected',
+      selectMI = '',
+      selectYD = '',
+      selectRace = '',
+      selectWorkout = 'selected',
+      submitTitle = 'Create',
+      btnDeleteClass = 'btn-style delete-post-btn js-delete-post-btn delete-post-btn--hidden';
+
+  if (post) {
+    runTitle = post.title;
+    distanceUnit = post.distanceUnit;
+    distanceValue = post.distanceValue;
+    submitTitle = 'Update';
+    durationHours = post.durationHours;
+    durationMinutes = post.durationMinutes;
+    durationSeconds = post.durationSeconds;
+    runType = post.runType;
+    date = post.date;
+    time = post.time;
+    description = post.description;
+    btnDeleteClass = 'btn-style delete-post-btn js-delete-post-btn';
+  }
+
+  switch (distanceUnit) {
+    case 'km':
+      selectKM = 'selected';
+      selectM = '';
+      selectMI = '';
+      selectYD = '';
+      break;
+    case 'm':
+      selectKM = '';
+      selectM = 'selected';
+      selectMI = '';
+      selectYD = '';
+      break;
+    case 'mi':
+      selectKM = '';
+      selectM = '';
+      selectMI = 'selected';
+      selectYD = '';
+      break;
+    case 'yd':
+      selectKM = '';
+      selectM = '';
+      selectMI = '';
+      selectYD = 'selected';
+      break;
+  }
+
+  switch (runType) {
+    case 'race':
+      selectRace = 'selected';
+      selectWorkout = '';
+      break;
+    case 'workout':
+      selectRace = '';
+      selectWorkout = 'selected';
+      break;
+  }
 
   const htmlString = 
   `<form class="add-new-run">
     <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
-          <h2>Add New Run</h2>
+          <h2>${formTitle}</h2>
         </div>
       </div>
     </div>
@@ -303,7 +411,7 @@ export const renderNewRunForm = () => {
             <legend>Title</legend>
             <div class="title__container">
               <label for="title__input" class="title__label"></label>
-              <input type="text" placeholder="Relaxing Afternoon Run" name="title" pattern=".{5,}" title="5 characters minimum" id="title__input" class="js-add-new-run__title" required/>
+              <input type="text" placeholder="Relaxing Afternoon Run" value="${runTitle}" name="title" pattern=".{5,}" title="5 characters minimum" id="title__input" class="js-add-new-run__title" required/>
             </div>
           </fieldset>	
         </div>
@@ -323,16 +431,16 @@ export const renderNewRunForm = () => {
             <legend>Distance</legend>
             <div class="distance__value">
               <label for="distance__value-input" class="distance__value-label"></label>
-              <input type="number" min="0.01" max="9999" step="0.01" placeholder="0" value="0" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
+              <input type="number" min="0.01" max="9999" step="0.01" placeholder="0" value="${distanceValue}" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
             </div>
             <div class="distance__unit">
               <label for="distance__unit-select" class="distance__unit-label"></label>
               <select name="distance-unit" id="distance__unit-select" class="js-add-new-run__distance-unit" required>
                 <option value="">Select Unit Type</option>
-                <option value="km">kilometers</option>
-                <option value="m" selected>meters</option>
-                <option value="mi">miles</option>
-                <option value="yd">yards</option>
+                <option value="km" ${selectKM}>kilometers</option>
+                <option value="m" ${selectM}>meters</option>
+                <option value="mi" ${selectMI}>miles</option>
+                <option value="yd" ${selectYD}>yards</option>
               </select>
             </div>
           </fieldset>
@@ -343,15 +451,15 @@ export const renderNewRunForm = () => {
             <legend>Duration</legend>
             <div class="duration__hours">
               <label for="duration__hours-input" class="duration__hours-label">hr</label>
-              <input type="number" min="0" max="9999" placeholder="0" value="0" step="1" name="duration-hours"  id="duration__hours-input" class="js-add-new-run__duration-hours" required/>
+              <input type="number" min="0" max="9999" placeholder="0" value="${durationHours}" step="1" name="duration-hours"  id="duration__hours-input" class="js-add-new-run__duration-hours" required/>
             </div>
             <div class="duration__minutes">
               <label for="duration__minutes-input" class="duration__minutes-label">min</label>
-              <input type="number" min="0" max="59" placeholder="00" value="00" step="1"  name="duration-minutes"  id="duration__minutes-input" class="js-add-new-run__duration-minutes" required/>
+              <input type="number" min="0" max="59" placeholder="00" value="${durationMinutes}" step="1"  name="duration-minutes"  id="duration__minutes-input" class="js-add-new-run__duration-minutes" required/>
             </div>
             <div class="duration__seconds">
               <label for="duration__seconds-input" class="duration__seconds-label">s</label>
-              <input type="number" min="0" max="59" placeholder="00" value="00" step="1" name="duration-seconds"  id="duration__seconds-input" class="js-add-new-run__duration-seconds" required/>
+              <input type="number" min="0" max="59" placeholder="00" value="${durationSeconds}" step="1" name="duration-seconds"  id="duration__seconds-input" class="js-add-new-run__duration-seconds" required/>
             </div>
           </fieldset>
         </div>
@@ -373,8 +481,8 @@ export const renderNewRunForm = () => {
               <label for="run-type__select" class="run-type__label"></label>
               <select name="run-type" id="run-type__select" class="js-add-new-run__run-type" required>
                 <option value="">Select Run Type</option>
-                <option value="race">Race</option>
-                <option value="workout" selected>Workout</option>
+                <option value="race" ${selectRace}>Race</option>
+                <option value="workout" ${selectWorkout}>Workout</option>
               </select>
             </div>
           </fieldset>
@@ -384,11 +492,11 @@ export const renderNewRunForm = () => {
             <legend>Date & Time</legend>
             <div class="date">
               <label for="date-input" class="date-label"></label>
-              <input type="date" value="2018-11-18" name="date" id="date-input" class="js-add-new-run__date" required/>
+              <input type="date" value="${date}" name="date" id="date-input" class="js-add-new-run__date" required/>
             </div>
             <div class="time">
               <label for="time-input" class="time-label"></label>
-              <input type="time" value="10:00" name="time"  id="time-input" class="js-add-new-run__time" required/>
+              <input type="time" value="${time}" name="time"  id="time-input" class="js-add-new-run__time" required/>
             </div>	
           </fieldset>					
         </div>
@@ -408,7 +516,7 @@ export const renderNewRunForm = () => {
               <legend>Description</legend>
               <div class="description__container">
                 <label for="description__input" class="description__label"></label>
-                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description" required></textarea>
+                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description" required>${description}</textarea>
               </div>
           </fieldset>	
         </div>
@@ -442,12 +550,21 @@ export const renderNewRunForm = () => {
     <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
-          <button type="submit" class="new-run__submit btn-style">Create</button>
+          <button type="submit" class="new-run__submit btn-style">${submitTitle}</button>
         </div>
       </div>
     </div>
     
-  </form>`
+  </form>
+
+  <div class="row">
+    <div class="form-inner-container">
+      <div class="col-12 js-delete-post">
+        <button type="button" class="${btnDeleteClass}">Delete</button>
+      </div>
+    </div>
+  </div>
+  `
 
   appendHtmlToMainContent(htmlString);
   DOMelements.mainContent.classList.add(controledHooksStrings.addNewRunBackground);
@@ -461,7 +578,7 @@ export const getNewRunFormData = () => {
   return {
     runTitle: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.runTitle}`).value,
     distance: {
-      value: parseInt(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value, 10),
+      value: parseFloat(document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.value}`).value),
       unit: document.querySelector(`.${DOMstrings.addNewRunForm.inputFields.distance.unit}`).value
     },
     duration: {
@@ -555,4 +672,8 @@ export const adjustModalWithAvatarsStyle = () => {
 
 function appendHtmlToMainContent(html, position='beforeend') {
   DOMelements.mainContent.insertAdjacentHTML(position, html);
+}
+
+function appendHtmlAfterSortLabel(html, position='afterend') {
+  DOMelements.mainContent.querySelector(`.${DOMstrings.posts.sortContainer}`).insertAdjacentHTML(position, html);
 }
