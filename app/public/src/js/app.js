@@ -99,7 +99,7 @@ async function renderPostsPage(view,  message, anotherUser) {
     if (!anotherUser) {
       mainView.renderProfileBanner(appState.login.JWT.user);
     } else {
-      mainView.renderProfileBanner(anotherUser);
+      mainView.renderProfileBanner(anotherUser, true);
     }
   }
 

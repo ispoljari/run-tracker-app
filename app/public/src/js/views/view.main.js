@@ -255,7 +255,15 @@ export const clearRegistrationFormData = () => {
 
 // My Runs page
 
-export const renderProfileBanner = (user) => {
+export const renderProfileBanner = (user, nameHidden=false) => {
+  let nameClass = 'profile-info__full-name'
+  let hrClass = 'profile-banner__underline'
+
+  if (nameHidden) {
+    nameClass = 'profile-info__full-name profile-info__full-name--hidden';
+    hrClass = 'profile-banner__underline profile-banner__underline--hidden'
+  }
+
   const htmlString = 
   `<div class="content__profile-banner">
     <div class="profile-banner__inner-container">
@@ -264,12 +272,12 @@ export const renderProfileBanner = (user) => {
         <button type="button" class="myProfile__change-avatar-button js-myProfile__change-avatar-button">Change avatar</button>
       </div>
       <div class="profile-banner__info">
-        <div class="profile-info__full-name">
+        <div class="${nameClass}">
           <h2>
             <input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed" value="${user.name}" placeholder="Name?" class="js-myProfile__full-name-input" form="myProfile__update-account" disabled/>
           </h2>
         </div>
-        <hr class="profile-banner__underline" />
+        <hr class="${hrClass}" />
         <div class="profile-info__display-name">
           <p>
             @<input type="text" pattern="[A-Za-zšŠđĐčČćĆžŽ ]+" title="Only letters A-Z are allowed(no spaces)" value="${user.displayName}" placeholder="Nickname?" class="js-myProfile__display-name-input" form="myProfile__update-account" disabled>

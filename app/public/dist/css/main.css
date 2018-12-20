@@ -1300,6 +1300,8 @@ footer {
   background-color: #f8fffc;
 }
 
-.future-development--hiden {
+.future-development--hiden,
+.profile-banner__underline--hidden,
+.profile-info__full-name--hidden {
   display: none;
 }
