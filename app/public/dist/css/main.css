@@ -1081,6 +1081,10 @@ footer {
     width: 40%;
     max-width: 170px;
   }
+
+  .myProfile__form-container:last-of-type {
+    margin-top: 0px;
+  }
 }
 
 @media only screen and (min-width: 460px) {

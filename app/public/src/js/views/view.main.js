@@ -301,14 +301,84 @@ export const renderProfileBanner = (user, nameHidden=false) => {
 
 // Add new run page
 
-export const renderNewRunForm = (title) => {
+export const renderNewRunForm = (formTitle, post='') => {
+
+  let runTitle='',
+      distanceUnit,
+      distanceValue=0,
+      durationHours=0,
+      durationMinutes=0,
+      durationSeconds=0,
+      runType,
+      date=moment().format('YYYY-MM-DD'),
+      time='10:00',
+      description='',
+      selectKM = '',
+      selectM = 'selected',
+      selectMI = '',
+      selectYD = '',
+      selectRace = '',
+      selectWorkout = 'selected',
+      submitTitle = 'Create';
+
+  if (post) {
+    runTitle = post.title;
+    distanceUnit = post.distanceUnit;
+    distanceValue = post.distanceValue;
+    submitTitle = 'Update';
+    durationHours = post.durationHours;
+    durationMinutes = post.durationMinutes;
+    durationSeconds = post.durationSeconds;
+    runType = post.runType;
+    date = post.date;
+    time = post.time;
+    description = post.description;
+  }
+
+  switch (distanceUnit) {
+    case 'km':
+      selectKM = 'selected';
+      selectM = '';
+      selectMI = '';
+      selectYD = '';
+      break;
+    case 'm':
+      selectKM = '';
+      selectM = 'selected';
+      selectMI = '';
+      selectYD = '';
+      break;
+    case 'mi':
+      selectKM = '';
+      selectM = '';
+      selectMI = 'selected';
+      selectYD = '';
+      break;
+    case 'yd':
+      selectKM = '';
+      selectM = '';
+      selectMI = '';
+      selectYD = 'selected';
+      break;
+  }
+
+  switch (runType) {
+    case 'race':
+      selectRace = 'selected';
+      selectWorkout = '';
+      break;
+    case 'workout':
+      selectRace = '';
+      selectWorkout = 'selected';
+      break;
+  }
 
   const htmlString = 
   `<form class="add-new-run">
     <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
-          <h2>${title}</h2>
+          <h2>${formTitle}</h2>
         </div>
       </div>
     </div>
@@ -320,7 +390,7 @@ export const renderNewRunForm = (title) => {
             <legend>Title</legend>
             <div class="title__container">
               <label for="title__input" class="title__label"></label>
-              <input type="text" placeholder="Relaxing Afternoon Run" name="title" pattern=".{5,}" title="5 characters minimum" id="title__input" class="js-add-new-run__title" required/>
+              <input type="text" placeholder="Relaxing Afternoon Run" value="${runTitle}" name="title" pattern=".{5,}" title="5 characters minimum" id="title__input" class="js-add-new-run__title" required/>
             </div>
           </fieldset>	
         </div>
@@ -340,16 +410,16 @@ export const renderNewRunForm = (title) => {
             <legend>Distance</legend>
             <div class="distance__value">
               <label for="distance__value-input" class="distance__value-label"></label>
-              <input type="number" min="0.01" max="9999" step="0.01" placeholder="0" value="0" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
+              <input type="number" min="0.01" max="9999" step="0.01" placeholder="0" value="${distanceValue}" name="distance-value" id="distance__value-input" class="js-add-new-run__distance-value" required/>
             </div>
             <div class="distance__unit">
               <label for="distance__unit-select" class="distance__unit-label"></label>
               <select name="distance-unit" id="distance__unit-select" class="js-add-new-run__distance-unit" required>
                 <option value="">Select Unit Type</option>
-                <option value="km">kilometers</option>
-                <option value="m" selected>meters</option>
-                <option value="mi">miles</option>
-                <option value="yd">yards</option>
+                <option value="km" ${selectKM}>kilometers</option>
+                <option value="m" ${selectM}>meters</option>
+                <option value="mi" ${selectMI}>miles</option>
+                <option value="yd" ${selectYD}>yards</option>
               </select>
             </div>
           </fieldset>
@@ -360,15 +430,15 @@ export const renderNewRunForm = (title) => {
             <legend>Duration</legend>
             <div class="duration__hours">
               <label for="duration__hours-input" class="duration__hours-label">hr</label>
-              <input type="number" min="0" max="9999" placeholder="0" value="0" step="1" name="duration-hours"  id="duration__hours-input" class="js-add-new-run__duration-hours" required/>
+              <input type="number" min="0" max="9999" placeholder="0" value="${durationHours}" step="1" name="duration-hours"  id="duration__hours-input" class="js-add-new-run__duration-hours" required/>
             </div>
             <div class="duration__minutes">
               <label for="duration__minutes-input" class="duration__minutes-label">min</label>
-              <input type="number" min="0" max="59" placeholder="00" value="00" step="1"  name="duration-minutes"  id="duration__minutes-input" class="js-add-new-run__duration-minutes" required/>
+              <input type="number" min="0" max="59" placeholder="00" value="${durationMinutes}" step="1"  name="duration-minutes"  id="duration__minutes-input" class="js-add-new-run__duration-minutes" required/>
             </div>
             <div class="duration__seconds">
               <label for="duration__seconds-input" class="duration__seconds-label">s</label>
-              <input type="number" min="0" max="59" placeholder="00" value="00" step="1" name="duration-seconds"  id="duration__seconds-input" class="js-add-new-run__duration-seconds" required/>
+              <input type="number" min="0" max="59" placeholder="00" value="${durationSeconds}" step="1" name="duration-seconds"  id="duration__seconds-input" class="js-add-new-run__duration-seconds" required/>
             </div>
           </fieldset>
         </div>
@@ -390,8 +460,8 @@ export const renderNewRunForm = (title) => {
               <label for="run-type__select" class="run-type__label"></label>
               <select name="run-type" id="run-type__select" class="js-add-new-run__run-type" required>
                 <option value="">Select Run Type</option>
-                <option value="race">Race</option>
-                <option value="workout" selected>Workout</option>
+                <option value="race" ${selectRace}>Race</option>
+                <option value="workout" ${selectWorkout}>Workout</option>
               </select>
             </div>
           </fieldset>
@@ -401,11 +471,11 @@ export const renderNewRunForm = (title) => {
             <legend>Date & Time</legend>
             <div class="date">
               <label for="date-input" class="date-label"></label>
-              <input type="date" value="2018-11-18" name="date" id="date-input" class="js-add-new-run__date" required/>
+              <input type="date" value="${date}" name="date" id="date-input" class="js-add-new-run__date" required/>
             </div>
             <div class="time">
               <label for="time-input" class="time-label"></label>
-              <input type="time" value="10:00" name="time"  id="time-input" class="js-add-new-run__time" required/>
+              <input type="time" value="${time}" name="time"  id="time-input" class="js-add-new-run__time" required/>
             </div>	
           </fieldset>					
         </div>
@@ -425,7 +495,7 @@ export const renderNewRunForm = (title) => {
               <legend>Description</legend>
               <div class="description__container">
                 <label for="description__input" class="description__label"></label>
-                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description" required></textarea>
+                <textarea placeholder="How did you feel during the run? Did it rain, or was it sunny? Where did you run?" name="description" id="description__input" class="js-add-new-run__description" required>${description}</textarea>
               </div>
           </fieldset>	
         </div>
@@ -459,7 +529,7 @@ export const renderNewRunForm = (title) => {
     <div class="row">
       <div class="form-inner-container">
         <div class="col-12">
-          <button type="submit" class="new-run__submit btn-style">Create</button>
+          <button type="submit" class="new-run__submit btn-style">${submitTitle}</button>
         </div>
       </div>
     </div>

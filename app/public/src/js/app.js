@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
   homeViewController('home', 'Main Feed');
+  console.log(moment().format('YYYY-MM-DD'));
 }, false);
 
 /* ---------------------------------------- */
@@ -292,9 +293,12 @@ async function retrievePostData(e) {
 }
 
 function editSelectedPostController(post) {
-  clearCurrentPage();
-  executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, submitEditedPostForm, apiData.infoMessages.login.fail.server.unknown);    
-  mainView.renderNewRunForm('Edit Run', post);
+  if (appState.session.currentView !== post.id) {
+    clearCurrentPage();
+    executeFunctionAfterDOMContentLoaded(DOMelements.mainContent, submitEditedPostForm, apiData.infoMessages.login.fail.server.unknown);    
+    mainView.renderNewRunForm('Edit Run', post);
+    appState.session.currentView = post.id;
+  }
 }
 
 function submitEditedPostForm() {
