@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
   navMenuController(); // Open/close clicked pages (views), drop-down menus and lists
   logoController(); 
   homeViewController('home', 'Main Feed');
-  console.log(moment().format('YYYY-MM-DD'));
 }, false);
 
 /* ---------------------------------------- */
@@ -302,7 +301,8 @@ function editSelectedPostController(post) {
 }
 
 function submitEditedPostForm() {
-  // console.log()
+  attachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+  appState.registeredClickEvents.addNewRunForm = true;
 }
 
 /* ------------------------------------------- */
@@ -1000,16 +1000,33 @@ async function submitNewRunEvent(e) {
 
     // 4) create new post using provided JWT token
     try {
-      await appState.posts.created.createNew();
+      if (appState.session.currentView === 'addNewRun') {
+        await appState.posts.created.createNew();
+      } else {
+        await appState.posts.created.updateByID();
+      }
     } catch (error) {
       displayFailMessage(apiData.infoMessages.unknown);
+    }
+
+    let statusMessage,
+        info1,
+        info2;
+    if (appState.session.currentView === 'addNewRun') {
+      statusMessage = 201;
+      info1 = apiData.infoMessages.addNewRun.success.info1;
+      info2 = apiData.infoMessages.addNewRun.success.info2;
+    } else {
+      statusMessage = 204;
+      info1 = apiData.infoMessages.addNewRun.success.info3;
+      info2 = apiData.infoMessages.addNewRun.success.info2;
     }
   
     // 5) read and store the returned data
     if (appState.posts.created.result) {
-      appState.posts.created.result.status === 201 
+      appState.posts.created.result.status === statusMessage 
       && appState.posts.created.result.data ? 
-      formSubmitSuccessfullyExecuted('addNewRun', apiData.infoMessages.addNewRun.success.info1, apiData.infoMessages.addNewRun.success.info2) : displayFailMessage(apiData.infoMessages.unknown);
+      formSubmitSuccessfullyExecuted('addNewRun', info1, info2) : displayFailMessage(apiData.infoMessages.unknown);
     } else if (appState.posts.created.error) {
       return displayFailMessage(`${appState.posts.created.error.message}`);
     } else {

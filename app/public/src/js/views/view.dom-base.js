@@ -177,7 +177,8 @@ export const apiData = {
       }, 
       success: {
         info1: 'Post successfully submited!',
-        info2: 'Loading main page.'
+        info2: 'Loading main page.',
+        info3: 'Post successfully edited!'
       }
     },
     deleteAccount: {
