@@ -58,7 +58,7 @@ export const renderDotsAnimation = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderPosts = (post) => {
+export const renderPosts = (post, editable) => {
   const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
   const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
 
@@ -97,6 +97,12 @@ export const renderPosts = (post) => {
     displayAvrSecSpeed = `${secPartAvrSpeed}`;
   }
 
+  let editableClass = 'post-data__editable post-data__editable--hidden';
+  if (editable) {
+    editableClass = 'post-data__editable';
+  }
+   
+
   const htmlString = 
   `<div class="content__post js-content__post" data-user-id="${post.user.id}">
     <div class="post-collapsible js-post-collapsible">
@@ -121,8 +127,11 @@ export const renderPosts = (post) => {
         </div>
       </div>
       <div class="post-data">
-        <div class="post-data__title">
+        <div class="post-data__title js-post-data__title">
           <h4>${post.title}</h4>
+          <a href="#" class="${editableClass}">
+            <img src="https://img.icons8.com/material-outlined/24/000000/pencil.png">
+          </a>
         </div>
         <div class="post-data__distance post-data__distance--style-results">
           <p>Distance</p>

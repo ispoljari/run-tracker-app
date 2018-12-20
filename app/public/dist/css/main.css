@@ -414,7 +414,7 @@ a {
 }
 
 .profile-info__display-name p {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .profile-info__display-name input {
@@ -619,7 +619,16 @@ a {
   margin-left: 10px;
 }
 
-.post-data__title,
+.post-data__title {
+  display: flex;
+  align-items: center;
+}
+
+.post-data__editable {
+  margin-left: 5px;
+}
+
+
 .post-header__user,
 .post-header__datetime,
 .post-data__time {
@@ -1013,6 +1022,10 @@ footer {
   margin: 5px 0;
 }
 
+.credit__menu-icons a {
+  display: block;
+  margin-top:5px;
+}
 
 /* ------------------------------------------------- */
 /* --------------------MEDIA QUERIES---------------- */
@@ -1129,14 +1142,14 @@ footer {
   }
 
   .registration legend,
-  .post-data__distance--style-results p:last-of-type {
+  .post-data__distance--style-results p:last-of-type,
+  .profile-info__display-name p {
     font-size: 22px;
   }
 
   .post-header__user h3,
   .post-data__title h4,
-  .post-additional__description h4,
-  .profile-info__display-name p {
+  .post-additional__description h4 {
     /* Style */
     font-size: 20px;
   }
@@ -1176,14 +1189,14 @@ footer {
 
   .post-data__distance--style-results p:last-of-type,
   .registration legend,
-  .add-new-run h2 {
+  .add-new-run h2,
+  .profile-info__display-name p {
     font-size: 24px;
   }
 
   .post-header__user h3,
   .post-data__title h4,
-  .post-additional__description h4,
-  .profile-info__display-name p {
+  .post-additional__description h4 {
     /* Style */
     font-size: 22px;
   }
@@ -1302,6 +1315,7 @@ footer {
 
 .future-development--hiden,
 .profile-banner__underline--hidden,
-.profile-info__full-name--hidden {
+.profile-info__full-name--hidden,
+.post-data__editable--hidden {
   display: none;
 }

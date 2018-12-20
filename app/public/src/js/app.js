@@ -179,7 +179,15 @@ function renderPosts(page) {
     }
   
     for (let i=(page-1)*10; i<loopLimit+(page-1)*10; i++) {
-      mainView.renderPosts(appState.posts.retrieved.result.data[i]);  
+      let editable = false;
+
+      if (appState.session.loggedIn) {
+        if (appState.posts.retrieved.result.data[i].user.id === appState.login.JWT.user.id) {
+          editable = true;
+        }
+      }
+
+      mainView.renderPosts(appState.posts.retrieved.result.data[i], editable); 
     }
   
     if (remainingPosts > 10) {
