@@ -319,7 +319,8 @@ export const renderNewRunForm = (formTitle, post='') => {
       selectYD = '',
       selectRace = '',
       selectWorkout = 'selected',
-      submitTitle = 'Create';
+      submitTitle = 'Create',
+      btnDeleteClass = 'btn-style delete-post-btn js-delete-post-btn delete-post-btn--hidden';
 
   if (post) {
     runTitle = post.title;
@@ -333,6 +334,7 @@ export const renderNewRunForm = (formTitle, post='') => {
     date = post.date;
     time = post.time;
     description = post.description;
+    btnDeleteClass = 'btn-style delete-post-btn js-delete-post-btn';
   }
 
   switch (distanceUnit) {
@@ -534,7 +536,16 @@ export const renderNewRunForm = (formTitle, post='') => {
       </div>
     </div>
     
-  </form>`
+  </form>
+
+  <div class="row">
+    <div class="form-inner-container">
+      <div class="col-12">
+        <button type="button" class="${btnDeleteClass}">Delete</button>
+      </div>
+    </div>
+  </div>
+  `
 
   appendHtmlToMainContent(htmlString);
   DOMelements.mainContent.classList.add(controledHooksStrings.addNewRunBackground);

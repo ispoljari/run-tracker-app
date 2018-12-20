@@ -212,7 +212,7 @@ function clearCurrentPage() {
     detachEventListener([DOMelements.mainContent], 'submit', [registerSubmitEvent]);
     appState.registeredClickEvents.registerForm = false;
   } else if (appState.registeredClickEvents.addNewRunForm) {
-    detachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+    detachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
     appState.registeredClickEvents.addNewRunForm = false;
   } else if (appState.registeredClickEvents.posts) {
     detachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
@@ -301,7 +301,7 @@ function editSelectedPostController(post) {
 }
 
 function submitEditedPostForm() {
-  attachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
   appState.registeredClickEvents.addNewRunForm = true;
 }
 
@@ -943,11 +943,11 @@ async function deletePostsFromDB(posts) {
 /* ---------------------------------------- */
 
 function addNewRunController() {
-  attachEventListener([DOMelements.mainContent], 'submit', [submitNewRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
   appState.registeredClickEvents.addNewRunForm = true;
 }
 
-async function submitNewRunEvent(e) {
+async function submitAddOrEditRunEvent(e) {
   e.stopPropagation();
   e.preventDefault();
 

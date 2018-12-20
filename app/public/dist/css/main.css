@@ -310,7 +310,6 @@ a {
 .heading__subtitle {
   /* Layout */
   display: inline-block;
-  margin-top: 7px;
 }
 
 .heading__subtitle span {
@@ -957,6 +956,12 @@ a {
   max-width: 250px;
 }
 
+.delete-post-btn {
+  max-width: 250px;
+  margin-top: 20px;
+  background-color: #f44336;
+}
+
 /* ---------------- MY PROFILE PAGE ---------------- */
 
 .myProfile__form-container {
@@ -1328,6 +1333,7 @@ footer {
 .future-development--hiden,
 .profile-banner__underline--hidden,
 .profile-info__full-name--hidden,
-.post-data__editable--hidden {
+.post-data__editable--hidden,
+.delete-post-btn--hidden {
   display: none;
 }
