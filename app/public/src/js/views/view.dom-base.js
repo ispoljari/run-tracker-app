@@ -89,7 +89,9 @@ export const DOMstrings = {
     additional: 'js-post-additional',
     loadMore: 'js-main-content__loader',
     username: 'js-post-header__user',
-    avatar: 'js-post-avatar'
+    avatar: 'js-post-avatar',
+    title: 'js-post-data__title',
+    editable: 'js-post-data__editable'
   },
   modal: {
     outerBox: 'tingle-modal-box',

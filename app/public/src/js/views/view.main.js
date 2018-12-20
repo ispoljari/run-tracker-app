@@ -97,14 +97,13 @@ export const renderPosts = (post, editable) => {
     displayAvrSecSpeed = `${secPartAvrSpeed}`;
   }
 
-  let editableClass = 'post-data__editable post-data__editable--hidden';
+  let editableClass = 'post-data__editable post-data__editable--hidden js-post-data__editable';
   if (editable) {
-    editableClass = 'post-data__editable';
+    editableClass = 'post-data__editable js-post-data__editable';
   }
-   
 
   const htmlString = 
-  `<div class="content__post js-content__post" data-user-id="${post.user.id}">
+  `<div class="content__post js-content__post" data-user-id="${post.user.id}" data-post-id="${post.id}">
     <div class="post-collapsible js-post-collapsible">
       <a href="#">
         <span class="js-post-collapsible__symbol">&#10133;</span>

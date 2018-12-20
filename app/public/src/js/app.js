@@ -252,7 +252,39 @@ function postClickEvent(e) {
         openSelectedUserPage(userData);
       }
     }
+  } else if (e.target.closest(`.${DOMstrings.posts.editable}`)) {
+    if (appState.session.loggedIn) {
+      const postData = harvestPostData(e);
+      // editSelectedPostController(postData);
+    }
   }
+}
+
+/* ------------------------------------------- */
+/* ------- EDIT SELECTED POST CONTROLLER ----- */
+
+function retrievePostData(e) {
+  const postID = e.target.closest(`.${DOMstrings.posts.mainContainer}`).dataset.postId;
+
+  const retrievedPost = new Post({id: postID});
+
+  // try {
+  //   await loggedUser.deleteByID();
+  // } catch (error) {
+  //   displayFailMessage(apiData.infoMessages.unknown);;
+  // }
+
+  // if (loggedUser.result) {
+  //   if (loggedUser.result.status === 204) {
+  //     logoutSubController('deleteAccount');
+  //   } else {
+  //     displayFailMessage(apiData.infoMessages.unknown);
+  //   }
+  // } else if (loggedUser.error) {
+  //   return displayFailMessage(`${loggedUser.error.message}!`);
+  // } else {
+  //   return displayFailMessage(apiData.infoMessages.unknown);
+  // }
 }
 
 /* ------------------------------------------- */

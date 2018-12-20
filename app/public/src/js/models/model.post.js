@@ -86,6 +86,23 @@ export default class Post {
     }
   }
 
+  async retrieveSingleByID() {
+    try {
+      const res = await axios({
+        method: 'get',
+        url: `${apiData.urls.posts}/${this.id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${appState.login.user.result.data.authToken}`
+        }
+      });
+      
+      this.result = res; 
+    } catch (error) {
+      this.error = error.response.data;  
+    }
+  }
+
   async deleteByID() {
     try {
       const res = await axios({
