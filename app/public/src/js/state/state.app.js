@@ -11,6 +11,7 @@ export const appState = {
     logInMenu: false,
     registerForm: false,
     addNewRunForm: false,
+    addNewRunClick: false,
     dropDownList: false,
     posts: false,
     myProfileClick: false,

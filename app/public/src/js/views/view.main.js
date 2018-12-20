@@ -540,7 +540,7 @@ export const renderNewRunForm = (formTitle, post='') => {
 
   <div class="row">
     <div class="form-inner-container">
-      <div class="col-12">
+      <div class="col-12 js-delete-post">
         <button type="button" class="${btnDeleteClass}">Delete</button>
       </div>
     </div>

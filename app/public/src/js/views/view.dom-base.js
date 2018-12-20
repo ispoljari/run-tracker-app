@@ -66,6 +66,9 @@ export const DOMstrings = {
       time: 'js-add-new-run__time',
       description: 'js-add-new-run__description',
       privacy: 'js-add-new-run__privacy'
+    },
+    buttons: {
+      deleteContainer: 'js-delete-post'
     }
   },
   myProfileForm: {
@@ -178,7 +181,8 @@ export const apiData = {
       success: {
         info1: 'Post successfully submited!',
         info2: 'Loading main page.',
-        info3: 'Post successfully edited!'
+        info3: 'Post successfully edited!',
+        info4: 'Post successfully deleted!'
       }
     },
     deleteAccount: {

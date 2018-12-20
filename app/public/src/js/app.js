@@ -314,28 +314,48 @@ function submitEditedPostForm() {
 function clickDeleteRunEvent(e) {
   e.preventDefault();
 
-  const modal = new tingle.modal({
-    footer: true,
-    stickyFooter: false,
-    closeMethods: []
-  });
-
-  modal.setContent('<h1>Are you sure you whish to delete this post?</h1>');
-
-  modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
-    modal.close();
-  });
-
-  modal.addFooterBtn('YES. DELETE POST', 'tingle-btn tingle-btn--danger', async function() {
-    deletePostFromDB();
-    modal.close();
-  });
-
-  modal.open();
+  if (e.target.closest(`.${DOMstrings.addNewRunForm.buttons.deleteContainer}`)) {
+    const modal = new tingle.modal({
+      footer: true,
+      stickyFooter: false,
+      closeMethods: []
+    });
+  
+    modal.setContent('<h1>Are you sure you whish to delete this post?</h1>');
+  
+    modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+      modal.close();
+    });
+  
+    modal.addFooterBtn('YES. DELETE POST', 'tingle-btn tingle-btn--danger', async function() {
+      deletePostFromDB();
+      modal.close();
+    });
+    
+    modal.open();
+  }
 }
 
-function deletePostFromDB() {
-  console.log('deleted!');
+async function deletePostFromDB() {
+  const post = new Post({id: appState.session.currentView});
+
+    try {
+      await post.deleteByID();
+    } catch (error) {
+      displayFailMessage(apiData.infoMessages.unknown);;
+    }
+
+    if (post.result) {
+      if (post.result.status === 204) {
+        formSubmitSuccessfullyExecuted('addNewRun', apiData.infoMessages.addNewRun.success.info4, apiData.infoMessages.addNewRun.success.info2)
+      } else {
+        return displayFailMessage(apiData.infoMessages.unknown);
+      }
+    } else if (post.error) {
+      return displayFailMessage(`${post.error.message}!`);
+    } else {
+      return displayFailMessage(apiData.infoMessages.unknown);
+    }
 }
 
 /* ------------------------------------------- */
