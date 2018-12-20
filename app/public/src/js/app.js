@@ -243,10 +243,10 @@ function clearCurrentPage() {
 
 function postsController() {
   attachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
-  attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
+  // attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
   
   appState.registeredClickEvents.posts = true;
-  appState.registeredClickEvents.sort = true;
+  // appState.registeredClickEvents.sort = true;
 }
 
 
@@ -278,26 +278,26 @@ async function postClickEvent(e) {
   }
 }
 
-async function sortChangeEvent(e) {
-  const totalNumPostsForRemoval = appState.posts.loaders + appState.posts.displayed;
-  appState.session.postsPage = 1;
+// async function sortChangeEvent(e) {
+//   const totalNumPostsForRemoval = appState.posts.loaders + appState.posts.displayed;
+//   appState.session.postsPage = 1;
 
-  mainView.removePostsAfterSortMenu(totalNumPostsForRemoval);
-  await retrieveAllPostsFromAPI(e.target.value);
+//   mainView.removePostsAfterSortMenu(totalNumPostsForRemoval);
+//   await retrieveAllPostsFromAPI(e.target.value);
 
-  // if (appState.posts.retrieved.result.data.length > 0) {
-  //   if (appState.currentView === 'myRuns') {
-  //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
-  //     } 
+//   // if (appState.posts.retrieved.result.data.length > 0) {
+//   //   if (appState.currentView === 'myRuns') {
+//   //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
+//   //     } 
       
-  //     else if (appState.currentView  !== 'myRuns' && appState.currentView !== 'home') {
-  //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, anotherUser.id);
-  //     }
+//   //     else if (appState.currentView  !== 'myRuns' && appState.currentView !== 'home') {
+//   //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, anotherUser.id);
+//   //     }
 
-  // }
+//   // }
 
-  renderPosts(appState.session.postsPage, true);
-}
+//   renderPosts(appState.session.postsPage, true);
+// }
 
 /* ------------------------------------------- */
 /* ------- EDIT SELECTED POST CONTROLLER ----- */
