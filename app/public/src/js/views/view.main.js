@@ -16,7 +16,14 @@ export const renderTitle = (message) => {
   const htmlString = 
   `<div class="content__heading-posts">
     <h2>${message}</h2>
-   </div>`
+    <div class="posts__sort-method js-posts__sort-method">
+      <select name="sort-method" required>
+        <option value="">Select Sort Criteria</option>
+        <option value="desc" selected>Newest First</option>
+        <option value="asc">Oldest First</option>
+      </select>
+    </div>
+  </div>`
 
   appendHtmlToMainContent(htmlString);
 }

@@ -226,6 +226,9 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.addNewRunClick ) {
     detachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
     appState.registeredClickEvents.addNewRunClick = false;
+  } else if (appState.registeredClickEvents.sort) {
+    attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
+    appState.registeredClickEvents.sort = false;
   }
 }
 
@@ -235,7 +238,10 @@ function clearCurrentPage() {
 
 function postsController() {
   attachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
+  attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
+  
   appState.registeredClickEvents.posts = true;
+  appState.registeredClickEvents.sort = true;
 }
 
 
@@ -265,6 +271,10 @@ async function postClickEvent(e) {
       }
     }
   }
+}
+
+function sortChangeEvent(e) {
+  console.log(e.target.value);
 }
 
 /* ------------------------------------------- */

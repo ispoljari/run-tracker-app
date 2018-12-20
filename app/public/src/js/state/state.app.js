@@ -14,6 +14,7 @@ export const appState = {
     addNewRunClick: false,
     dropDownList: false,
     posts: false,
+    sort: false,
     myProfileClick: false,
     myProfileSubmit: false
   },
