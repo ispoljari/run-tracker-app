@@ -21,6 +21,9 @@ export const appState = {
   register: {},
   login: {},
   user: {},
-  posts: {},
+  posts: {
+    displayed: 0,
+    loaders: 0
+  },
   mutationObserver: {}
 }

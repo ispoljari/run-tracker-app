@@ -478,6 +478,7 @@ a {
 }
 
 .posts__sort-method {
+  display: none;
   max-width: 140px;
   width: 45%;
 }

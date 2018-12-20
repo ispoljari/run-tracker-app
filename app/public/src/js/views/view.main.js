@@ -12,9 +12,17 @@ export const removeMainContent = () => {
   DOMelements.mainContent.innerHTML = '';
 }
 
+export const removePostsAfterSortMenu = (numElements) => {
+  const targetElement = DOMelements.mainContent.querySelector(`.${DOMstrings.posts.sortContainer}`);
+
+  for (let i=0; i<numElements; i++) {
+    targetElement.nextElementSibling.remove();
+  }
+}
+
 export const renderTitle = (message) => {
   const htmlString = 
-  `<div class="content__heading-posts">
+  `<div class="content__heading-posts js-content__heading-posts">
     <h2>${message}</h2>
     <div class="posts__sort-method js-posts__sort-method">
       <select name="sort-method" required>
@@ -65,7 +73,7 @@ export const renderDotsAnimation = () => {
   appendHtmlToMainContent(htmlString);
 }
 
-export const renderPosts = (post, editable) => {
+export const renderPosts = (post, editable, sorted) => {
   const formatedDate = moment(post.date, 'YYYY-MM-DD').format('LL');
   const formatedTime = moment(post.time, 'HH:mm').format('hh:mm A');
 
@@ -160,7 +168,11 @@ export const renderPosts = (post, editable) => {
     </div>
   </div>`
 
-  appendHtmlToMainContent(htmlString);
+  if (sorted) {
+    appendHtmlAfterSortLabel(htmlString);
+  } else {
+    appendHtmlToMainContent(htmlString);
+  }
 }
 
 export const adjustFirstPostVerticalOffset = () => {
@@ -660,4 +672,8 @@ export const adjustModalWithAvatarsStyle = () => {
 
 function appendHtmlToMainContent(html, position='beforeend') {
   DOMelements.mainContent.insertAdjacentHTML(position, html);
+}
+
+function appendHtmlAfterSortLabel(html, position='afterend') {
+  DOMelements.mainContent.querySelector(`.${DOMstrings.posts.sortContainer}`).insertAdjacentHTML(position, html);
 }
