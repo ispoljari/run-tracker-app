@@ -1019,7 +1019,14 @@ footer {
 
 .credit {
   /* Layout */
-  margin-top: 15px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.credit h4 {
+  font-weight: lighter;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .credit__monsters,
@@ -1038,6 +1045,43 @@ footer {
 .credit__menu-icons a {
   display: block;
   margin-top:5px;
+}
+
+.author {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.author h4 {
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+.social {
+  margin: 0  auto;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+}
+
+.social img {
+  width: 35px;
+  display: block;
+}
+
+.social__linkedin,
+.social__github {
+  display: inline-block;
+  background-color: white;
+}
+
+.social__linkedin {
+  border-radius: 5px;
+}
+
+.social__github {
+  margin-left: 10px;
+  border-radius: 20px;
 }
 
 /* ------------------------------------------------- */
