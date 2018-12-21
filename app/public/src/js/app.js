@@ -163,7 +163,7 @@ function sortPosts(method) {
   
 }
 
-function renderPosts(page, sorted=false) {
+function renderPosts(page) {
   let loopLimit;
   let remainingPosts;
 
@@ -187,12 +187,10 @@ function renderPosts(page, sorted=false) {
         }
       }
 
-      appState.posts.displayed++;
-      mainView.renderPosts(appState.posts.retrieved.result.data[i], editable, sorted); 
+      mainView.renderPosts(appState.posts.retrieved.result.data[i], editable); 
     }
   
     if (remainingPosts > 10) {
-      appState.posts.loaders++;
       mainView.renderPostLoaderBtn();
     }
   }
@@ -207,9 +205,6 @@ function clearCurrentPage() {
   }
 
   appState.session.postsPage = 1; // reset posts current page
-  appState.posts.loaders = 0;
-  appState.posts.displayed = 0;
-
   mainView.removeMainContent(); 
 
   // Detach event listeners
@@ -231,9 +226,6 @@ function clearCurrentPage() {
   } else if (appState.registeredClickEvents.addNewRunClick ) {
     detachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
     appState.registeredClickEvents.addNewRunClick = false;
-  } else if (appState.registeredClickEvents.sort) {
-    attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
-    appState.registeredClickEvents.sort = false;
   }
 }
 
@@ -243,10 +235,7 @@ function clearCurrentPage() {
 
 function postsController() {
   attachEventListener([DOMelements.mainContent], 'click', [postClickEvent]);
-  attachEventListener([DOMelements.mainContent], 'change', [sortChangeEvent]);
-  
   appState.registeredClickEvents.posts = true;
-  appState.registeredClickEvents.sort = true;
 }
 
 
@@ -276,27 +265,6 @@ async function postClickEvent(e) {
       }
     }
   }
-}
-
-async function sortChangeEvent(e) {
-  const totalNumPostsForRemoval = appState.posts.loaders + appState.posts.displayed;
-  appState.session.postsPage = 1;
-
-  mainView.removePostsAfterSortMenu(totalNumPostsForRemoval);
-  await retrieveAllPostsFromAPI(e.target.value);
-
-  // if (appState.posts.retrieved.result.data.length > 0) {
-  //   if (appState.currentView === 'myRuns') {
-  //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, appState.login.JWT.user.id);
-  //     } 
-      
-  //     else if (appState.currentView  !== 'myRuns' && appState.currentView !== 'home') {
-  //       appState.posts.retrieved.result.data = filterPostsByID(appState.posts.retrieved.result.data, anotherUser.id);
-  //     }
-
-  // }
-
-  renderPosts(appState.session.postsPage, true);
 }
 
 /* ------------------------------------------- */
@@ -336,15 +304,16 @@ function editSelectedPostController(post) {
 }
 
 function submitEditedPostForm() {
-  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
+  console.log('Hello!');
   attachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]); //TODO: submit event not registering!!
   
   appState.registeredClickEvents.addNewRunForm = true;
   appState.registeredClickEvents.addNewRunClick = true;
 }
 
 function clickDeleteRunEvent(e) {
-  e.preventDefault();
+  e.stopPropagation();
 
   if (e.target.closest(`.${DOMstrings.addNewRunForm.buttons.deleteContainer}`)) {
     const modal = new tingle.modal({
@@ -415,7 +384,6 @@ function openSelectedUserPage(user) {
 function loadMorePostsSubController(e) {
   let currentLoaderElement = e.target.closest(`.${DOMstrings.posts.loadMore}`);
   
-  appState.posts.loaders--;
   mainView.hideLoaderElement(currentLoaderElement);
 
   appState.session.postsPage++;

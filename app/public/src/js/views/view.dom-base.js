@@ -86,8 +86,6 @@ export const DOMstrings = {
     }
   },
   posts: {
-    sortContainer: 'js-content__heading-posts',
-    sortSelect: 'js-posts__sort-method',
     mainContainer: 'js-content__post',
     collapsibleContainer: 'js-post-collapsible',
     collapsibleSymbol: 'js-post-collapsible__symbol',

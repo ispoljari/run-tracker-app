@@ -471,18 +471,6 @@ a {
   max-width: 450px;
 }
 
-.content__heading-posts {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.posts__sort-method {
-  display: none;
-  max-width: 140px;
-  width: 45%;
-}
-
 .main-content__loader {
   /* Layout */
   margin: 50px auto 0 auto;
@@ -880,22 +868,10 @@ a {
 .date input,
 .time input,
 .description textarea,
-.privacy select,
-.posts__sort-method select {
+.privacy select {
   /* Layout */
 	min-height: 25px;
   width: 100%;
-  
-  /* Style */
-  background-color: white;
-  font-size: 18px;
-	border-radius: 5px;
-	border: 1px solid #cccccc;
-}
-
-.posts__sort-method select {
-  /* Layout */
-  min-height: 25px;
   
   /* Style */
   background-color: white;
@@ -1043,7 +1019,14 @@ footer {
 
 .credit {
   /* Layout */
-  margin-top: 15px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.credit h4 {
+  font-weight: lighter;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .credit__monsters,
@@ -1062,6 +1045,43 @@ footer {
 .credit__menu-icons a {
   display: block;
   margin-top:5px;
+}
+
+.author {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.author h4 {
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+.social {
+  margin: 0  auto;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+}
+
+.social img {
+  width: 35px;
+  display: block;
+}
+
+.social__linkedin,
+.social__github {
+  display: inline-block;
+  background-color: white;
+}
+
+.social__linkedin {
+  border-radius: 5px;
+}
+
+.social__github {
+  margin-left: 10px;
+  border-radius: 20px;
 }
 
 /* ------------------------------------------------- */
@@ -1263,8 +1283,7 @@ footer {
   .date input,
   .time input,
   .description textarea,
-  .privacy select,
-  .posts__sort-method select {
+  .privacy select {
     /* Style */
     font-size: 20px;
   }
