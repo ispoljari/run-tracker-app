@@ -40,7 +40,7 @@ This app is intended for athletes that whish to log their running activities and
 ## DESIGN PARADIGMS
 
 * mobile-first
-* usability
+* RWD
 * a11y
 * SEO
 * cross-browser compatibility
