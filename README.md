@@ -37,17 +37,57 @@ This app is intended for athletes that whish to log their running activities and
 
 **AUTOMATION**: WEBPACK
 
+## DESIGN PARADIGMS
+
+* mobile-first
+* usability
+* a11y
+* SEO
+* cross-browser compatibility
+
 ## SCREENSHOTS (DESKTOP)
 
+Home feed (logged out):
+
+![Image showing the app home feed logged out](app/public/dist/img/homeFeed1.png "Home feed logged out")
+
+Registration form:
+
+![Image showing the registration form](app/public/dist/img/registerForm.png "Registration form")
+
+Home Feed (logged in):
+
+![Image showing the app home feed logged in](app/public/dist/img/homeFeed2.png "Home feed logged in")
+
+My Runs Page:
+
+![Image showing the My Runs Page](app/public/dist/img/MyRuns.png "My Runs")
+
+My Profile Page:
+
+![Image showing the My Profile Page](app/public/dist/img/myProfileEdit.png "My Profile")
+
+Choose Avatar Menu:
+
+![Image showing the Avatar select dropdown menu](app/public/dist/img/chooseAvatar.png "Choose Avatar")
+
+
+Add New Run form:
+
+![Image showing the add new run form](app/public/dist/img/addNewRunForm.png "Add New Run form")
+
+Edit Run form:
+
+![Image showing the Edit Run form](app/public/dist/img/editRun.png "Edit Run form")
 
 ## WHAT IS PLANNED FOR FUTURE DEVELOPMENT:
 * login with google or facebook using the OAUTH protocol
 * enable userst to upvote/downvote posts
-* enale users to analyze their running progress on a weekly/monthly basis (implement graphs with D3)
+* enale users to analyze their running progress on a weekly/monthly basis (implement graphs with D3.js library)
 * enable sharing posts to other social networks
 * enable importing/exporting running activity from/to third-party apps (like Strava)
 * implement cookie-based (session) authorization
-* create a real-time app with the WebSocket protocol (persistent, low latency connection instead of HTTP requests)
+* create a real-time app using the WebSocket protocol (a persistent, low latency connection with the server is more appropriate for this app, instead of traditional HTTP requests)
 
 ## TECHNICAL DESCRIPTION
 The backend is running on a NodeJS server. 
