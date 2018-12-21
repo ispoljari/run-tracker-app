@@ -304,15 +304,16 @@ function editSelectedPostController(post) {
 }
 
 function submitEditedPostForm() {
-  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]);
+  console.log('Hello!');
   attachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]); //TODO: submit event not registering!!
   
   appState.registeredClickEvents.addNewRunForm = true;
   appState.registeredClickEvents.addNewRunClick = true;
 }
 
 function clickDeleteRunEvent(e) {
-  e.preventDefault();
+  e.stopPropagation();
 
   if (e.target.closest(`.${DOMstrings.addNewRunForm.buttons.deleteContainer}`)) {
     const modal = new tingle.modal({
