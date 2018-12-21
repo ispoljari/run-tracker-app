@@ -312,8 +312,6 @@ function submitEditedPostForm() {
 }
 
 function clickDeleteRunEvent(e) {
-  e.stopPropagation();
-
   if (e.target.closest(`.${DOMstrings.addNewRunForm.buttons.deleteContainer}`)) {
     const modal = new tingle.modal({
       footer: true,
