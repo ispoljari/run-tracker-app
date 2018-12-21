@@ -1,11 +1,6 @@
 'use strict';
 const result = require('dotenv').config();
 
-if (result.error) {
-  console.log(result.parsed);
-  throw result.error
-}
-
 // Import 3rd party frameworks, libraries or project modules
 const chai = require('chai')
 const chaiHttp = require('chai-http');
@@ -51,7 +46,6 @@ function validateResponse(res, token) {
 }
 
 function tearDownDB() {
-  console.warn('Tearing down test database...');
   return mongoose.connection.dropDatabase();
 }
 

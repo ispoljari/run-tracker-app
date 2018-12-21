@@ -57,7 +57,6 @@ router.post('/', jwtAuth, (req, res) => {
 
   // Check the 'upvotes' property
   if (upvotes) {
-    console.log(upvotes[upvotes.length-1].userId);
     if (!(mongoose.Types.ObjectId.isValid(upvotes[upvotes.length-1].userId))) {
       const message = 'The value of \'upvotes\'/\'userId\' is not in a valid ObjectId format.'  
       return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({

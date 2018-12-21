@@ -43,8 +43,6 @@ const userData = {
 }
 
 function seedData() {
-  console.info('Seeding post and user data to test DB...');
-
   const promise = new Promise(function(resolve, reject) {
     userData.userSeedData = generateUserData();
     userData.postSeedData = generatePostData();
@@ -109,7 +107,6 @@ function generateUserData() {
 }
 
 function tearDownDB() {
-  console.warn('Tearing down test database...');
   return mongoose.connection.dropDatabase();
 }
 

@@ -304,9 +304,8 @@ function editSelectedPostController(post) {
 }
 
 function submitEditedPostForm() {
-  console.log('Hello!');
   attachEventListener([DOMelements.mainContent], 'click', [clickDeleteRunEvent]);
-  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]); //TODO: submit event not registering!!
+  attachEventListener([DOMelements.mainContent], 'submit', [submitAddOrEditRunEvent]); 
   
   appState.registeredClickEvents.addNewRunForm = true;
   appState.registeredClickEvents.addNewRunClick = true;
@@ -538,8 +537,6 @@ async function registerSubmitEvent(e) {
     // Delete all data from appState.register.user
     deleteAllObjectProperties(appState.register.user);
   }
-
-  // TODO: ENABLE USER TO DELETE ACCOUNT
 }
 
 function formSubmitSuccessfullyExecuted(type, ...messages) {
