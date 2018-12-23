@@ -160,10 +160,22 @@ router.put('/:id', jwtAuth, (req, res) => {
     }
   });
 
-  Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+  Post.findById(req.params.id)
   .populate('user')
-  .then(updatedPost => {
-    return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+  .then(post => {
+    if (post.user.id !== req.user.id) {
+      return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+        code: HTTP_STATUS_CODES.UNAUTHORIZED,
+        message: 'Unauthorized access!'
+      });
+    }
+  })
+  .then(() => {
+    Post.findByIdAndUpdate(req.params.id, {$set: updated}, {new: true})
+    .populate('user')
+    .then(updatedPost => {
+      return res.status(HTTP_STATUS_CODES.NO_CONTENT).json(updatedPost.serialize());
+    })
   })
   .catch(err => {
     res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
