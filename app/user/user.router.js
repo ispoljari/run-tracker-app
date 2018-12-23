@@ -78,6 +78,13 @@ router.post('/', (req, res) => {
 
 // GET user by ID
 router.get('/:id', jwtAuth, (req, res) => {
+  if ((req.user.id !== req.params.id)) {
+    return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+      code: HTTP_STATUS_CODES.UNAUTHORIZED,
+      message: 'Unauthorized access!'
+    });
+  }
+
   User.findById(req.params.id)
     .then(user => {
       if (!user) {
@@ -100,6 +107,16 @@ router.get('/:id', jwtAuth, (req, res) => {
 // PUT endpoint (JWT protected)
 
 router.put('/:id', jwtAuth, (req, res) => {
+  console.log(req.user);
+  console.log(req.params.id);
+
+  if ((req.user.id !== req.params.id)) {
+    return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+      code: HTTP_STATUS_CODES.UNAUTHORIZED,
+      message: 'Unauthorized access!'
+    });
+  }
+
   if (!(req.params.id === req.body.id)) {
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
       code: HTTP_STATUS_CODES.BAD_REQUEST,
@@ -131,6 +148,15 @@ router.put('/:id', jwtAuth, (req, res) => {
 // DELETE enpoint (JWT protected)
 
 router.delete('/:id', jwtAuth, (req, res) => {
+  console.log(req.user);
+
+  if ((req.user.id !== req.params.id) || (req.user.username === 'demo@user.com')) {
+    return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+      code: HTTP_STATUS_CODES.UNAUTHORIZED,
+      message: 'Unauthorized access!'
+    });
+  }
+  
   User.findByIdAndRemove(req.params.id)
     .then(() => {
       return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();

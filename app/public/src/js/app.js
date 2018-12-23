@@ -902,23 +902,39 @@ function userUpdateSuccessfullyExecuted() {
 function deleteAccountController(e) {
   e.preventDefault();
 
+  let method,
+      modalMessage,
+      demoUser;
+
+  if (appState.login.JWT.user.username === 'demo@user.com') {
+    method = ['escape', 'button']; 
+    modalMessage = '<h1>Deletion of demo user account is not allowed.</h1>'
+    demoUser = true;
+  } else {
+    method = [];
+    modalMessage = '<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>';
+    demoUser = false;
+  }
+
   const modal = new tingle.modal({
     footer: true,
     stickyFooter: false,
-    closeMethods: []
+    closeMethods: method
   });
 
-  modal.setContent('<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>');
+  modal.setContent(modalMessage);
 
-  modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
-    modal.close();
-  });
-
-  modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', async function() {
-    await deleteLoggedUserPosts();
-    await deleteUserFromDB();
-    modal.close();
-  });
+  if (!demoUser) {
+    modal.addFooterBtn('NO', 'tingle-btn tingle-btn--primary', function() {
+      modal.close();
+    });
+  
+    modal.addFooterBtn('YES. DELETE ACCOUNT', 'tingle-btn tingle-btn--danger', async function() {
+      await deleteLoggedUserPosts();
+      await deleteUserFromDB();
+      modal.close();
+    });
+  }
 
   modal.open();
 }
