@@ -460,7 +460,7 @@ a {
   -webkit-box-shadow: 4px 4px 0px 0px rgba(162, 162, 162, 0.75);
           box-shadow: 4px 4px 0px 0px rgba(162, 162, 162, 0.75);
   background-color: white;
-  max-width: 450px;
+  max-width: 480px;
 }
 
 .content__heading-posts,
@@ -469,7 +469,7 @@ a {
   margin: 0 auto;
 
   /* Style */
-  max-width: 450px;
+  max-width: 480px;
 }
 
 .main-content__loader {
@@ -1147,11 +1147,6 @@ footer {
 }
 
 @media only screen and (min-width: 460px) {
-  .registration legend {
-    /* Layout */
-    margin: 0 70px 20px 70px;
-  }
-
   .post-data__time {
     /* Layout */
     display: inline-block;
