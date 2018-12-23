@@ -1037,6 +1037,7 @@ footer {
 
   /* Style */
   font-size: 12px;
+  font-style: italic;
 }
 
 .credit__menu-icons {
@@ -1055,7 +1056,7 @@ footer {
 
 .author h4 {
   font-size: 14px;
-  font-weight: lighter;
+  font-weight: bold;
 }
 
 .social {

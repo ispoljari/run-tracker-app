@@ -732,9 +732,7 @@ function myRunsViewSubController() {
 }
 
 function analyticsViewSubController() {
-  if (appState.session.currentView !== 'analytics') {
-    appState.session.currentView = 'analytics';
-  }
+  // TO BE DEVELOPED
 }
 
 function logoutSubController(type='') {
