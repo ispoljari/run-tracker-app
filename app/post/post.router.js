@@ -164,8 +164,9 @@ router.put('/:id', jwtAuth, (req, res) => {
   .populate('user')
   .then(post => {
     if (post.user.id !== req.user.id) {
-      return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+      return Promise.reject({
         code: HTTP_STATUS_CODES.UNAUTHORIZED,
+        reason: 'Unauthorized',
         message: 'Unauthorized access!'
       });
     }
@@ -178,7 +179,14 @@ router.put('/:id', jwtAuth, (req, res) => {
     })
   })
   .catch(err => {
-    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+    if (err.reason === 'Unauthorized') {
+      return res.status(err.code).json({
+        code: err.code,
+        message: err.message
+      });
+    }
+
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
       code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
       message: 'Internal Server Error'
     });
@@ -188,16 +196,36 @@ router.put('/:id', jwtAuth, (req, res) => {
 // Delete a note (JWT auth required)
 
 router.delete('/:id', jwtAuth, (req, res) => {
-  Post.findByIdAndRemove(req.params.id)
+  Post.findById(req.params.id)
+  .populate('user')
+  .then(post => {
+    if (post.user.id !== req.user.id) {
+      return Promise.reject({
+        code: HTTP_STATUS_CODES.UNAUTHORIZED,
+        reason: 'Unauthorized',
+        message: 'Unauthorized access!'
+      });
+    }
+  })
+  .then(() => {
+    Post.findByIdAndRemove(req.params.id)
     .then(() => {
       return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
-    })
-    .catch(err => {
-      res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
-        code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-        message: 'Internal server error'
-      });
     });
+  })
+  .catch(err => {
+    if (err.reason === 'Unauthorized') {
+      return res.status(err.code).json({
+        code: err.code,
+        message: err.message
+      });
+    }
+
+    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      code: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+      message: 'Internal Server Error'
+    });
+  });
 });
 
 module.exports = {router};
