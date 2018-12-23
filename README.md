@@ -83,7 +83,7 @@ Edit Run form:
 ## WHAT IS PLANNED FOR FUTURE DEVELOPMENT:
 * login with google or facebook using the OAUTH protocol
 * enable users to upvote/downvote posts
-* enale users to analyze their running progress on a weekly/monthly basis (implement graphs with D3.js library)
+* enable users to analyze their running progress on a weekly/monthly basis (implement graphs with D3.js library)
 * enable sharing posts to other social networks
 * enable importing running activity from third-party API's (like Strava)
 * implement cookie-based (session) authorization
