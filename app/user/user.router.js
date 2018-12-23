@@ -78,6 +78,13 @@ router.post('/', (req, res) => {
 
 // GET user by ID
 router.get('/:id', jwtAuth, (req, res) => {
+  if ((req.user.id !== req.params.id)) {
+    return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+      code: HTTP_STATUS_CODES.UNAUTHORIZED,
+      message: 'Unauthorized access!'
+    });
+  }
+
   User.findById(req.params.id)
     .then(user => {
       if (!user) {
