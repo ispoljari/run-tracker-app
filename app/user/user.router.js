@@ -148,6 +148,13 @@ router.put('/:id', jwtAuth, (req, res) => {
 // DELETE enpoint (JWT protected)
 
 router.delete('/:id', jwtAuth, (req, res) => {
+  if ((req.user.id !== req.params.id)) {
+    return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
+      code: HTTP_STATUS_CODES.UNAUTHORIZED,
+      message: 'Unauthorized access!'
+    });
+  }
+  
   User.findByIdAndRemove(req.params.id)
     .then(() => {
       return res.status(HTTP_STATUS_CODES.NO_CONTENT).end();
