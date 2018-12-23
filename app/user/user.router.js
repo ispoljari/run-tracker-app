@@ -148,7 +148,9 @@ router.put('/:id', jwtAuth, (req, res) => {
 // DELETE enpoint (JWT protected)
 
 router.delete('/:id', jwtAuth, (req, res) => {
-  if ((req.user.id !== req.params.id)) {
+  console.log(req.user);
+
+  if ((req.user.id !== req.params.id) || (req.user.username === 'demo@user.com')) {
     return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({
       code: HTTP_STATUS_CODES.UNAUTHORIZED,
       message: 'Unauthorized access!'

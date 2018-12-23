@@ -908,17 +908,13 @@ function deleteAccountController(e) {
 
   if (appState.login.JWT.user.username === 'demo@user.com') {
     method = ['escape', 'button']; 
-    modalMessage = '<h1>Sorry. You cannot delete demo user account.</h1>'
+    modalMessage = '<h1>Deletion of demo user account is not allowed.</h1>'
     demoUser = true;
   } else {
     method = [];
     modalMessage = '<h1>This action will result in permanent deletion of your account. Are you sure you whish to proceed?</h1>';
     demoUser = false;
   }
-
-  console.log(method);
-  console.log(modalMessage);
-  console.log(demoUser);
 
   const modal = new tingle.modal({
     footer: true,
