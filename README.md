@@ -33,7 +33,7 @@ This app is intended for athletes that wish to log their running activities and 
 
 **CONTINUOS INTEGRATION**: TRAVISCI
 
-**CLIENT SIDE**: HTML5, CSS3, ES6 JAVASCRIPT (MVC architecure)
+**CLIENT SIDE**: HTML5, CSS3, ES6 JAVASCRIPT
 
 **AUTOMATION**: WEBPACK
 
@@ -83,8 +83,7 @@ Edit Run form:
 ## WHAT IS PLANNED FOR FUTURE DEVELOPMENT:
 * login with google or facebook using the OAUTH protocol
 * enable users to upvote/downvote posts
-* enale users to analyze their running progress on a weekly/monthly basis (implement graphs with D3.js library)
+* enable users to analyze their running progress on a weekly/monthly basis (implement graphs with D3.js library)
 * enable sharing posts to other social networks
 * enable importing running activity from third-party API's (like Strava)
 * implement cookie-based (session) authorization
-* create a real-time app using the WebSocket protocol
