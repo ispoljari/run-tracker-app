@@ -29,6 +29,8 @@ This app is intended for athletes that wish to log their running activities and 
 
 **ORM LAYER**: MONGOOSE
 
+**AUTHENTICATION**: JWT
+
 **TESTING**: MOCHA, CHAI
 
 **CONTINUOS INTEGRATION**: TRAVISCI
